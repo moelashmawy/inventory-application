@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import AddProductForm from './AddProductForm';
 import AddCategoryForm from './AddCategoryForm';
+import { Link } from 'react-router-dom';
 
 function Dashboard() {
     return (
@@ -11,12 +12,12 @@ function Dashboard() {
                     <Col>
                         <h1>Categories</h1> <br />
                         <AddCategoryForm />
-                        <a className='btn btn-success mt-2' href='/editCategories'> Edit Categories</a>
+                        <Link className='btn btn-success mt-2' to='/editCategories'> Edit Categories</Link>
                     </Col>
                     <Col>
                         <h1>Products</h1> <br />
                         <AddProductForm />
-                        <a className='btn btn-success mt-2' href='/editProducts'> Edit Products</a>
+                        <Link className='btn btn-success mt-2' to='/editProducts'> Edit Products</Link>
                     </Col>
                 </Row>
             </Container>
