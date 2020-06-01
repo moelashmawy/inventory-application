@@ -20,10 +20,10 @@ function App() {
         <Route path='/' component={Products} exact />
         <Route path='/dashboard' component={Dashboard} exact />
         <Route path='/categories' component={Categories} exact />
-        <Route path='/categories/edit' component={EditCategories} exact />
+        <Route path='/editCategories' component={EditCategories} exact />
         <Route path='/category/:id' component={CategoryProducts} exact />
         <Route path='/products' component={Products} exact />
-        <Route path='/products/edit' component={EditProducts} exact />
+        <Route path='/editProducts' component={EditProducts} exact />
         <Route path='/product/:id' component={SingleProduct} exact />
       </Switch>
     </Router>

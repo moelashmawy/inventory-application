@@ -11,12 +11,12 @@ function Dashboard() {
                     <Col>
                         <h1>Categories</h1> <br />
                         <AddCategoryForm />
-                        <a className='btn btn-success mt-2' href='/categories/edit'> Edit Categories</a>
+                        <a className='btn btn-success mt-2' href='/editCategories'> Edit Categories</a>
                     </Col>
                     <Col>
                         <h1>Products</h1> <br />
                         <AddProductForm />
-                        <a className='btn btn-success mt-2' href='/products/edit'> Edit Products</a>
+                        <a className='btn btn-success mt-2' href='/editProducts'> Edit Products</a>
                     </Col>
                 </Row>
             </Container>
