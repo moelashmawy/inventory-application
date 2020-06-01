@@ -37,7 +37,7 @@ exports.createProduct = (req, res, next) => {
         });
 
     newProduct.save()
-        .then(() => res.redirect(newProduct.url))
+        .then(product => res.redirect(product.url))
         .catch(err => res.json(err))
 }
 
