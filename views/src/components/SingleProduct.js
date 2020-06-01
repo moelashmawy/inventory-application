@@ -21,7 +21,6 @@ function SingleProduct(props) {
             return (<div>Category: undefined "please consider edit this product"</div>)
         }
     }
-    console.log(product);
 
     return (
         <Container>

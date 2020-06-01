@@ -10,6 +10,12 @@ const app = express();
 // for body-parser middleware
 app.use(express.json());
 
+
+app.use(function (req, res, next) {
+    res.setHeader("Content-Security-Policy", "script-src 'self' https://apis.google.com");
+    return next();
+});
+
 //make our upload an accesable folder
 app.use('/uploads', express.static('uploads'));
 
