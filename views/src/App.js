@@ -18,13 +18,13 @@ function App() {
       </div>
       <Switch>
         <Route path='/' component={Products} exact />
-        <Route path='/dashboard' component={Dashboard} exact />
-        <Route path='/categories' component={Categories} exact />
-        <Route path='/editCategories' component={EditCategories} exact />
-        <Route path='/category/:id' component={CategoryProducts} exact />
-        <Route path='/products' component={Products} exact />
-        <Route path='/editProducts' component={EditProducts} exact />
-        <Route path='/product/:id' component={SingleProduct} exact />
+        <Route path='/dashboard' component={Dashboard} />
+        <Route path='/categories' component={Categories} />
+        <Route path='/editCategories' component={EditCategories} />
+        <Route path='/category/:id' component={CategoryProducts} />
+        <Route path='/products' component={Products} />
+        <Route path='/editProducts' component={EditProducts} />
+        <Route path='/product/:id' component={SingleProduct} />
       </Switch>
     </Router>
   );

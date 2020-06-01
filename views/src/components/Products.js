@@ -22,7 +22,7 @@ function Categories() {
                     return (
                         <Col lg={4} key={product._id} className='mb-5'>
                             <Card>
-                                <Card.Img className='product-card-image' height='300px' variant="top" src={product.productImage} />
+                                <Card.Img className='product-card-image' height='300px' variant="top" src={process.env.PUBLIC_URL + '/' + product.productImage} />
                                 <Card.Body>
                                     <Card.Title>{product.name}</Card.Title>
                                     <Card.Text>{'$' + product.price}</Card.Text>

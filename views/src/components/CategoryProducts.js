@@ -23,7 +23,7 @@ function CategoryProducts(props) {
                     return (
                         <Col lg={4} key={product._id} className='mb-5'>
                             <Card>
-                                <Card.Img className='product-card-image' variant="top" height='300px' src={`http://localhost:3000/${product.productImage}`} />
+                                <Card.Img className='product-card-image' variant="top" height='300px' src={process.env.PUBLIC_URL + '/' + product.productImage} />
                                 <Card.Body>
                                     <Card.Title>{product.name}</Card.Title>
                                     <Card.Text>

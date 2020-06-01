@@ -22,6 +22,9 @@ function SingleProduct(props) {
         }
     }
 
+    console.log(product);
+
+
     return (
         <Container>
             {loading && <ProgressBar animated now={100} />}
@@ -30,7 +33,7 @@ function SingleProduct(props) {
                 <Row>
                     <Col>
                         <div>{product.name}</div><br />
-                        <Image src={`${product.productImage}`} thumbnail />
+                        <Image src={`${process.env.PUBLIC_URL + '/' + product.productImage}`} thumbnail />
                     </Col>
                     <Col>
                         <div>${product.price}</div><br />
