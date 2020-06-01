@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 // our routes
 const productRouter = require('./routes/api/product');
 const categoryRouter = require('./routes/api/category');
@@ -25,6 +26,16 @@ db.once('open', function () {
 // Set up our main routes
 app.use('/api/product', productRouter);
 app.use('/api/category', categoryRouter);
+
+// serve static assets if in production
+if (process.env.NODE_ENV == 'production') {
+    // set static folder
+    app.use(express.static('views/build'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'views', 'index.html'));
+    });
+}
 
 // App's connection port
 const PORT = process.env.PORT | 5000;
