@@ -7,7 +7,7 @@ import axios from 'axios';
 export const updateProduct = (id, product) => {
     return dispatch => {
         axios
-            .put(`/api/product/${id}/update`, product)
+            .post(`/api/product/${id}/update`, product)
             .then(res => {
                 dispatch(updateProductSuccess(id, res.data))
             })

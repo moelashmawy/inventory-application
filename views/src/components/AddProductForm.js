@@ -89,15 +89,41 @@ function AddProductForm() {
                             }
                         </select>
 
-                        <input className="form-control mb-2" type='text' placeholder="Enter Product price" name='price' onChange={handleChange} />
+                        <input
+                            className="form-control mb-2"
+                            type='text'
+                            placeholder="Enter Product price"
+                            name='price'
+                            onChange={handleChange}
+                        />
 
-                        <input className="form-control mb-2" type='text' placeholder="Enter Product numberInStock" name='numberInStock' onChange={handleChange} />
+                        <input
+                            className="form-control mb-2"
+                            type='text' placeholder="Enter Product numberInStock"
+                            name='numberInStock'
+                            onChange={handleChange}
+                        />
 
-                        <input className="custom custom-file mb-2" type='file' name='productImage' onChange={handleChange} />
+                        <input
+                            className="custom custom-file mb-2"
+                            type='file'
+                            name='productImage'
+                            onChange={handleChange}
+                        />
 
-                        <input className='btn btn-primary mb-2' type='submit' onSubmit={handleSubmit} value='Add' />
+                        <input
+                            className='btn btn-primary mb-2'
+                            type='submit'
+                            onSubmit={handleSubmit}
+                            value='Add'
+                        />
 
-                        <input className='btn btn-danger mb-2' type='submit' onClick={handleClose} value='Close' />
+                        <input
+                            className='btn btn-danger mb-2'
+                            type='submit'
+                            onClick={handleClose}
+                            value='Close'
+                        />
 
                     </form>
                 </Modal.Body>

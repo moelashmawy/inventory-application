@@ -63,14 +63,20 @@ exports.deleteProduct = (req, res) => {
             res.json({ message: `item ${req.params.id} was deleted` })
         }
     })
-    /* .then(() => res.json({ message: "Item was deleted succefully" }))
-    .catch(err => res.json(err)) */
-
 }
 
 // handle POST request at /api/product/:id/update to update an item
-exports.updateProduct = (req, res) => {
-    Product.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true, useFindAndModify: false })
-        .then(product => res.json(product))
+exports.updateProduct = (req, res, next) => {
+    const updatedProduct = {
+        name: req.body.name,
+        description: req.body.description,
+        category: req.body.category,
+        price: req.body.price,
+        numberInStock: req.body.numberInStock,
+        productImage: req.file.path
+    }
+
+    Product.findByIdAndUpdate(req.params.id, { $set: updatedProduct }, { new: true, useFindAndModify: false })
+        .then(product => res.redirect(product.url))
         .catch(err => res.json(err))
 }

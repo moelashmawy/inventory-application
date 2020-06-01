@@ -22,9 +22,6 @@ function SingleProduct(props) {
         }
     }
 
-    console.log(product);
-
-
     return (
         <Container>
             {loading && <ProgressBar animated now={100} />}

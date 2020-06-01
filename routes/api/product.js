@@ -15,6 +15,6 @@ router.get('/:id', product_controller.productDetails);
 router.delete('/:id/delete', product_controller.deleteProduct);
 
 // PUT request at /api/product/:id/update to update one product
-router.put('/:id/update', product_controller.updateProduct);
+router.post('/:id/update', product_controller.handleImages(), product_controller.updateProduct);
 
 module.exports = router;

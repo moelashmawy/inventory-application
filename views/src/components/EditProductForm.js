@@ -18,7 +18,7 @@ function EditProductForm(props) {
         category: props.category,
         price: props.price,
         numberInStock: props.numberInStock,
-        productImage: props.productImage
+        productImage: ''
     });
 
     // importing categories and laoding state from out store
@@ -75,7 +75,7 @@ function EditProductForm(props) {
                 </Modal.Header>
                 <Modal.Body>
 
-                    <form method="put" onSubmit={handleSubmit}>
+                    <form action={`/api/product/${props.id}/update`} method="post" enctype="multipart/form-data">
                         <input
                             className="form-control mb-2"
                             type='text'
