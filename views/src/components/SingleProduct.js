@@ -30,7 +30,7 @@ function SingleProduct(props) {
                 <Row>
                     <Col>
                         <div>{product.name}</div><br />
-                        <Image src={`http://localhost:3000/${product.productImage}`} thumbnail />
+                        <Image src={`${product.productImage}`} thumbnail />
                     </Col>
                     <Col>
                         <div>${product.price}</div><br />
