@@ -16,8 +16,6 @@ function EditProducts() {
         dispatch(fetchProducts())
     }, [dispatch])
 
-    console.log(products);
-
     return (
         <Container>
             <Table striped bordered hover variant="dark">
