@@ -18,7 +18,7 @@ function EditProductForm(props) {
         category: props.category,
         price: props.price,
         numberInStock: props.numberInStock,
-        productImage: ''
+        productImage: props.productImage
     });
 
     // importing categories and laoding state from out store

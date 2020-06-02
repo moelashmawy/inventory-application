@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const csp = require('helmet-csp');
+const helmet = require('helmet')
 // our routes
 const productRouter = require('./routes/api/product');
 const categoryRouter = require('./routes/api/category');
@@ -9,6 +11,32 @@ const app = express();
 
 // for body-parser middleware
 app.use(express.json());
+
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
+    }
+}))
+
+app.use(csp({
+    directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
+    }
+}))
+app.use(csp({
+    directives: {
+        defaultSrc: ["'self'", 'default.com'],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        sandbox: ['allow-forms', 'allow-scripts'],
+        reportUri: '/report-violation',
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: true,
+        workerSrc: false  // This is not set.
+    }
+}))
+
 
 //make our upload an accesable folder
 app.use('/uploads', express.static('uploads'));

@@ -19,7 +19,17 @@ exports.handleImages = function () {
             cb(null, file.originalname)
         }
     });
-    const upload = multer({ storage });
+
+    const fileFilter = (req, file, cb) => {
+        // reject a file
+        if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+            cb(null, true);
+        } else {
+            cb(null, false);
+        }
+    };
+
+    const upload = multer({ storage, fileFilter });
 
     return upload.single('productImage')
 }
@@ -37,7 +47,7 @@ exports.createProduct = (req, res, next) => {
         });
 
     newProduct.save()
-        .then(product => res.redirect(product.url))
+        .then(() => res.redirect(newProduct.url))
         .catch(err => res.json(err))
 }
 
@@ -65,18 +75,26 @@ exports.deleteProduct = (req, res) => {
     })
 }
 
+
 // handle POST request at /api/product/:id/update to update an item
 exports.updateProduct = (req, res, next) => {
-    const updatedProduct = {
-        name: req.body.name,
-        description: req.body.description,
-        category: req.body.category,
-        price: req.body.price,
-        numberInStock: req.body.numberInStock,
-        productImage: req.file.path
-    }
 
-    Product.findByIdAndUpdate(req.params.id, { $set: updatedProduct }, { new: true, useFindAndModify: false })
-        .then(product => res.redirect(product.url))
+    Product.findById(req.params.id, 'productImage')
+        .then(function (product) {
+
+            const updatedProduct = {
+                name: req.body.name,
+                description: req.body.description,
+                category: req.body.category,
+                price: req.body.price,
+                numberInStock: req.body.numberInStock,
+                productImage: req.file ? req.file.path : product.productImage
+            }
+
+            Product.findByIdAndUpdate(req.params.id, { $set: updatedProduct }, { new: true, useFindAndModify: false })
+                .then(product => res.redirect(product.url))
+                .catch(err => res.json(err))
+        })
         .catch(err => res.json(err))
+
 }
