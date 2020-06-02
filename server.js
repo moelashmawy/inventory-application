@@ -12,19 +12,18 @@ const app = express();
 // for body-parser middleware
 app.use(express.json());
 
-app.use(helmet.contentSecurityPolicy({
+app.use(csp({
     directives: {
-        defaultSrc: ["'self'"],
-        styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
+        defaultSrc: ["'self'", 'default.com'],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        sandbox: ['allow-forms', 'allow-scripts'],
+        reportUri: '/report-violation',
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: true,
+        workerSrc: false  // This is not set.
     }
 }))
 
-app.use(csp({
-    directives: {
-        defaultSrc: ["'self'"],
-        styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
-    }
-}))
 
 //make our upload an accesable folder
 app.use('/uploads', express.static('uploads'));
