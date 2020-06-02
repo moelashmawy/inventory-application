@@ -30,10 +30,10 @@ app.use('/api/category', categoryRouter);
 // serve static assets if in production
 if (process.env.NODE_ENV == 'production') {
     // set static folder
-    app.use(express.static(path.join(__dirname, './views/build')));
+    app.use(express.static(path.join(__dirname, "views", "build")));
 
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'views', 'index.html'));
+        res.sendFile(path.join(__dirname, "views", "build", "index.html"));
     });
 }
 
