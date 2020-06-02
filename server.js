@@ -25,18 +25,6 @@ app.use(csp({
         styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
     }
 }))
-app.use(csp({
-    directives: {
-        defaultSrc: ["'self'", 'default.com'],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        sandbox: ['allow-forms', 'allow-scripts'],
-        reportUri: '/report-violation',
-        objectSrc: ["'none'"],
-        upgradeInsecureRequests: true,
-        workerSrc: false  // This is not set.
-    }
-}))
-
 
 //make our upload an accesable folder
 app.use('/uploads', express.static('uploads'));
