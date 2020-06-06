@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
-import { Formik, Field, ErrorMessage, useFormik } from "formik";
+import { Formik, Field, ErrorMessage } from "formik";
 import { Button, Modal, Toast } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategories } from "../redux/actions/fetchCategoriesAction";
@@ -26,10 +26,10 @@ const validate = () =>
       .integer("Please enter number more than 0"),
   });
 
+// our main function component
 function AddProductForm() {
   //handle modal show and hide
   const [show, setShow] = useState(false);
-  const [productImage, setProductImage] = useState("");
 
   // importing categories and laoding state from out store
   const { categories, loading } = useSelector((state) => state.categoriesss);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
-import { Formik, Field, ErrorMessage, useFormik } from "formik";
+import { Formik, Field, ErrorMessage } from "formik";
 import { Button, Modal, Toast } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategories } from "../redux/actions/fetchCategoriesAction";

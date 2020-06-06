@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal /* Form */, Toast } from "react-bootstrap";
-import { Form, ErrorMessage, Field, useFormik, Formik } from "formik";
+import { Form, ErrorMessage, Field, Formik } from "formik";
 import * as Yup from "yup";
 import { updateCategory } from "../redux/actions/updateCategoryAction";
 import { useDispatch } from "react-redux";
