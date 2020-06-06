@@ -61,6 +61,7 @@ $ npm run dev (for both client and server side)
 
 -   Twitter: [@hamohuh](https://twitter.com/hamohuh)
 -   Github: [@hamohuh](https://github.com/hamohuh)
+-   Linkedin: [@mo-elashmawy](https://www.linkedin.com/in/mo-elashmawy/)
 -   Email: [hamodroid@gmail.com](mailto:hamodroid@gmail.com)
 
 ## 📝 License
