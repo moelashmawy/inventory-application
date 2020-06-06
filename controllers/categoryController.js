@@ -12,14 +12,30 @@ exports.categoryIndex = (req, res) => {
 
 //handle POST reqest at /api/category/create to create a new category
 exports.createCategory = (req, res, next) => {
-    const newCategory = new Category({
+    let newCategory = new Category({
         name: req.body.name,
         description: req.body.description
     });
 
-    newCategory.save()
-        .then(() => res.redirect(newCategory.url))
-        .catch(err => res.json(err))
+    // Check if Category with same name already exists.
+    Category.findOne({ 'name': req.body.name })
+        .exec(
+            function (err, found_category) {
+                if (err) { return next(err) };
+
+                if (found_category) {
+                    // Category exists, redirect to its page
+                    res.redirect(found_category.url)
+                }
+                else {
+                    newCategory.save(function (err) {
+                        if (err) { return next(err); }
+                        // Category saved. Redirect to its page.
+                        res.redirect(newCategory.url);
+                    });
+                }
+            }
+        )
 }
 
 // handle GET request at /api/category/:id to get one category

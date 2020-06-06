@@ -1,138 +1,176 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Modal } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchCategories } from '../redux/actions/fetchCategoriesAction';
-import { addProduct } from '../redux/actions/addProductAction';
+import React, { useState, useEffect } from "react";
+import * as Yup from "yup";
+import { Formik, Field, ErrorMessage, useFormik } from "formik";
+import { Button, Modal, Toast } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCategories } from "../redux/actions/fetchCategoriesAction";
+import { addProduct } from "../redux/actions/addProductAction";
 
+// form validation using yup
+const validate = () =>
+  Yup.object({
+    name: Yup.string()
+      .required("This field is required")
+      .min(2, "Must be more then 2 characters"),
+    description: Yup.string()
+      .required("This field is required")
+      .min(10, "Must be more then 10 characters"),
+    category: Yup.string().required("This field is required"),
+    price: Yup.number()
+      .required("This field is required")
+      .positive("Please enter Positive number")
+      .integer("Please enter number more than 0"),
+    numberInStock: Yup.number()
+      .required("This field is required")
+      .positive("Please enter Positive number")
+      .integer("Please enter number more than 0"),
+  });
 
 function AddProductForm() {
-    //handle modal show and hide
-    const [show, setShow] = useState(false);
+  //handle modal show and hide
+  const [show, setShow] = useState(false);
+  const [productImage, setProductImage] = useState("");
 
-    //save the state of every input
-    const [state, setState] = useState({
-        name: "",
-        description: "",
-        category: "",
-        price: "",
-        numberInStock: "",
-        productImage: ""
-    });
+  // importing categories and laoding state from out store
+  const { categories, loading } = useSelector((state) => state.categoriesss);
 
-    // importing categories and laoding state from out store
-    const { categories, loading } = useSelector(state => state.categoriesss)
+  // handle modal show and close
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-    // handle modal show and close
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+  // react redux method to dispatch our functions
+  const dispatch = useDispatch();
 
-    // react redux method to dispatch our functions
-    const dispatch = useDispatch();
+  // fetch all the the categories with dispatch before our component render
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
-    // fetch all the the categories with dispatch before our component render
-    useEffect(() => {
-        dispatch(fetchCategories());
-    }, [dispatch])
+  //our form initial state
+  const initialState = {
+    name: "",
+    description: "",
+    category: "",
+    price: "",
+    numberInStock: "",
+    productImage: "",
+  };
 
-    // handle every input change
-    const handleChange = e => {
-        const { name, value } = e.target;
-        setState(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    }
+  // handle submit our form
+  const handleSubmit = (values) => {
+    const newProduct = {
+      name: values.name,
+      description: values.description,
+      category: values.category,
+      price: values.price,
+      numberInStock: values.numberInStock,
+      productImage: values.productImage,
+    };
 
-    // handle submit our form
-    const handleSubmit = e => {
-        e.preventDefault();
+    dispatch(addProduct(newProduct));
 
-        const newProduct = {
-            name: state.name,
-            description: state.description,
-            category: state.category,
-            price: state.price,
-            numberInStock: state.numberInStock,
-            productImage: state.productImage
-        }
+    handleClose();
+  };
 
-        dispatch(addProduct(newProduct));
+  return (
+    <div>
+      <Button variant="primary" onClick={handleShow}>
+        Add Product
+      </Button>
 
-        handleClose();
-    }
-
-    return (
-        <div>
-            <Button variant="primary" onClick={handleShow}>
-                Add Product
-            </Button>
-
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Add New Product</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-
-                    <form action='/api/product/create' method="post" enctype="multipart/form-data">
-                        <input className="form-control mb-2" type='text' placeholder="Enter Product name" name='name' onChange={handleChange} />
-
-                        <input className="form-control mb-2" type='text' placeholder="Enter Product description" name='description' onChange={handleChange} />
-
-                        <select className="custom-select mb-2" onChange={handleChange} name='category'>
-                            {loading && <option>loading...</option>}
-                            {
-                                categories.map(cat => {
-                                    return (
-                                        <option key={cat._id} value={cat._id}>{cat.name}</option>
-                                    )
-                                })
-                            }
-                        </select>
-
-                        <input
-                            className="form-control mb-2"
-                            type='text'
-                            placeholder="Enter Product price"
-                            name='price'
-                            onChange={handleChange}
-                        />
-
-                        <input
-                            className="form-control mb-2"
-                            type='text' placeholder="Enter Product numberInStock"
-                            name='numberInStock'
-                            onChange={handleChange}
-                        />
-
-                        <input
-                            className="custom custom-file mb-2"
-                            type='file'
-                            name='productImage'
-                            onChange={handleChange}
-                        />
-
-                        <input
-                            className='btn btn-primary mb-2'
-                            type='submit'
-                            onSubmit={handleSubmit}
-                            value='Add'
-                        />
-
-                        <input
-                            className='btn btn-danger mb-2'
-                            type='submit'
-                            onClick={handleClose}
-                            value='Close'
-                        />
-
-                    </form>
-                </Modal.Body>
-                <Modal.Footer>
-
-                </Modal.Footer>
-            </Modal>
-        </div>
-    );
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Formik
+            initialValues={initialState}
+            validationSchema={validate}
+            onSubmit={handleSubmit}
+          >
+            <form
+              action="/api/product/create"
+              method="post"
+              enctype="multipart/form-data"
+            >
+              <div className="form-group">
+                <Field
+                  className="form-control mb-2"
+                  type="text"
+                  placeholder="Enter Product name"
+                  name="name"
+                  required
+                />
+                <ErrorMessage name="name" component={Toast} />
+              </div>
+              <div className="form-group">
+                <Field
+                  className="form-control mb-2"
+                  as="textarea"
+                  placeholder="Enter Product description"
+                  name="description"
+                  required
+                />
+                <ErrorMessage name="description" component={Toast} />
+              </div>
+              <div className="form-group">
+                <Field
+                  as="select"
+                  className="custom-select mb-2"
+                  name="category"
+                  required
+                >
+                  {loading && <option>loading...</option>}
+                  {categories.map((cat) => {
+                    return (
+                      <option key={cat._id} value={cat._id}>
+                        {cat.name}
+                      </option>
+                    );
+                  })}
+                </Field>
+                <ErrorMessage name="category" />
+              </div>
+              <div className="form-group">
+                <Field
+                  className="form-control mb-2"
+                  type="text"
+                  placeholder="Enter Product price"
+                  name="price"
+                  required
+                />
+                <ErrorMessage name="price" component={Toast} />
+              </div>
+              <div className="form-group">
+                <Field
+                  className="form-control mb-2"
+                  type="text"
+                  placeholder="Enter Product numberInStock"
+                  name="numberInStock"
+                  required
+                />
+                <ErrorMessage name="numberInStock" component={Toast} />
+              </div>
+              <div className="form-group">
+                <input
+                  className="custom custom-file mb-2"
+                  type="file"
+                  name="productImage"
+                  required
+                />
+              </div>
+              <Button variant="primary" type="submit">
+                Submit{" "}
+              </Button>{" "}
+              <Button variant="secondary" onClick={handleClose}>
+                Close{" "}
+              </Button>{" "}
+            </form>
+          </Formik>
+        </Modal.Body>
+      </Modal>
+    </div>
+  );
 }
 
 export default AddProductForm;

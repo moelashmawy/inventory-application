@@ -8,7 +8,7 @@ const CategorySchema = new Schema({
 });
 
 CategorySchema.virtual('url').get(function () {
-    return '/category/' + this._id;
+    return '/product/' + this._id;
 })
 
 const Category = mongoose.model('Category', CategorySchema);
