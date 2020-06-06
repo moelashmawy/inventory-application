@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 let async = require("async");
-const { body, sanitizeBody, validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const Category = require("../models/CategoryModel");
 const Product = require("../models/ProductModel");
 
@@ -11,15 +11,21 @@ exports.categoryIndex = (req, res) => {
 };
 
 //handle POST reqest at /api/category/create to create a new category
+// we will pass an array of funtions as a middleware
 exports.createCategory = [
     // Validate that the name field is not empty and minimum length 2
     //and Sanitize (trim) the field so it's clear to be inserted
-    body("name", "category name required").isLength({ min: 2 }).trim().escape(),
+    body("name")
+        .isLength({ min: 2 })
+        .withMessage("Must be at least 2 letters")
+        .trim()
+        .escape(),
 
     // Validate that the description field is not empty and minimum length 2
     //and Sanitize (trim) the field so it's clear to be inserted
-    body("description", "category description required")
+    body("description")
         .isLength({ min: 10 })
+        .withMessage("Must be at least 10 letters")
         .trim()
         .escape(),
 
@@ -97,21 +103,37 @@ exports.deleteCategory = (req, res) => {
         .catch(err => res.json(err));
 };
 
-//handle PUT request at /api/category/:id/update to update a category with id
+//handle POST request at /api/category/:id/update to update a category with id
+// will pass an array of functions as a middlware
 exports.updateCategory = [
-    body("name").isLength({ min: 2 }).trim().escape(),
+    // validate that the name is not empthy and have at least 2 letters
+    // then sanitize and clear it with trim and escape
+    body("name")
+        .isLength({ min: 2 })
+        .withMessage("Must be at least 2 letters")
+        .trim()
+        .escape(),
 
-    body("description").isLength({ min: 10 }).trim().escape(),
+    // validate that the description is not empthy and have at least 10 letters
+    // then sanitize and clear it with trim and escape
+    body("description")
+        .isLength({ min: 10 })
+        .withMessage("Must be at least 10 letters")
+        .trim()
+        .escape(),
 
+    //continue process after validation
     (req, res) => {
+        // Extract the validation errors from a request
         const errors = validationResult(req);
 
+        // create clear updatedCategory after sanitization
         let updatedCategory = new Category({
             name: req.body.name,
             description: req.body.description,
             _id: req.params.id
         });
-
+        // if there are errors send them as json
         if (!errors.isEmpty()) {
             res.json(errors);
         } else {
