@@ -66,10 +66,4 @@ $ npm run dev (for both client and server side)
 
 ## 📝 License
 
--   Twitter: [@hamohuh](https://twitter.com/hamohuh)
--   Github: [@hamohuh](https://github.com/hamohuh)
--   Email: [hamodroid@gmail.com](mailto:hamodroid@gmail.com)
-
-## 📝 License
-
 -   This project is [MIT](./LICENSE) licensed.
