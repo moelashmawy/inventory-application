@@ -6,9 +6,8 @@
 > From The Odin Project's [curriculum](https://www.theodinproject.com/courses/nodejs/lessons/inventory-application)
 > The Code can be found [here](https://github.com/hamohuh/inventory-application)
 
-### <h1 align="center">  ⚡️⚡️⚡️ [Live Demo](https://afternoon-atoll-93127.herokuapp.com/) ⚡️⚡️⚡️ </h1>
 
-###  ⚡️⚡️⚡️ [Live Demo](https://afternoon-atoll-93127.herokuapp.com/) ⚡️⚡️⚡️
+<h1 align="center">  ⚡️⚡️⚡️ [Live Demo](https://afternoon-atoll-93127.herokuapp.com/) ⚡️⚡️⚡️ </h1>
 
 ## 📜 Table of contents
 * [Main Features](#main-features)
