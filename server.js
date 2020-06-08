@@ -32,6 +32,16 @@ app.use(logger("dev"));
 app.use("/api/product", productRouter);
 app.use("/api/category", categoryRouter);
 
+// serve static assets if in production
+if (process.env.NODE_ENV == "production") {
+    // set static folder
+    app.use(express.static(path.join(__dirname, "views", "build")));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "views", "build", "index.html"));
+    });
+}
+
 // if the request passes all the middleware without a response
 app.use((req, res, next) => {
     const error = new Error("Not Found");
@@ -46,16 +56,6 @@ app.use((error, req, res, next) => {
         message: error.message
     });
 });
-
-// serve static assets if in production
-if (process.env.NODE_ENV == "production") {
-    // set static folder
-    app.use(express.static(path.join(__dirname, "views", "build")));
-
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "views", "build", "index.html"));
-    });
-}
 
 // App's connection port
 const PORT = process.env.PORT || 5000;
