@@ -1,31 +1,39 @@
-import {
-    UPDATE_CATEGORY_SUCCESS,
-    UPDATE_CATEGORY_FAILURE
-} from './types';
-import axios from 'axios';
+import { UPDATE_CATEGORY_SUCCESS, UPDATE_CATEGORY_FAILURE } from "./types";
+import axios from "axios";
 
-export const updateCategory = (id, category) => {
-    return dispatch => {
+export const updateCategory = (id, category) => dispatch => {
+    // will return Promise so we can handle success and error message
+    return new Promise((resolve, reject) => {
         axios
             .put(`/api/category/${id}/update`, category)
             .then(res => {
-                dispatch(updateCategorySuccess(id, res.data))
+                let updatedCategory = res.data.category;
+                let successMessage = res.data.message;
+
+                dispatch(
+                    updateCategorySuccess(id, updatedCategory, successMessage)
+                );
+                resolve(successMessage);
             })
             .catch(error => {
-                dispatch(updateCategoryFailure(error.message))
-            })
-    }
-}
+                let errorMessage = error.response.data.message;
 
-const updateCategorySuccess = (id, newCategory) => {
+                dispatch(updateCategoryFailure(errorMessage));
+                reject(errorMessage);
+            });
+    });
+};
+
+const updateCategorySuccess = (id, newCategory, successMessage) => {
     return {
         type: UPDATE_CATEGORY_SUCCESS,
         payload: {
             id,
-            newCategory
+            newCategory,
+            successMessage
         }
-    }
-}
+    };
+};
 
 const updateCategoryFailure = error => {
     return {
@@ -33,5 +41,5 @@ const updateCategoryFailure = error => {
         payload: {
             error
         }
-    }
-}
+    };
+};

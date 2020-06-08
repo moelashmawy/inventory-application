@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { checkSchema, body, validationResult } = require("express-validator");
+const { matchedData, body, validationResult } = require("express-validator");
 const multer = require("multer");
 const Product = require("../models/ProductModel");
 
@@ -85,7 +85,7 @@ exports.createProduct = [
 
         // if there are errors send them as json
         if (!errors.isEmpty()) {
-            res.status(442).json({
+            return res.status(400).json({
                 message: "Request fields are invalid",
                 errors: errors.array()
             });
@@ -99,7 +99,7 @@ exports.createProduct = [
 ];
 
 // handle GET request at /api/product/:id to get details for a specific product
-exports.productDetails = (req, res) => {
+exports.productDetails = (req, res, next) => {
     Product.findById(req.params.id)
         .populate("category")
         .exec(function (err, result) {
@@ -112,7 +112,7 @@ exports.productDetails = (req, res) => {
 };
 
 // handle DELETE request at /api/product/:id/delete to delete an item by its id
-exports.deleteProduct = (req, res) => {
+exports.deleteProduct = (req, res, next) => {
     Product.findByIdAndDelete(req.params.id, (err, result) => {
         if (err) {
             res.json(err);
@@ -161,7 +161,7 @@ exports.updateProduct = [
 
         // if there are validation errors send them in json
         if (!errors.isEmpty()) {
-            res.status(402).json({
+            res.status(400).json({
                 message: "Invalid Inputs",
                 errors: errors.array()
             });
@@ -186,7 +186,7 @@ exports.updateProduct = [
                         new: true,
                         useFindAndModify: false
                     })
-                        .then(product => res.redirect(product.url))
+                        .then(product => res.send(product.url))
                         .catch(err => res.json(err));
                 })
                 .catch(err => res.json(err));

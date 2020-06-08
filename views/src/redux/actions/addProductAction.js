@@ -1,21 +1,18 @@
-import {
-    ADD_PRODUCT_SUCCESS,
-    ADD_PRODUCT_FAILURE
-} from './types';
-import axios from 'axios';
+import { ADD_PRODUCT_SUCCESS, ADD_PRODUCT_FAILURE } from "./types";
+import axios from "axios";
 
 export const addProduct = product => {
     return dispatch => {
         axios
-            .post('/api/product/create', product)
+            .post("/api/product/create", product)
             .then(res => {
-                dispatch(addProductSuccess(res.data))
+                dispatch(addProductSuccess(res.data));
             })
             .catch(error => {
-                dispatch(addProductFailure(error.message))
-            })
-    }
-}
+                dispatch(addProductFailure(error.message));
+            });
+    };
+};
 
 const addProductSuccess = product => {
     return {
@@ -23,8 +20,8 @@ const addProductSuccess = product => {
         payload: {
             product
         }
-    }
-}
+    };
+};
 
 const addProductFailure = error => {
     return {
@@ -32,5 +29,5 @@ const addProductFailure = error => {
         payload: {
             error
         }
-    }
-}
+    };
+};

@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Button, Modal, Toast } from "react-bootstrap";
 import { addCategory } from "../redux/actions/addCategoryAction";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 // form validation useing Yup
 const validate = () =>
@@ -26,9 +27,28 @@ function AddCategoryForm() {
     // dispatch our redux action
     const dispatch = useDispatch();
 
+    /**
+     * This method to handle our whole adding process
+     * it takes the new category object
+     */
+    const handleAdd = newCategory => {
+        //this promise was returned to handle sucess and error messages
+        dispatch(addCategory(newCategory))
+            .then(res => {
+                toast.success(res, {
+                    position: toast.POSITION.BOTTOM_LEFT
+                });
+            })
+            .catch(err => {
+                toast.error(err, {
+                    position: toast.POSITION.BOTTOM_LEFT
+                });
+            });
+    };
+
     return (
         <div>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant='primary' onClick={handleShow}>
                 Add Category
             </Button>
 
@@ -48,36 +68,39 @@ function AddCategoryForm() {
                                 name: values.name,
                                 description: values.description
                             };
-                            dispatch(addCategory(newCategory));
-                            handleClose();
+
+                            handleAdd(newCategory);
+
                             setSubmitting(false);
                         }}>
                         <Form>
-                            <div className="form-group">
-                                <label htmlFor="name">name</label>
+                            <div className='form-group'>
+                                <label htmlFor='name'>name</label>
                                 <Field
-                                    type="text"
-                                    name="name"
-                                    className="form-control"
+                                    type='text'
+                                    name='name'
+                                    className='form-control'
+                                    placeholder='Enter Category name'
                                 />
-                                <ErrorMessage component={Toast} name="name" />
+                                <ErrorMessage component={Toast} name='name' />
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="description">description</label>
+                            <div className='form-group'>
+                                <label htmlFor='description'>description</label>
                                 <Field
-                                    as="textarea"
-                                    name="description"
-                                    className="form-control"
+                                    as='textarea'
+                                    name='description'
+                                    className='form-control'
+                                    placeholder='Enter Category description'
                                 />
                                 <ErrorMessage
                                     component={Toast}
-                                    name="description"
+                                    name='description'
                                 />
                             </div>
-                            <Button variant="primary" type="submit">
+                            <Button variant='primary' type='submit'>
                                 Submit{" "}
                             </Button>{" "}
-                            <Button variant="secondary" onClick={handleClose}>
+                            <Button variant='secondary' onClick={handleClose}>
                                 Close{" "}
                             </Button>{" "}
                         </Form>

@@ -1,29 +1,31 @@
-import {
-    DELETE_CATEGORY_SUCCESS,
-    DELETE_CATEGORY_FAILURE
-} from './types';
-import axios from 'axios';
+import { DELETE_CATEGORY_SUCCESS, DELETE_CATEGORY_FAILURE } from "./types";
+import axios from "axios";
 
-export const deleteCategory = id => {
-    return dispatch => {
-        axios.delete(`/api/category/${id}/delete`)
+export const deleteCategory = id => dispatch => {
+    return new Promise((resolve, reject) => {
+        axios
+            .delete(`/api/category/${id}/delete`)
             .then(res => {
-                dispatch(deleteCategorySuccess(id))
+                let successMessage = res.data.message;
+
+                dispatch(deleteCategorySuccess(id, successMessage));
+                resolve(res);
             })
             .catch(error => {
-                dispatch(deleteCategoryFailure(error.message))
-            })
-    }
-}
-
-const deleteCategorySuccess = id => {
+                dispatch(deleteCategoryFailure(error.message));
+                reject(error);
+            });
+    });
+};
+const deleteCategorySuccess = (id, successMessage) => {
     return {
         type: DELETE_CATEGORY_SUCCESS,
         payload: {
-            id
+            id,
+            successMessage
         }
-    }
-}
+    };
+};
 
 const deleteCategoryFailure = error => {
     return {
@@ -31,5 +33,5 @@ const deleteCategoryFailure = error => {
         payload: {
             error
         }
-    }
-}
+    };
+};

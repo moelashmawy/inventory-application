@@ -32,7 +32,9 @@ function AddProductForm() {
     const [show, setShow] = useState(false);
 
     // importing categories and laoding state from out store
-    const { categories, loading } = useSelector(state => state.categoriesss);
+    const { categories, error, loading } = useSelector(
+        state => state.categoriesss
+    );
 
     // handle modal show and close
     const handleClose = () => setShow(false);
