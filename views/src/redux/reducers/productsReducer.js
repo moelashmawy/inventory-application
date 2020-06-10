@@ -8,13 +8,14 @@ import {
     DELETE_PRODUCT_FAILURE,
     UPDATE_PRODUCT_SUCCESS,
     UPDATE_PRODUCT_FAILURE
-} from '../actions/types';
+} from "../actions/types";
 
 const initialState = {
     products: [],
     loading: false,
-    error: null
-}
+    error: null,
+    success: null
+};
 
 const productReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -22,63 +23,71 @@ const productReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: true
-            }
+            };
         case FETCH_PRODUCTS_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 error: null,
                 products: action.payload.products
-            }
+            };
         case FETCH_PRODUCTS_FAILURE:
             return {
                 ...state,
                 loading: false,
-                error: action.payload.errors
-            }
+                error: action.payload.error,
+                success: null
+            };
         case ADD_PRODUCT_SUCCESS:
             return {
                 ...state,
                 products: [action.payload.product, ...state.products],
-                error: null
-            }
+                error: null,
+                success: action.payload.successMessage
+            };
         case ADD_PRODUCT_FAILURE:
             return {
                 ...state,
-                error: action.payload.error
-            }
+                error: action.payload.error,
+                success: null
+            };
         case DELETE_PRODUCT_SUCCESS:
             return {
                 ...state,
-                products: state.products.filter(product => product._id !== action.payload.id),
-                error: null
-            }
+                products: state.products.filter(
+                    product => product._id !== action.payload.id
+                ),
+                error: null,
+                success: action.payload.successMessage
+            };
         case DELETE_PRODUCT_FAILURE:
             return {
                 ...state,
-                error: action.payload.error
-            }
+                error: action.payload.error,
+                success: null
+            };
         case UPDATE_PRODUCT_SUCCESS:
             return {
                 ...state,
                 products: state.products.map(item => {
                     if (item._id === action.payload.id) {
-                        return action.payload.newProduct
+                        return action.payload.newProduct;
                     }
-                    return item
-                })
-            }
+                    return item;
+                }),
+                error: null,
+                success: action.payload.successMessage
+            };
         case UPDATE_PRODUCT_FAILURE:
             return {
                 ...state,
-                error: action.payload.error
-            }
+                error: action.payload.error,
+                success: null
+            };
 
         default:
             return state;
-
     }
-
-}
+};
 
 export default productReducer;

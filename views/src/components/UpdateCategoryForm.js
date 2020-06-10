@@ -6,7 +6,7 @@ import { updateCategory } from "../redux/actions/updateCategoryAction";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 //validate our form inputs and handle the errors using YUP
@@ -20,7 +20,7 @@ const validationSchema = () =>
             .required("This field is requried")
     });
 
-function EditCategoryForm(props) {
+function UpdateCategoryForm(props) {
     const [show, setShow] = useState(false);
 
     // dispatch our redux action
@@ -42,12 +42,14 @@ function EditCategoryForm(props) {
         dispatch(updateCategory(id, category))
             .then(res => {
                 toast.success(res, {
-                    position: toast.POSITION.BOTTOM_LEFT
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    transition: Slide
                 });
             })
             .catch(err => {
                 toast.error(err, {
-                    position: toast.POSITION.BOTTOM_LEFT
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    autoClose: false
                 });
             });
     };
@@ -78,7 +80,9 @@ function EditCategoryForm(props) {
 
                             setSubmitting(false);
                         }}>
-                        <Form>
+                        <Form
+                            action={`/api/product/${props.categoryId}/update`}
+                            method='put'>
                             <div className='form-group'>
                                 <label htmlFor='name'>name</label>
                                 <Field
@@ -114,4 +118,4 @@ function EditCategoryForm(props) {
     );
 }
 
-export default EditCategoryForm;
+export default UpdateCategoryForm;

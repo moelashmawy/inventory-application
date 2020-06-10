@@ -10,7 +10,7 @@ exports.productIndex = (req, res, next) => {
 };
 
 // Multer handling image upload Middleware at /api/product/create
-exports.handleImages = function () {
+exports.handleImages = function (fileName) {
     const storage = multer.diskStorage({
         destination: function (req, file, cb) {
             cb(null, "./uploads/");
@@ -29,9 +29,9 @@ exports.handleImages = function () {
         }
     };
 
-    const upload = multer({ storage, fileFilter });
+    upload = multer({ storage: storage, fileFilter: fileFilter });
 
-    return upload.single("productImage");
+    return upload.single(fileName);
 };
 
 // handle POST request at /api/product/create to create a new product
@@ -40,17 +40,18 @@ exports.createProduct = [
     //validate product that it's not empthy
     // then sanitize it with trima and escape
     body("name")
-        .isLength({ min: 2 })
+        .isLength({ min: 5 })
         .withMessage("Must be at least 2 letters")
         .trim()
         .escape(),
     body("description")
-        .isLength({ min: 10 })
+        .isLength({ min: 20 })
         .withMessage("Must be at least 10 letters")
         .trim()
         .escape(),
-    body("category", "This field is required")
+    body("category")
         .isLength({ min: 1 })
+        .withMessage("This field is required")
         .trim()
         .escape(),
     body("price")
@@ -70,11 +71,15 @@ exports.createProduct = [
 
     // continue process after validation
     (req, res, next) => {
+        if (!req.file || !req.file.path) {
+            return res.status(400).json({ message: "Please upload an image" });
+        }
+
         // get the validation errors from the request
         const errors = validationResult(req);
 
         // create new product after being validated and sanitized
-        const newProduct = new Product({
+        let newProduct = new Product({
             name: req.body.name,
             description: req.body.description,
             category: req.body.category,
@@ -85,15 +90,26 @@ exports.createProduct = [
 
         // if there are errors send them as json
         if (!errors.isEmpty()) {
-            return res.status(400).json({
-                message: "Request fields are invalid",
-                errors: errors.array()
+            let field = errors.errors[0].param;
+            let message = errors.errors[0].msg;
+            let errorMessage = field + " " + message;
+
+            res.status(400).json({
+                message: errorMessage
             });
         } else {
-            newProduct
-                .save()
-                .then(() => res.redirect(newProduct.url))
-                .catch(err => res.json(err));
+            newProduct.save(function (err, product) {
+                if (err) {
+                    res.status(400).json({
+                        message: "Couldn't create please try again"
+                    });
+                } else {
+                    res.status(200).json({
+                        message: "Added Succefulyl",
+                        product
+                    });
+                }
+            });
         }
     }
 ];
@@ -104,7 +120,7 @@ exports.productDetails = (req, res, next) => {
         .populate("category")
         .exec(function (err, result) {
             if (err) {
-                res.json(err.message);
+                res.status(404).json({ message: "Not Found" });
             } else {
                 res.json(result);
             }
@@ -115,9 +131,9 @@ exports.productDetails = (req, res, next) => {
 exports.deleteProduct = (req, res, next) => {
     Product.findByIdAndDelete(req.params.id, (err, result) => {
         if (err) {
-            res.json(err);
+            res.json({ message: "Couldn't delete, try again" });
         } else {
-            res.json({ message: `item ${req.params.id} was deleted` });
+            res.json({ message: "Deleted Successfully" });
         }
     });
 };
@@ -127,12 +143,12 @@ exports.updateProduct = [
     //validate product that it's not empthy
     // then sanitize it with trima and escape
     body("name")
-        .isLength({ min: 2 })
+        .isLength({ min: 5 })
         .withMessage("Must be at least 2 letters")
         .trim()
         .escape(),
     body("description")
-        .isLength({ min: 10 })
+        .isLength({ min: 20 })
         .withMessage("Must be at least 10 letters")
         .trim()
         .escape(),
@@ -161,9 +177,12 @@ exports.updateProduct = [
 
         // if there are validation errors send them in json
         if (!errors.isEmpty()) {
+            let fieldName = errors.errors[0].param;
+            let errorMessage = errors.errors[0].msg;
+            let message = fieldName + " " + errorMessage;
+
             res.status(400).json({
-                message: "Invalid Inputs",
-                errors: errors.array()
+                message
             });
         } else {
             // find one product in the database to get the same image
@@ -186,8 +205,15 @@ exports.updateProduct = [
                         new: true,
                         useFindAndModify: false
                     })
-                        .then(product => res.send(product.url))
-                        .catch(err => res.json(err));
+                        .then(product => {
+                            res.status(200).json({
+                                message: "Successfuly Updated",
+                                product
+                            });
+                        })
+                        .catch(err =>
+                            res.json(400).json({ message: "Error updating" })
+                        );
                 })
                 .catch(err => res.json(err));
         }

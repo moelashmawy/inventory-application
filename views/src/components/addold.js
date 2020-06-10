@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import { Formik, Field, ErrorMessage, useFormik } from "formik";
 import { Button, Toast, Container } from "react-bootstrap";
@@ -7,37 +7,31 @@ import { toast, Slide } from "react-toastify";
 import { fetchCategories } from "../redux/actions/fetchCategoriesAction";
 import { addProduct } from "../redux/actions/addProductAction";
 
+// form validation using yup
+const validate = Yup.object({
+    name: Yup.string()
+        .required("This field is required")
+        .min(2, "Must be more then 2 characters"),
+    description: Yup.string()
+        .required("This field is required")
+        .min(10, "Must be more then 10 characters"),
+    category: Yup.string().required("This field is required"),
+    price: Yup.number()
+        .required("This field is required")
+        .positive("Please enter Positive number")
+        .integer("Please enter number more than 0"),
+    numberInStock: Yup.number()
+        .required("This field is required")
+        .positive("Please enter Positive number")
+        .integer("Please enter number more than 0")
+});
+
+// our main function component
 function AddProductForm() {
-    //const theImage = useRef(null);
-
-    const [img, setImg] = useState("");
-
-    const [state, setState] = useState({
-        name: "",
-        description: "",
-        category: "",
-        price: "",
-        numberInStock: ""
-        //productImage: ""
-    });
-
-    const handleImg = e => {
-        console.log(e.target.files[0]);
-        setImg(e.target.files[0]);
-    };
-
     // importing categories and laoding state from out store
     const { categories, error, loading } = useSelector(
         state => state.categoriesss
     );
-
-    const handleChange = e => {
-        const { name, value } = e.target;
-        setState(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
 
     // react redux method to dispatch our functions
     const dispatch = useDispatch();
@@ -47,9 +41,28 @@ function AddProductForm() {
         dispatch(fetchCategories());
     }, [dispatch]);
 
+    //our form initial state
+    const initialState = {
+        name: "",
+        description: "",
+        category: "",
+        price: "",
+        numberInStock: "",
+        productImage: ""
+    };
+
     // handle submit our form
-    const handleSubmitt = product => {
-        dispatch(addProduct(product))
+    const handleSubmit = function (values) {
+        const newProduct = {
+            name: values.name,
+            description: values.description,
+            category: values.category,
+            price: values.price,
+            numberInStock: values.numberInStock,
+            productImage: values.productImage
+        };
+
+        dispatch(addProduct(newProduct))
             .then(res => {
                 toast.success(res, {
                     position: toast.POSITION.BOTTOM_LEFT,
@@ -64,26 +77,19 @@ function AddProductForm() {
             });
     };
 
+    const formik = useFormik({
+        initialValues: initialState,
+        validationSchema: validate,
+        onSubmit: () => handleSubmit(initialState)
+    });
+
     return (
         <Container>
             <form
                 action='/api/product/create'
                 method='post'
-                enctype='multipart/form-data'
-                onSubmit={e => {
-                    e.preventDefault();
-
-                    let newProduct = {
-                        name: state.name,
-                        description: state.description,
-                        category: state.category,
-                        price: state.price,
-                        numberInStock: state.numberInStock,
-                        productImage: img
-                    };
-
-                    handleSubmitt(newProduct);
-                }}>
+                encType='multipart/form-data'
+                onSubmit={formik.handleSubmit}>
                 <div className='form-group'>
                     <input
                         className='form-control mb-2'
@@ -91,8 +97,11 @@ function AddProductForm() {
                         placeholder='Enter Product name'
                         name='name'
                         required
-                        onChange={handleChange}
+                        {...formik.getFieldProps("name")}
                     />
+                    {formik.touched.name && formik.errors.name ? (
+                        <div>{formik.errors.name}</div>
+                    ) : null}
                 </div>
                 <div className='form-group'>
                     <input
@@ -101,15 +110,18 @@ function AddProductForm() {
                         placeholder='Enter Product description'
                         name='description'
                         required
-                        onChange={handleChange}
+                        {...formik.getFieldProps("description")}
                     />
+                    {formik.touched.description && formik.errors.description ? (
+                        <div>{formik.errors.description}</div>
+                    ) : null}
                 </div>
                 <div className='form-group'>
                     <select
                         className='custom-select mb-2'
                         name='category'
                         required
-                        onChange={handleChange}>
+                        {...formik.getFieldProps("category")}>
                         {loading && <option>loading...</option>}
                         {categories.map(cat => {
                             return (
@@ -119,6 +131,9 @@ function AddProductForm() {
                             );
                         })}
                     </select>
+                    {formik.touched.category && formik.errors.category ? (
+                        <div>{formik.errors.category}</div>
+                    ) : null}
                 </div>
                 <div className='form-group'>
                     <input
@@ -127,8 +142,11 @@ function AddProductForm() {
                         placeholder='Enter Product price'
                         name='price'
                         required
-                        onChange={handleChange}
+                        {...formik.getFieldProps("price")}
                     />
+                    {formik.touched.price && formik.errors.price ? (
+                        <div>{formik.errors.price}</div>
+                    ) : null}
                 </div>
                 <div className='form-group'>
                     <input
@@ -137,15 +155,26 @@ function AddProductForm() {
                         placeholder='Enter Product numberInStock'
                         name='numberInStock'
                         required
-                        onChange={handleChange}
+                        {...formik.getFieldProps("numberInStock")}
                     />
+                    {formik.touched.numberInStock &&
+                    formik.errors.numberInStock ? (
+                        <div>{formik.errors.numberInStock}</div>
+                    ) : null}
                 </div>
-                <input
-                    className='custom custom-file mb-2'
-                    type='file'
-                    name='productImage'
-                    onChange={handleImg}
-                />
+                <div className='form-group'>
+                    <input
+                        className='custom custom-file mb-2'
+                        type='file'
+                        name='productImage'
+                        //required
+                        {...formik.getFieldProps("productImage")}
+                    />
+                    {formik.touched.productImage &&
+                    formik.errors.productImage ? (
+                        <div>{formik.errors.productImage}</div>
+                    ) : null}
+                </div>
                 <Button variant='primary' type='submit'>
                     Submit{" "}
                 </Button>{" "}

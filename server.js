@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const logger = require("morgan");
 const path = require("path");
+const cors = require("cors");
 // our routes
 const productRouter = require("./routes/api/product");
 const categoryRouter = require("./routes/api/category");

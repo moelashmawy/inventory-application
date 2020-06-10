@@ -16,7 +16,7 @@ exports.createCategory = [
     // Validate that the name field is not empty and minimum length 2
     //and Sanitize (trim) the field so it's clear to be inserted
     body("name")
-        .isLength({ min: 5 })
+        .isLength({ min: 2 })
         .withMessage("Must be at least 2 letters")
         .trim()
         .escape(),
@@ -47,24 +47,21 @@ exports.createCategory = [
             let errorMessage = field + " " + message;
 
             res.status(400).json({
-                message: errorMessage,
-                errors: errors.array()
+                message: errorMessage
             });
         } else {
             // Check if Category with same name already exists.
             Category.findOne({
                 name: req.body.name
             }).exec(function (err, found_category) {
-                if (err) {
+                if (found_category) {
+                    // Category exists, redirect to its page
+                    res.status(400).json({
+                        message: "Category already exists"
+                    });
+                } else if (err) {
                     res.json({
                         message: "Couldn't create please try again"
-                    });
-                } else if (found_category) {
-                    // Category exists, redirect to its page
-                    res.status(400);
-                    res.json({
-                        message: "Category already exists",
-                        category: found_category
                     });
                 } else {
                     newCategory.save(function (err, category) {
@@ -74,8 +71,7 @@ exports.createCategory = [
                             });
                         } else {
                             res.json({
-                                message: "Created Successfully",
-                                category
+                                message: "Created Successfully"
                             });
                         }
                     });
@@ -132,7 +128,7 @@ exports.updateCategory = [
         .trim()
         .escape(),
     body("description")
-        .isLength({ min: 20 })
+        .isLength({ min: 10 })
         .withMessage("must be at least 10 letters")
         .trim()
         .escape(),

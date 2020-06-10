@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Button, Modal, Toast } from "react-bootstrap";
 import { addCategory } from "../redux/actions/addCategoryAction";
 import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 
 // form validation useing Yup
 const validate = () =>
@@ -36,12 +36,14 @@ function AddCategoryForm() {
         dispatch(addCategory(newCategory))
             .then(res => {
                 toast.success(res, {
-                    position: toast.POSITION.BOTTOM_LEFT
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    transition: Slide
                 });
             })
             .catch(err => {
                 toast.error(err, {
-                    position: toast.POSITION.BOTTOM_LEFT
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    autoClose: false
                 });
             });
     };

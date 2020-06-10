@@ -35,7 +35,8 @@ const categoryReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                error: action.payload.err
+                error: action.payload.error,
+                success: null
             };
         case ADD_CATEGORY_SUCCESS:
             return {
@@ -47,7 +48,8 @@ const categoryReducer = (state = initialState, action) => {
         case ADD_CATEGORY_FAILURE:
             return {
                 ...state,
-                error: action.payload.error
+                error: action.payload.error,
+                success: null
             };
         case DELETE_CATEGORY_SUCCESS:
             return {
@@ -61,7 +63,8 @@ const categoryReducer = (state = initialState, action) => {
         case DELETE_CATEGORY_FAILURE:
             return {
                 ...state,
-                error: action.payload.error
+                error: action.payload.error,
+                success: null
             };
         case UPDATE_CATEGORY_SUCCESS:
             return {
@@ -78,7 +81,8 @@ const categoryReducer = (state = initialState, action) => {
         case UPDATE_CATEGORY_FAILURE:
             return {
                 ...state,
-                error: action.payload.error
+                error: action.payload.error,
+                success: null
             };
 
         default:

@@ -6,10 +6,9 @@ export const addCategory = category => dispatch => {
         axios
             .post("/api/category/create", category)
             .then(res => {
-                let newCategory = res.data.category;
                 let successMessage = res.data.message;
 
-                dispatch(addCategorySuccess(newCategory, successMessage));
+                dispatch(addCategorySuccess(category, successMessage));
                 resolve(successMessage);
             })
             .catch(error => {

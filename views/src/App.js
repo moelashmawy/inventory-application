@@ -10,6 +10,7 @@ import Products from "./components/Products";
 import SingleProduct from "./components/SingleProduct";
 import EditCategories from "./components/EditCategories";
 import EditProducts from "./components/EditProducts";
+import AddProductForm from "./components/AddProductForm";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path='/category/:id' component={CategoryProducts} />
                 <Route path='/products' component={Products} />
                 <Route path='/editProducts' component={EditProducts} />
+                <Route path='/addProduct' component={AddProductForm} />
                 <Route path='/product/:id' component={SingleProduct} />
             </Switch>
         </Router>

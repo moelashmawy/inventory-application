@@ -1,27 +1,38 @@
 import { UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT_FAILURE } from "./types";
 import axios from "axios";
 
-export const updateProduct = (id, product) => {
-    return dispatch => {
+export const updateProduct = (id, product) => dispatch => {
+    return new Promise((reslove, reject) => {
+        const form = Object.keys(product).reduce((f, k) => {
+            f.append(k, product[k]);
+            return f;
+        }, new FormData());
+
         axios
-            .post(`/api/product/${id}/update`, product)
+            .post(`/api/product/${id}/update`, form)
             .then(res => {
-                if (res.status === 400) {
-                    throw new Error("your custom message");
-                } else dispatch(updateProductSuccess(id, res.data));
+                let product = res.data.product;
+                let successMessage = res.data.message;
+
+                dispatch(updateProductSuccess(id, product, successMessage));
+                reslove(successMessage);
             })
             .catch(error => {
-                dispatch(updateProductFailure(error.message));
+                let errorMessage = error.response.data.message;
+
+                dispatch(updateProductFailure(errorMessage));
+                reject(errorMessage);
             });
-    };
+    });
 };
 
-const updateProductSuccess = (id, newProduct) => {
+const updateProductSuccess = (id, newProduct, successMessage) => {
     return {
         type: UPDATE_PRODUCT_SUCCESS,
         payload: {
             id,
-            newProduct
+            newProduct,
+            successMessage
         }
     };
 };

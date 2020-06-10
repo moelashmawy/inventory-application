@@ -6,8 +6,8 @@ import { deleteCategory } from "../redux/actions/deleteCategoryAction";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
-import EditCategoryForm from "./EditCategoryForm";
+import { toast, Slide } from "react-toastify";
+import UpdateCategoryForm from "./UpdateCategoryForm";
 
 function EditCategories() {
     const { categories, loading, error } = useSelector(
@@ -24,12 +24,14 @@ function EditCategories() {
         dispatch(deleteCategory(id))
             .then(res => {
                 toast.success(res.data.message, {
-                    position: toast.POSITION.BOTTOM_LEFT
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    transition: Slide
                 });
             })
             .catch(err => {
                 toast.error(err.data.message, {
-                    position: toast.POSITION.BOTTOM_LEFT
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    autoClose: false
                 });
             });
     };
@@ -52,11 +54,6 @@ function EditCategories() {
                             </td>
                         </tr>
                     )}
-                    {error && (
-                        <tr>
-                            <td colSpan='3'>{error}</td>
-                        </tr>
-                    )}
                     {categories.map(category => (
                         <tr key={category._id}>
                             <td>
@@ -67,7 +64,7 @@ function EditCategories() {
                             <td>{category.description}</td>
                             <td>
                                 <span className='btn btn-primary mr-3'>
-                                    <EditCategoryForm
+                                    <UpdateCategoryForm
                                         categoryId={category._id}
                                         categoryName={category.name}
                                         categoryDescription={
