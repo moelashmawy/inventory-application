@@ -1,28 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const product_controller = require("../../controllers/productController");
-var multer = require("multer");
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "./uploads/");
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    }
-});
-
-const fileFilter = (req, file, cb) => {
-    // reject a file
-    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-};
-
-//const upload = multer({ storage /* , fileFilter */ });
-const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 // GET request at /api/product for list of all products
 router.get("/", product_controller.productIndex);

@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { matchedData, body, validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const multer = require("multer");
 const Product = require("../models/ProductModel");
 
@@ -40,12 +40,12 @@ exports.createProduct = [
     //validate product that it's not empthy
     // then sanitize it with trima and escape
     body("name")
-        .isLength({ min: 5 })
+        .isLength({ min: 2 })
         .withMessage("Must be at least 2 letters")
         .trim()
         .escape(),
     body("description")
-        .isLength({ min: 20 })
+        .isLength({ min: 10 })
         .withMessage("Must be at least 10 letters")
         .trim()
         .escape(),

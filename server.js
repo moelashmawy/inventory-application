@@ -6,6 +6,7 @@ const cors = require("cors");
 // our routes
 const productRouter = require("./routes/api/product");
 const categoryRouter = require("./routes/api/category");
+const usersRouter = require("./routes/api/users");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(logger("dev"));
 // Set up our main routes
 app.use("/api/product", productRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/users", usersRouter);
 
 // serve static assets if in production
 if (process.env.NODE_ENV == "production") {

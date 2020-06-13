@@ -11,6 +11,7 @@ import SingleProduct from "./components/SingleProduct";
 import EditCategories from "./components/EditCategories";
 import EditProducts from "./components/EditProducts";
 import AddProductForm from "./components/AddProductForm";
+import SignUpForm from "./components/SignUpForm";
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
             <Switch>
                 <Route path='/' component={Products} exact />
                 <Route path='/dashboard' component={Dashboard} />
+                <Route path='/signup' component={SignUpForm} />
                 <Route path='/categories' component={Categories} />
                 <Route path='/editCategories' component={EditCategories} />
                 <Route path='/category/:id' component={CategoryProducts} />
