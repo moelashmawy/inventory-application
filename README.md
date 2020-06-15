@@ -23,18 +23,18 @@
 - Edit and delete products
 - Register and signin system
 
-## 💹 Technologies
+## &nbsp; 💹 &nbsp; Technologies
 
 Project is created with:
 
-# Backend
+#### Backend
 
 - Express
 - Mongoose
 - Json Web Token (For authentication)
 - bcryptjs (for data encryption)
 
-# Frontend
+#### Frontend
 
 - React JS
 - Redux
