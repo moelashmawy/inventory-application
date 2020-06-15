@@ -10,38 +10,40 @@
 
 ## 📜 Table of contents
 
--   [Main Features](#main-features)
--   [Technologies](#technologies)
--   [Key Concepts](#key-concepts)
--   [Setup](#setup)
+- [Main Features](#main-features)
+- [Technologies](#technologies)
+- [Key Concepts](#key-concepts)
+- [Setup](#setup)
 
 ## 🚩 Main Features
 
--   Add categories contains products
--   Edit and delete categories
--   Add products
--   Edit and delete products
+- Add categories contains products
+- Edit and delete categories
+- Add products
+- Edit and delete products
+- Register and signin system
 
 ## 💹 Technologies
 
 Project is created with:
 
--   React JS
--   Express
--   Mongoose
--   Axios (For http requests)
--   React Bootstrap
--   Formik (To handle forms state and validation)
--   Yup (To handle client side form validation)
+- React JS
+- Redux
+- Express
+- Mongoose
+- Json Web Token (For authentication)
+- Axios (For http requests)
+- React Bootstrap
+- Formik (To handle forms state and validation)
+- Yup (To handle client side form validation)
 
 ## 💡 Key Concepts
 
--   Images handling with Express
--   Promise (then/catch) using Axios
--   Async/Await
--   ES6 Module
--   OOP (Object Oriented Programming)
--   MVC (Model-View-Controller)
+- MVC (Model-View-Controller)
+- CRUD operations
+- Authentication system
+- Images handling using multer
+- OOP (Object Oriented Programming)
 
 ## 💻 Setup
 
@@ -62,11 +64,11 @@ $ npm run dev (for both client and server side)
 
 👤 **Mohamed Elashmawy**
 
--   Twitter: [@hamohuh](https://twitter.com/hamohuh)
--   Github: [@hamohuh](https://github.com/hamohuh)
--   Linkedin: [@mo-elashmawy](https://www.linkedin.com/in/mo-elashmawy/)
--   Email: [hamodroid@gmail.com](mailto:hamodroid@gmail.com)
+- Twitter: [@hamohuh](https://twitter.com/hamohuh)
+- Github: [@hamohuh](https://github.com/hamohuh)
+- Linkedin: [@mo-elashmawy](https://www.linkedin.com/in/mo-elashmawy/)
+- Email: [hamodroid@gmail.com](mailto:hamodroid@gmail.com)
 
 ## 📝 License
 
--   This project is [MIT](./LICENSE) licensed.
+- This project is [MIT](./LICENSE) licensed.
