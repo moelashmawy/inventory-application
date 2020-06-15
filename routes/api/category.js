@@ -1,20 +1,31 @@
 const express = require("express");
 const router = express.Router();
 const category_controller = require("../../controllers/categoryController");
+const auth = require("../../middlewares/auth");
 
-// hanle GET request at /api/category to get all the categories
+// @route   GET /api/category
+// @desc    Get all categories
+// @access  public
 router.get("/", category_controller.categoryIndex);
 
-//handle POST reqest at /api/category/create to create a new category
-router.post("/create", category_controller.createCategory);
+// @route   POST /api/category/create
+// @desc    create a new category
+// @access  private
+router.post("/create", auth, category_controller.createCategory);
 
-// handle GET request at /api/category/:id to get one category
+// @route   GET /api/category/:id
+// @desc    get one category details
+// @access  public
 router.get("/:id", category_controller.categoryDetails);
 
-// handle DELETE request at /api/category/:id/delete to delete a category with id
-router.delete("/:id/delete", category_controller.deleteCategory);
+// @route   DELETE /api/category/:id/delete
+// @desc    delete a category with specific id
+// @access  private
+router.delete("/:id/delete", auth, category_controller.deleteCategory);
 
-//handle PUT request at /api/category/:id/update to update a category with id
-router.put("/:id/update", category_controller.updateCategory);
+// @route   PUT /api/category/:id/update
+// @desc    update a category with specific id
+// @access  private
+router.put("/:id/update", auth, category_controller.updateCategory);
 
 module.exports = router;

@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Button, Toast, Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast, Slide } from "react-toastify";
-import { registerNewUser } from "../redux/actions/auth-actions/registerNewUser";
+import { login } from "../redux/actions/auth-actions/loginAction";
 
 // form validation useing Yup
 const validate = () =>
@@ -14,20 +14,14 @@ const validate = () =>
       .required("Username is required"),
     password: Yup.string()
       .min(8, "Must be more than 8 characters")
-      .required("This field is required"),
-    name: Yup.string()
-      .min(2, "Must be more than one character")
-      .required("This field is required"),
-    email: Yup.string()
-      .email("Please enter a vaild email")
       .required("This field is required")
   });
 
-function SignUpForm() {
+function LoginForm() {
   const dispatch = useDispatch();
 
-  const signUp = user => {
-    dispatch(registerNewUser(user))
+  const loginUser = user => {
+    dispatch(login(user))
       .then(res => {
         toast.success(res, {
           position: toast.POSITION.BOTTOM_LEFT,
@@ -41,26 +35,22 @@ function SignUpForm() {
         });
       });
   };
+
   return (
     <Container>
       <Formik
         initialValues={{
           username: "",
-          password: "",
-          name: "",
-          email: ""
+          password: ""
         }}
         validationSchema={validate}
         onSubmit={(values, { setSubmitting }) => {
           const newUser = {
             username: values.username,
-            password: values.password,
-            name: values.name,
-            email: values.email
+            password: values.password
           };
 
-          signUp(newUser);
-
+          loginUser(newUser);
           setSubmitting(false);
         }}>
         <Form>
@@ -83,24 +73,6 @@ function SignUpForm() {
             />
             <ErrorMessage component={Toast} name='password' />
           </div>
-          <div className='form-group'>
-            <Field
-              name='name'
-              className='form-control'
-              placeholder='Enter your name'
-              required
-            />
-            <ErrorMessage component={Toast} name='name' />
-          </div>
-          <div className='form-group'>
-            <Field
-              name='email'
-              className='form-control'
-              placeholder='Enter a valid email'
-              required
-            />
-            <ErrorMessage component={Toast} name='email' />
-          </div>
           <Button variant='primary' type='submit'>
             Submit{" "}
           </Button>{" "}
@@ -110,4 +82,4 @@ function SignUpForm() {
   );
 }
 
-export default SignUpForm;
+export default LoginForm;

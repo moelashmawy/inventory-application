@@ -1,28 +1,41 @@
 const express = require("express");
 const router = express.Router();
 const product_controller = require("../../controllers/productController");
+const auth = require("../../middlewares/auth");
 
-// GET request at /api/product for list of all products
+// @route   GET /api/product
+// @desc    Get all products
+// @access  public
 router.get("/", product_controller.productIndex);
 
-// POST request at /api/product/create to create a new product
+// @route   POST /api/product/create
+// @desc    Create a new product
+// @access  private
 router.post(
-    "/create",
-    product_controller.handleImages("productImage"),
-    product_controller.createProduct
+  "/create",
+  auth,
+  product_controller.handleImages("productImage"),
+  product_controller.createProduct
 );
 
-// GET request at /api/product/:id to get one product details
+// @route   GET /api/product/:id
+// @desc    Get one product details
+// @access  public
 router.get("/:id", product_controller.productDetails);
 
-// DELETE request at /api/product/:id/delete to delete one product
-router.delete("/:id/delete", product_controller.deleteProduct);
+// @route   DELETE /api/product/:id/delete
+// @desc    Delete one product
+// @access  private
+router.delete("/:id/delete", auth, product_controller.deleteProduct);
 
-// POST request at /api/product/:id/update to update one product
+// @route   POST /api/product/:id/update
+// @desc    Update one product
+// @access  private
 router.post(
-    "/:id/update",
-    product_controller.handleImages("productImage"),
-    product_controller.updateProduct
+  "/:id/update",
+  auth,
+  product_controller.handleImages("productImage"),
+  product_controller.updateProduct
 );
 
 module.exports = router;

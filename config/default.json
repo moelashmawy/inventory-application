@@ -1,0 +1,4 @@
+{
+    "dbURI": "mongodb+srv://hamo246:0452504270@cluster0-7ckqn.azure.mongodb.net/local_library?retryWrites=true",
+    "jwtSecret": "iDontHaveAnySecrets"
+}
