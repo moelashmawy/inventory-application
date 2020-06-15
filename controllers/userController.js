@@ -1,7 +1,5 @@
 const User = require("./../models/UsersModel");
 const { body, validationResult } = require("express-validator");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");

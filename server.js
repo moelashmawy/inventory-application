@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const logger = require("morgan");
 const path = require("path");
 const config = require("config");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
 // our routes
 const productRouter = require("./routes/api/product");
 const categoryRouter = require("./routes/api/category");
@@ -17,10 +15,6 @@ app.use(express.json());
 
 // morgan logger for dev
 app.use(logger("dev"));
-
-// passport authentication
-app.use(passport.initialize());
-app.use(passport.session());
 
 //make our upload an accesable folder
 app.use("/uploads", express.static("uploads"));

@@ -27,13 +27,21 @@
 
 Project is created with:
 
-- React JS
-- Redux
+# Backend
+
 - Express
 - Mongoose
 - Json Web Token (For authentication)
+- bcryptjs (for data encryption)
+
+# Frontend
+
+- React JS
+- Redux
 - Axios (For http requests)
 - React Bootstrap
+- React-router
+- React-toastify
 - Formik (To handle forms state and validation)
 - Yup (To handle client side form validation)
 
@@ -42,6 +50,7 @@ Project is created with:
 - MVC (Model-View-Controller)
 - CRUD operations
 - Authentication system
+- Encrypting passwords
 - Images handling using multer
 - OOP (Object Oriented Programming)
 

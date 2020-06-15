@@ -5,7 +5,7 @@ import { fetchCategories } from "../redux/actions/category-actions/fetchCategori
 import { Link } from "react-router-dom";
 
 function Categories() {
-  const { categories, loading, error } = useSelector(state => state.categoriesss);
+  const { categories, loading } = useSelector(state => state.categoriesss);
 
   const dispatch = useDispatch();
 

@@ -3,7 +3,7 @@ import { Button, Modal, Toast } from "react-bootstrap";
 import { Form, ErrorMessage, Field, Formik } from "formik";
 import * as Yup from "yup";
 import { updateCategory } from "../redux/actions/category-actions/updateCategoryAction";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { toast, Slide } from "react-toastify";
@@ -25,9 +25,6 @@ function UpdateCategoryForm(props) {
 
   // dispatch our redux action
   const dispatch = useDispatch();
-
-  // get error and success from out main redux state from categoriesss
-  const { error, success } = useSelector(state => state.categoriesss);
 
   //handle modal show and close
   const handleClose = () => setShow(false);

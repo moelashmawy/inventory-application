@@ -1,41 +1,41 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
-import { Formik, Field, ErrorMessage, useFormik } from "formik";
-import { Button, Toast, Container } from "react-bootstrap";
+import { Formik, Field, ErrorMessage, Form } from "formik";
+import { Button, Container, Toast } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { toast, Slide } from "react-toastify";
 import { fetchCategories } from "./../redux/actions/category-actions/fetchCategoriesAction";
 import { addProduct } from "../redux/actions/product-actions/addProductAction";
 
-function AddProductForm() {
-  //const theImage = useRef(null);
-
-  const [img, setImg] = useState("");
-
-  const [state, setState] = useState({
-    name: "",
-    description: "",
-    category: "",
-    price: "",
-    numberInStock: ""
-    //productImage: ""
+// form validation useing Yup
+const validate = () =>
+  Yup.object({
+    name: Yup.string()
+      .min(2, "Must be more then one character")
+      .required("This field is required"),
+    description: Yup.string()
+      .min(10, "Must be more than 10 characters")
+      .required("This field is required"),
+    category: Yup.string().required("This field is required"),
+    price: Yup.number()
+      .positive("Must be more than 0")
+      .integer("Must be more than 0")
+      .required("This field is required"),
+    numberInStock: Yup.number()
+      .positive("Must be more than 0")
+      .integer("Must be more than 0")
+      .required("This field is required")
   });
 
+function AddProductForm() {
+  const [img, setImg] = useState("");
+
   const handleImg = e => {
-    console.log(e.target.files[0]);
     setImg(e.target.files[0]);
   };
 
   // importing categories and laoding state from out store
-  const { categories, error, loading } = useSelector(state => state.categoriesss);
-
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setState(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
+  const { categories, loading } = useSelector(state => state.categoriesss);
 
   // react redux method to dispatch our functions
   const dispatch = useDispatch();
@@ -64,90 +64,98 @@ function AddProductForm() {
 
   return (
     <Container>
-      <form
-        action='/api/product/create'
-        method='post'
-        enctype='multipart/form-data'
-        onSubmit={e => {
-          e.preventDefault();
-
-          let newProduct = {
-            name: state.name,
-            description: state.description,
-            category: state.category,
-            price: state.price,
-            numberInStock: state.numberInStock,
+      <Formik
+        initialValues={{
+          name: "",
+          description: "",
+          category: "",
+          price: "",
+          numberInStock: ""
+        }}
+        validationSchema={validate}
+        onSubmit={(values, { setSubmitting }) => {
+          const newProduct = {
+            name: values.name,
+            description: values.description,
+            category: values.category,
+            price: values.price,
+            numberInStock: values.numberInStock,
             productImage: img
           };
 
           handleSubmitt(newProduct);
+
+          setSubmitting(false);
         }}>
-        <div className='form-group'>
+        <Form action='/api/product/create' method='post' encType='multipart/form-data'>
+          <div className='form-group'>
+            <Field
+              type='text'
+              name='name'
+              className='form-control'
+              placeholder='Enter product name'
+            />
+            <ErrorMessage component={Toast} name='name' />
+          </div>
+          <div className='form-group'>
+            <Field
+              as='textarea'
+              name='description'
+              className='form-control'
+              placeholder='Enter product description'
+            />
+            <ErrorMessage component={Toast} name='description' />
+          </div>
+          <div className='form-group'>
+            <Field as='select' name='category' className='form-control'>
+              {loading && <option>loading...</option>}
+              {!loading && (
+                <>
+                  <option value='' disabled>
+                    Choose product category
+                  </option>
+                  {categories.map(cat => {
+                    return (
+                      <option key={cat._id} value={cat._id}>
+                        {cat.name}
+                      </option>
+                    );
+                  })}
+                </>
+              )}
+            </Field>
+            <ErrorMessage component={Toast} name='category' />
+          </div>
+          <div className='form-group'>
+            <Field
+              type='text'
+              name='price'
+              className='form-control'
+              placeholder='Enter product price'
+            />
+            <ErrorMessage component={Toast} name='price' />
+          </div>
+          <div className='form-group'>
+            <Field
+              type='text'
+              name='numberInStock'
+              className='form-control'
+              placeholder='Enter product numberInStock'
+            />
+            <ErrorMessage component={Toast} name='numberInStock' />
+          </div>
           <input
-            className='form-control mb-2'
-            type='text'
-            placeholder='Enter Product name'
-            name='name'
             required
-            onChange={handleChange}
+            className='custom custom-file mb-2'
+            type='file'
+            name='productImage'
+            onChange={handleImg}
           />
-        </div>
-        <div className='form-group'>
-          <input
-            className='form-control mb-2'
-            as='textarea'
-            placeholder='Enter Product description'
-            name='description'
-            required
-            onChange={handleChange}
-          />
-        </div>
-        <div className='form-group'>
-          <select
-            className='custom-select mb-2'
-            name='category'
-            required
-            onChange={handleChange}>
-            {loading && <option>loading...</option>}
-            {categories.map(cat => {
-              return (
-                <option key={cat._id} value={cat._id}>
-                  {cat.name}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <div className='form-group'>
-          <input
-            className='form-control mb-2'
-            type='text'
-            placeholder='Enter Product price'
-            name='price'
-            required
-            onChange={handleChange}
-          />
-        </div>
-        <div className='form-group'>
-          <input
-            className='form-control mb-2'
-            type='text'
-            placeholder='Enter Product numberInStock'
-            name='numberInStock'
-            required
-            onChange={handleChange}
-          />
-        </div>
-        <input
-          className='custom custom-file mb-2'
-          type='file'
-          name='productImage'
-          onChange={handleImg}
-        />
-        <Button variant='primary' type='submit'>
-          Submit{" "}
-        </Button>{" "}
-      </form>
+          <Button variant='primary' type='submit'>
+            ADD{" "}
+          </Button>{" "}
+        </Form>
+      </Formik>
     </Container>
   );
 }

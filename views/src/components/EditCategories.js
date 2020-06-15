@@ -10,7 +10,7 @@ import { toast, Slide } from "react-toastify";
 import UpdateCategoryForm from "./UpdateCategoryForm";
 
 function EditCategories() {
-  const { categories, loading, error } = useSelector(state => state.categoriesss);
+  const { categories, loading } = useSelector(state => state.categoriesss);
 
   const dispatch = useDispatch();
 
@@ -27,8 +27,6 @@ function EditCategories() {
         });
       })
       .catch(err => {
-        console.log(err.response);
-
         toast.error(err.response.data.message, {
           position: toast.POSITION.BOTTOM_LEFT,
           autoClose: false

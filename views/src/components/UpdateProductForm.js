@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
-import { Formik, Field, ErrorMessage, Form, useFormik } from "formik";
-import { Button, Modal, Toast } from "react-bootstrap";
+import { Formik, Field, ErrorMessage, Form } from "formik";
+import { Button, Container, Toast, Modal } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategories } from "../redux/actions/category-actions/fetchCategoriesAction";
 import { updateProduct } from "../redux/actions/product-actions/updateProductAction";
@@ -9,24 +9,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { toast, Slide } from "react-toastify";
 
-// form validation using yup
+// form validation useing Yup
 const validate = () =>
   Yup.object({
     name: Yup.string()
-      .required("This field is required")
-      .min(2, "Must be more then 2 characters"),
+      .min(2, "Must be more then one character")
+      .required("This field is required"),
     description: Yup.string()
-      .required("This field is required")
-      .min(10, "Must be more then 10 characters"),
+      .min(10, "Must be more than 10 characters")
+      .required("This field is required"),
     category: Yup.string().required("This field is required"),
     price: Yup.number()
-      .required("This field is required")
-      .positive("Please enter Positive number")
-      .integer("Please enter number more than 0"),
+      .positive("Must be more than 0")
+      .integer("Must be more than 0")
+      .required("This field is required"),
     numberInStock: Yup.number()
+      .positive("Must be more than 0")
+      .integer("Must be more than 0")
       .required("This field is required")
-      .positive("Please enter Positive number")
-      .integer("Please enter number more than 0")
   });
 
 function UpdateProductForm(props) {
@@ -40,7 +40,7 @@ function UpdateProductForm(props) {
   };
 
   // importing categories and laoding state from out store
-  const { categories, error, loading } = useSelector(state => state.categoriesss);
+  const { categories, loading } = useSelector(state => state.categoriesss);
 
   // handle modal show and close
   const handleClose = () => setShow(false);
@@ -65,16 +65,7 @@ function UpdateProductForm(props) {
   };
 
   // handle submit our form
-  const handleSubmit = values => {
-    const newProduct = {
-      name: values.name,
-      description: values.description,
-      category: values.category,
-      price: values.price,
-      numberInStock: values.numberInStock,
-      productImage: img
-    };
-
+  const handleSubmit = newProduct => {
     dispatch(updateProduct(props.id, newProduct))
       .then(res => {
         toast.success(res, {
@@ -90,14 +81,8 @@ function UpdateProductForm(props) {
       });
   };
 
-  const formik = useFormik({
-    initialValues: initialState,
-    validationSchema: validate,
-    onSubmit: handleSubmit
-  });
-
   return (
-    <div>
+    <Container>
       <Button variant='primary' onClick={handleShow}>
         <FontAwesomeIcon icon={faEdit} />
       </Button>
@@ -107,102 +92,97 @@ function UpdateProductForm(props) {
           <Modal.Title>Add New Product</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form
-            action={`/api/product/${props.id}/update`}
-            method='post'
-            enctype='multipart/form-data'
-            onSubmit={formik.handleSubmit}>
-            <div className='form-group'>
-              <input
-                className='form-control mb-2'
-                type='text'
-                placeholder='Enter Product name'
-                name='name'
-                required
-                {...formik.getFieldProps("name")}
-              />
-              {formik.touched.name && formik.errors.name ? (
-                <div>{formik.errors.name}</div>
-              ) : null}
-            </div>
-            <div className='form-group'>
-              <input
-                className='form-control mb-2'
-                as='textarea'
-                placeholder='Enter Product description'
-                name='description'
-                required
-                {...formik.getFieldProps("description")}
-              />
-              {formik.touched.description && formik.errors.description ? (
-                <div>{formik.errors.description}</div>
-              ) : null}
-            </div>
-            <div className='form-group'>
-              <select
-                className='custom-select mb-2'
-                name='category'
-                required
-                {...formik.getFieldProps("category")}>
-                {loading && <option>loading...</option>}
-                {categories.map(cat => {
-                  return (
-                    <option key={cat._id} value={cat._id}>
-                      {cat.name}
-                    </option>
-                  );
-                })}
-              </select>
-              {formik.touched.category && formik.errors.category ? (
-                <div>{formik.errors.category}</div>
-              ) : null}
-            </div>
-            <div className='form-group'>
-              <input
-                className='form-control mb-2'
-                type='text'
-                placeholder='Enter Product price'
-                name='price'
-                required
-                {...formik.getFieldProps("price")}
-              />
-              {formik.touched.price && formik.errors.price ? (
-                <div>{formik.errors.price}</div>
-              ) : null}
-            </div>
-            <div className='form-group'>
-              <input
-                className='form-control mb-2'
-                type='text'
-                placeholder='Enter Product numberInStock'
-                name='numberInStock'
-                required
-                {...formik.getFieldProps("numberInStock")}
-              />
-              {formik.touched.numberInStock && formik.errors.numberInStock ? (
-                <div>{formik.errors.numberInStock}</div>
-              ) : null}
-            </div>
-            <div className='form-group'>
+          <Formik
+            initialValues={initialState}
+            validationSchema={validate}
+            onSubmit={(values, { setSubmitting }) => {
+              const newProduct = {
+                name: values.name,
+                description: values.description,
+                category: values.category,
+                price: values.price,
+                numberInStock: values.numberInStock,
+                productImage: img
+              };
+
+              handleSubmit(newProduct);
+
+              setSubmitting(false);
+            }}>
+            <Form
+              action='/api/product/create'
+              method='post'
+              encType='multipart/form-data'>
+              <div className='form-group'>
+                <Field
+                  type='text'
+                  name='name'
+                  className='form-control'
+                  placeholder='Enter product name'
+                />
+                <ErrorMessage component={Toast} name='name' />
+              </div>
+              <div className='form-group'>
+                <Field
+                  as='textarea'
+                  name='description'
+                  className='form-control'
+                  placeholder='Enter product description'
+                />
+                <ErrorMessage component={Toast} name='description' />
+              </div>
+              <div className='form-group'>
+                <Field as='select' name='category' className='form-control'>
+                  {loading && <option>loading...</option>}
+                  {!loading && (
+                    <>
+                      <option value='' disabled>
+                        Choose product category
+                      </option>
+                      {categories.map(cat => {
+                        return (
+                          <option key={cat._id} value={cat._id}>
+                            {cat.name}
+                          </option>
+                        );
+                      })}
+                    </>
+                  )}
+                </Field>
+                <ErrorMessage component={Toast} name='category' />
+              </div>
+              <div className='form-group'>
+                <Field
+                  type='text'
+                  name='price'
+                  className='form-control'
+                  placeholder='Enter product price'
+                />
+                <ErrorMessage component={Toast} name='price' />
+              </div>
+              <div className='form-group'>
+                <Field
+                  type='text'
+                  name='numberInStock'
+                  className='form-control'
+                  placeholder='Enter product numberInStock'
+                />
+                <ErrorMessage component={Toast} name='numberInStock' />
+              </div>
               <input
                 className='custom custom-file mb-2'
                 type='file'
                 name='productImage'
-                required
                 onChange={handleImg}
               />
-              {formik.touched.productImage && formik.errors.productImage ? (
-                <div>{formik.errors.productImage}</div>
-              ) : null}
-            </div>
-            <Button variant='primary' type='submit' onClick={formik.handleSubmit}>
-              Submit{" "}
-            </Button>{" "}
-          </form>
+              <Button variant='primary' type='submit'>
+                Update{" "}
+              </Button>{" "}
+            </Form>
+          </Formik>
         </Modal.Body>
-        <Modal.Footer></Modal.Footer>
       </Modal>
-    </div>
+    </Container>
   );
 }
 
