@@ -1,4 +1,4 @@
-<h1 align="center">  🛒 Shopping App 🛒 </h1>
+<h1 align="center">  🛒 &nbsp; Shopping App 🛒 </h1>
 
 > Built with MERN stack (MongoDB, Express, React and Node).
 
@@ -6,16 +6,16 @@
 > From The Odin Project's [curriculum](https://www.theodinproject.com/courses/nodejs/lessons/inventory-application)
 > The Code can be found [here](https://github.com/hamohuh/inventory-application)
 
-### <h2 align="center"> ⚡️⚡️⚡️ [Live Demo](https://afternoon-atoll-93127.herokuapp.com/) ⚡️⚡️⚡️ </h2>
+### <h2 align="center"> ⚡️⚡️⚡️ &nbsp; [Live Demo](https://afternoon-atoll-93127.herokuapp.com/) ⚡️⚡️⚡️ </h2>
 
-## 📜 Table of contents
+## 📜 &nbsp; Table of contents
 
 - [Main Features](#main-features)
 - [Technologies](#technologies)
 - [Key Concepts](#key-concepts)
 - [Setup](#setup)
 
-## 🚩 Main Features
+## 🚩 &nbsp; Main Features
 
 - Add categories contains products
 - Edit and delete categories
@@ -23,9 +23,9 @@
 - Edit and delete products
 - Register and signin system
 
-## &nbsp; 💹 &nbsp; Technologies
+## 💹 &nbsp; Technologies
 
-Project is created with:
+#### Project is created with:
 
 #### Backend
 
@@ -45,7 +45,7 @@ Project is created with:
 - Formik (To handle forms state and validation)
 - Yup (To handle client side form validation)
 
-## 💡 Key Concepts
+## 💡 &nbsp; Key Concepts
 
 - MVC (Model-View-Controller)
 - CRUD operations
@@ -54,7 +54,7 @@ Project is created with:
 - Images handling using multer
 - OOP (Object Oriented Programming)
 
-## 💻 Setup
+## 💻 &nbsp;Setup
 
 To run this project, install it locally using npm:
 
@@ -71,13 +71,13 @@ $ npm run dev (for both client and server side)
 
 # Author
 
-👤 **Mohamed Elashmawy**
+👤 &nbsp; **Mohamed Elashmawy**
 
 - Twitter: [@hamohuh](https://twitter.com/hamohuh)
 - Github: [@hamohuh](https://github.com/hamohuh)
 - Linkedin: [@mo-elashmawy](https://www.linkedin.com/in/mo-elashmawy/)
 - Email: [hamodroid@gmail.com](mailto:hamodroid@gmail.com)
 
-## 📝 License
+## 📝 &nbsp; License
 
 - This project is [MIT](./LICENSE) licensed.
