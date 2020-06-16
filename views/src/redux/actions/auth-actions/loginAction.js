@@ -13,8 +13,6 @@ export const login = user => dispatch => {
         resolve(message);
       })
       .catch(err => {
-        console.log(err);
-
         let error = err.response.data.message;
         dispatch(loginUserFailure(error));
         reject(error);

@@ -5,7 +5,8 @@ import axios from "axios";
 /*
  * this function to load the user with a specific token given from the frontend
  * in the request header cause JWT is stateless and we have to load the user
- * from the token in every refresh to the website and we call it in app.js
+ * from the token in every refresh to the website
+ * call this function in app.js before any render in useEffect
  */
 export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });

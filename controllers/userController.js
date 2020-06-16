@@ -146,17 +146,20 @@ exports.login = (req, res, next) => {
             config.get("jwtSecret"),
             { expiresIn: 3600 },
             (err, token) => {
-              if (err) throw err;
-              res.json({
-                token,
-                message: "Logged in Succefully",
-                user: {
-                  id: user.id,
-                  name: user.name,
-                  username: user.username,
-                  email: user.email
-                }
-              });
+              if (err) res.json({ err });
+              else {
+                //localStorage.setItem("newTOOOO", token);
+                res.json({
+                  token,
+                  message: "Logged in Succefully",
+                  user: {
+                    id: user.id,
+                    name: user.name,
+                    username: user.username,
+                    email: user.email
+                  }
+                });
+              }
             }
           );
         }

@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Button, Toast, Container } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast, Slide } from "react-toastify";
 import { login } from "../redux/actions/auth-actions/loginAction";
 
@@ -17,7 +18,7 @@ const validate = () =>
       .required("This field is required")
   });
 
-function LoginForm() {
+function LoginForm(props) {
   const dispatch = useDispatch();
 
   const loginUser = user => {
@@ -27,6 +28,7 @@ function LoginForm() {
           position: toast.POSITION.BOTTOM_LEFT,
           transition: Slide
         });
+        props.history.push("/");
       })
       .catch(err => {
         toast.error(err, {
@@ -74,10 +76,14 @@ function LoginForm() {
             <ErrorMessage component={Toast} name='password' />
           </div>
           <Button variant='primary' type='submit'>
-            Submit{" "}
+            Login{" "}
           </Button>{" "}
         </Form>
       </Formik>
+      <div className='mt-3'>
+        <span>Not a user, </span>
+        <Link to='/signup'>Sign up</Link>
+      </div>
     </Container>
   );
 }

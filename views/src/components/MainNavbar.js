@@ -1,17 +1,20 @@
 import React from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { logout } from "./../redux/actions/auth-actions/logoutAction";
 import { useDispatch, useSelector } from "react-redux";
 
-function MainNavbar() {
+function MainNavbar(props) {
   const { user, isAuthenticated } = useSelector(state => state.userrr);
 
   const dispatch = useDispatch();
+  let history = useHistory();
+
   const logoutUser = () => {
     dispatch(logout());
+    history.push("/");
   };
 
   return (
