@@ -20,8 +20,6 @@ const auth = (req, res, next) => {
     // add user from token payload which contains the user id we attached to the token
     req.user = decoded;
 
-    console.log(req.header("x-auth-token"));
-
     next();
   } catch (e) {
     res.status(400).json({ message: "Token isn't valid" });

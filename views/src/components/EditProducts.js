@@ -1,22 +1,29 @@
 import React, { useEffect } from "react";
 import { Container, Table, Spinner, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProducts } from "../redux/actions/product-actions/fetchProductsAction";
+import { fetchUserProducts } from "../redux/actions/product-actions/fetchUserProductsAction";
 import { deleteProduct } from "../redux/actions/product-actions/deleteProductAction";
+import { loadUser } from "../redux/actions/auth-actions/loadUser";
 import UpdateProductForm from "./UpdateProductForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
 function EditProducts() {
-  const { products, loading } = useSelector(state => state.productsss);
+  const { user } = useSelector(state => state.userrr);
+  const { loading, products } = useSelector(state => state.userProductsss);
+
+  const userId = user ? user._id : null;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    dispatch(loadUser());
 
+    dispatch(fetchUserProducts(userId));
+  }, [dispatch, userId]);
+
+  // this function will delete the item and trigger a message after it's done
   const deleteIt = id => {
     dispatch(deleteProduct(id))
       .then(res => {
@@ -47,6 +54,12 @@ function EditProducts() {
               <td colSpan='4'>
                 <Spinner animation='border' /> loading...{" "}
               </td>
+            </tr>
+          )}
+
+          {!user && !loading && (
+            <tr>
+              <td colSpan='4'>Please Log in to access this page</td>
             </tr>
           )}
 

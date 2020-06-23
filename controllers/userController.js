@@ -21,7 +21,10 @@ exports.createUser = [
     .withMessage("must be at least 8 characters")
     .trim()
     .escape(),
-  body("name")
+  body("firstName").isLength({
+    min: 2
+  }),
+  body("lastName")
     .isLength({
       min: 2
     })
@@ -63,11 +66,16 @@ exports.createUser = [
               res.status(400).json({ message: "Username is taken" });
             } else {
               // create a new user after validating and sanitzing
+              // the user is a customer by default and can update himself to seller
               const newUser = new User({
                 username: req.body.username,
                 password: req.body.password,
-                name: req.body.name,
-                email: req.body.email
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
+                isAdmin: false,
+                isSeller: false,
+                isCustomer: true
               });
 
               // encrypt the password using bcryptjs
@@ -99,8 +107,12 @@ exports.createUser = [
                             message: "Registered Succefully",
                             user: {
                               id: user.id,
-                              name: user.name,
-                              email: user.email
+                              firstName: user.firstName,
+                              lastName: user.lastName,
+                              email: user.email,
+                              isAdmin: user.isAdmin,
+                              isSeller: user.isSeller,
+                              isCustomer: user.isCustomer
                             }
                           });
                         }
@@ -123,49 +135,69 @@ exports.createUser = [
 ];
 
 // handle POST request at "api/users/login"
-exports.login = (req, res, next) => {
-  User.findOne({ username: req.body.username }, (err, user) => {
-    if (err) {
-      res.json(err);
-    }
-    if (!user) {
-      res.status(400).json({ message: "Invalid username" });
-    }
-    // compare the encryptic password with the entered password
-    else
-      bcrypt.compare(req.body.password, user.password).then(isMatch => {
-        // if the password doesn't match, return a message
-        if (!isMatch) {
-          return res.status(400).json({
-            message: "Invalid password"
-          });
-          // if it matches return a json with some data
-        } else {
-          jwt.sign(
-            { id: user.id },
-            config.get("jwtSecret"),
-            { expiresIn: 3600 },
-            (err, token) => {
-              if (err) res.json({ err });
-              else {
-                //localStorage.setItem("newTOOOO", token);
-                res.json({
-                  token,
-                  message: "Logged in Succefully",
-                  user: {
-                    id: user.id,
-                    name: user.name,
-                    username: user.username,
-                    email: user.email
-                  }
-                });
+exports.login = [
+  // validate our user inputs
+  body("username")
+    .isLength({
+      min: 2
+    })
+    .withMessage("must be at least 2 charachers")
+    .trim()
+    .escape(),
+  body("password")
+    .isLength({
+      min: 8
+    })
+    .withMessage("must be at least 8 characters")
+    .trim()
+    .escape(),
+
+  (req, res, next) => {
+    User.findOne({ username: req.body.username }, (err, user) => {
+      if (err) {
+        res.json(err);
+      }
+      if (!user) {
+        res.status(400).json({ message: "Invalid username" });
+      }
+      // compare the encryptic password with the entered password
+      else
+        bcrypt.compare(req.body.password, user.password).then(isMatch => {
+          // if the password doesn't match, return a message
+          if (!isMatch) {
+            return res.status(400).json({
+              message: "Invalid password"
+            });
+            // if it matches return a json with some data
+          } else {
+            jwt.sign(
+              { id: user.id },
+              config.get("jwtSecret"),
+              { expiresIn: 3600 },
+              (err, token) => {
+                if (err) res.json({ err });
+                else {
+                  res.json({
+                    token,
+                    message: "Logged in Succefully",
+                    user: {
+                      id: user.id,
+                      firstName: user.firstName,
+                      lastName: user.lastName,
+                      email: user.email,
+                      isAdmin: user.isAdmin,
+                      isSeller: user.isSeller,
+                      isCustomer: user.isCustomer
+                    }
+                  });
+                }
               }
-            }
-          );
-        }
-      });
-  });
-};
+            );
+          }
+        });
+    });
+  }
+];
 
 // handle get request at "/api/users/user"
 exports.getUser = (req, res) => {

@@ -12,7 +12,11 @@ import {
 let initialState = {
   token: localStorage.getItem("token"),
   user: null,
-  isAuthenticated: false,
+  auth: {
+    isAdmin: false,
+    isSeller: false,
+    isCustomer: false
+  },
   isLoading: false,
   success: null,
   error: null
@@ -29,8 +33,13 @@ const usersReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        isAuthenticated: true,
-        user: action.payload.user
+        user: action.payload.user,
+        auth: {
+          isAdmin: action.payload.user.isAdmin,
+          isSeller: action.payload.user.isSeller,
+          isCustomer: action.payload.user.isCustomer
+        },
+        error: null
       };
     case REGISTER_USER_SUCCESS:
     case LOGIN_USER_SUCCESS:
@@ -39,7 +48,11 @@ const usersReducer = (state = initialState, action) => {
         ...state,
         token: action.payload.token,
         user: action.payload.user,
-        isAuthenticated: true,
+        auth: {
+          isAdmin: action.payload.user.isAdmin,
+          isSeller: action.payload.user.isSeller,
+          isCustomer: action.payload.user.isCustomer
+        },
         isLoading: false,
         error: null,
         success: action.payload.successMessage
@@ -52,10 +65,14 @@ const usersReducer = (state = initialState, action) => {
       return {
         ...state,
         token: null,
-        isAuthenticated: false,
         user: null,
         error: null,
-        success: null
+        success: null,
+        auth: {
+          isAdmin: false,
+          isSeller: false,
+          isCustomer: false
+        }
       };
 
     default:

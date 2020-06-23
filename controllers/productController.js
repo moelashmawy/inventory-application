@@ -6,7 +6,22 @@ const Product = require("../models/ProductModel");
 
 // handle GET request at /api/product to get list of all products
 exports.productIndex = (req, res, next) => {
-  Product.find().then(product => res.json(product));
+  Product.find()
+    .sort({ creationDate: -1 })
+    .then(product => res.json(product));
+};
+
+// handle GET request at /api/product/:userId/products to get list of all products
+exports.userProducts = (req, res, next) => {
+  Product.find({ seller: req.params.userId })
+    .populate("seller")
+    .exec((err, result) => {
+      if (err) {
+        res.status(400).json({ message: "Couldn't find user" });
+      } else {
+        res.status(200).json(result);
+      }
+    });
 };
 
 // Multer handling image upload Middleware at /api/product/create
@@ -83,6 +98,7 @@ exports.createProduct = [
       name: req.body.name,
       description: req.body.description,
       category: req.body.category,
+      seller: req.user.id,
       price: req.body.price,
       numberInStock: req.body.numberInStock,
       productImage: req.file.path
@@ -118,6 +134,7 @@ exports.createProduct = [
 exports.productDetails = (req, res, next) => {
   Product.findById(req.params.id)
     .populate("category")
+    .populate("seller")
     .exec(function (err, result) {
       if (err) {
         res.status(404).json({ message: "Not Found" });

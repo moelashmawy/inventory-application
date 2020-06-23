@@ -46,7 +46,7 @@ function SingleProduct(props) {
             <br />
             <div>Condition: New</div>
             <br />
-            <div>Sold by: Seller</div>
+            <div>Sold by: {product.seller.username}</div>
             <br />
             {prodCategory()}
           </Col>

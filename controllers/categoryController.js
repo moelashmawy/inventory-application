@@ -81,7 +81,7 @@ exports.createCategory = [
   }
 ];
 
-// handle GET request at /api/category/:id to get one category
+// handle GET request at /api/category/:id to get one category items
 exports.categoryDetails = function (req, res, next) {
   async.parallel(
     {

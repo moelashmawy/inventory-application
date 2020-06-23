@@ -16,7 +16,10 @@ const validate = () =>
     password: Yup.string()
       .min(8, "Must be more than 8 characters")
       .required("This field is required"),
-    name: Yup.string()
+    firstName: Yup.string()
+      .min(2, "Must be more than one character")
+      .required("This field is required"),
+    lastName: Yup.string()
       .min(2, "Must be more than one character")
       .required("This field is required"),
     email: Yup.string()
@@ -49,7 +52,8 @@ function SignUpForm(props) {
         initialValues={{
           username: "",
           password: "",
-          name: "",
+          firstName: "",
+          lastName: "",
           email: ""
         }}
         validationSchema={validate}
@@ -57,7 +61,8 @@ function SignUpForm(props) {
           const newUser = {
             username: values.username,
             password: values.password,
-            name: values.name,
+            firstName: values.firstName,
+            lastName: values.lastName,
             email: values.email
           };
 
@@ -87,12 +92,21 @@ function SignUpForm(props) {
           </div>
           <div className='form-group'>
             <Field
-              name='name'
+              name='firstName'
               className='form-control'
-              placeholder='Enter your name'
+              placeholder='Enter your firstName'
               required
             />
-            <ErrorMessage component={Toast} name='name' />
+            <ErrorMessage component={Toast} name='firstName' />
+          </div>
+          <div className='form-group'>
+            <Field
+              name='lastName'
+              className='form-control'
+              placeholder='Enter your lastName'
+              required
+            />
+            <ErrorMessage component={Toast} name='lastName' />
           </div>
           <div className='form-group'>
             <Field
