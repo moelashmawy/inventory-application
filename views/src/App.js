@@ -3,16 +3,24 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import MainNavbar from "./components/MainNavbar";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/dashboard/Dashboard";
 import Categories from "./components/Categories";
 import CategoryProducts from "./components/CategoryProducts";
 import Products from "./components/Products";
 import SingleProduct from "./components/SingleProduct";
-import EditCategories from "./components/EditCategories";
-import EditProducts from "./components/EditProducts";
-import AddProductForm from "./components/AddProductForm";
-import SignUpForm from "./components/SignUpForm";
-import LoginForm from "./components/LoginForm";
+import EditCategories from "./components/dashboard/EditCategories";
+import EditProducts from "./components/dashboard/EditProducts";
+import AddProductForm from "./components/dashboard/AddProductForm";
+import SignUpForm from "./components/login&signup/SignUpForm";
+import LoginForm from "./components/login&signup/LoginForm";
+import Cart from "./components/cart/Cart";
+import AccountSettings from "./components/account-settings/AccountSettings";
+import Addresses from "./components/account-settings/Addresses";
+import MyOrders from "./components/account-settings/MyOrders";
+import WishList from "./components/account-settings/WishList";
+import AddAddressForm from "./components/account-settings/AddAddressForm";
+import EditAddressForm from "./components/account-settings/EditAddressForm";
+import EditAccountForm from "./components/account-settings/EditAccountForm";
 import { loadUser } from "./redux/actions/auth-actions/loadUser";
 import { useDispatch } from "react-redux";
 
@@ -40,6 +48,14 @@ function App() {
         <Route path='/editProducts' component={EditProducts} />
         <Route path='/addProduct' component={AddProductForm} />
         <Route path='/product/:id' component={SingleProduct} />
+        <Route path='/cart' component={Cart} />
+        <Route path='/settings' component={AccountSettings} exact />
+        <Route path='/settings/edit_account' component={EditAccountForm} />
+        <Route path='/my_addresses' component={Addresses} exact />
+        <Route path='/my_addresses/add_address' component={AddAddressForm} />
+        <Route path='/my_addresses/edit_address' component={EditAddressForm} />
+        <Route path='/my_orders' component={MyOrders} />
+        <Route path='/wish_list' component={WishList} />
       </Switch>
     </Router>
   );

@@ -2,6 +2,11 @@ import React, { useEffect } from "react";
 import { Container, ProgressBar, Image, Row, Col, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSingleProductAction } from "../redux/actions/product-actions/fetchSingleProductAction";
+import { toast, Slide } from "react-toastify";
+import { addToCart } from "./../redux/actions/cart-actions/addToCart";
+import { addToWishlist } from "./../redux/actions/wishlist-actions/addToWishlist";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 function SingleProduct(props) {
   const { product, loading, error } = useSelector(state => state.singleProducttt);
@@ -18,6 +23,23 @@ function SingleProduct(props) {
     } else {
       return <div>Category: undefined "please consider edit this product"</div>;
     }
+  };
+
+  // handle add to cart and wishlist
+  const addTo = addFunction => {
+    dispatch(addFunction)
+      .then(res => {
+        toast.success(res, {
+          position: toast.POSITION.BOTTOM_LEFT,
+          transition: Slide
+        });
+      })
+      .catch(err => {
+        toast.error(err, {
+          position: toast.POSITION.BOTTOM_LEFT,
+          autoClose: false
+        });
+      });
   };
 
   return (
@@ -41,7 +63,21 @@ function SingleProduct(props) {
             <br />
           </Col>
           <Col>
-            <Button>Add to cart</Button>
+            <Button
+              onClick={() => {
+                addTo(addToCart(product._id));
+              }}>
+              Add to cart
+            </Button>
+            <FontAwesomeIcon
+              onClick={() => {
+                addTo(addToWishlist(product._id));
+              }}
+              color='red'
+              size='lg'
+              icon={faHeart}
+              className='ml-5'
+            />
             <br />
             <br />
             <div>Condition: New</div>

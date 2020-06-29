@@ -1,42 +1,39 @@
 import React, { useState } from "react";
-import { Button, Modal, Toast } from "react-bootstrap";
-import { Form, ErrorMessage, Field, Formik } from "formik";
 import * as Yup from "yup";
-import { updateCategory } from "../redux/actions/category-actions/updateCategoryAction";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Button, Modal, Toast } from "react-bootstrap";
+import { addCategory } from "../../redux/actions/category-actions/addCategoryAction";
 import { useDispatch } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { toast, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-//validate our form inputs and handle the errors using YUP
-const validationSchema = () =>
+// form validation useing Yup
+const validate = () =>
   Yup.object({
     name: Yup.string()
-      .min(1, "Please enter a name more than 1 character")
-      .required("This field is required"),
+      .min(2, "Must be more then one character")
+      .required("Category name is required"),
     description: Yup.string()
       .min(10, "Must be more than 10 characters")
-      .required("This field is requried")
+      .required("This field is required")
   });
 
-function UpdateCategoryForm(props) {
+function AddCategoryForm() {
   const [show, setShow] = useState(false);
+
+  // handle modal show and hide
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   // dispatch our redux action
   const dispatch = useDispatch();
 
-  //handle modal show and close
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   /**
-   * This method to handle our whole update process
-   * it takes the targeted category id and the category object
+   * This method to handle our whole adding process
+   * it takes the new category object
    */
-  const handleUpdateCategory = (id, category) => {
+  const handleAdd = newCategory => {
     //this promise was returned to handle sucess and error messages
-    dispatch(updateCategory(id, category))
+    dispatch(addCategory(newCategory))
       .then(res => {
         toast.success(res, {
           position: toast.POSITION.BOTTOM_LEFT,
@@ -53,39 +50,50 @@ function UpdateCategoryForm(props) {
 
   return (
     <div>
-      <Button className='btn' variant='primary' onClick={handleShow}>
-        <FontAwesomeIcon icon={faEdit} />{" "}
+      <Button variant='primary' onClick={handleShow}>
+        Add Category
       </Button>
+
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title> Add New Category </Modal.Title>{" "}
-        </Modal.Header>{" "}
+          <Modal.Title>Add New Category</Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           <Formik
             initialValues={{
-              name: props.categoryName,
-              description: props.categoryDescription
+              name: "",
+              description: ""
             }}
-            validationSchema={validationSchema}
+            validationSchema={validate}
             onSubmit={(values, { setSubmitting }) => {
               const newCategory = {
                 name: values.name,
                 description: values.description
               };
 
-              handleUpdateCategory(props.categoryId, newCategory);
+              handleAdd(newCategory);
 
               setSubmitting(false);
             }}>
-            <Form action={`/api/product/${props.categoryId}/update`} method='put'>
+            <Form>
               <div className='form-group'>
                 <label htmlFor='name'>name</label>
-                <Field type='text' name='name' className='form-control' />
+                <Field
+                  type='text'
+                  name='name'
+                  className='form-control'
+                  placeholder='Enter Category name'
+                />
                 <ErrorMessage component={Toast} name='name' />
               </div>
               <div className='form-group'>
                 <label htmlFor='description'>description</label>
-                <Field as='textarea' name='description' className='form-control' />
+                <Field
+                  as='textarea'
+                  name='description'
+                  className='form-control'
+                  placeholder='Enter Category description'
+                />
                 <ErrorMessage component={Toast} name='description' />
               </div>
               <Button variant='primary' type='submit'>
@@ -102,4 +110,4 @@ function UpdateCategoryForm(props) {
   );
 }
 
-export default UpdateCategoryForm;
+export default AddCategoryForm;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar, Nav, Button, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Spinner, NavDropdown } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
@@ -7,7 +7,7 @@ import { logout } from "./../redux/actions/auth-actions/logoutAction";
 import { useDispatch, useSelector } from "react-redux";
 
 function MainNavbar(props) {
-  const { user, auth } = useSelector(state => state.userrr);
+  const { user, auth, isLoading } = useSelector(state => state.userrr);
 
   const dispatch = useDispatch();
   let history = useHistory();
@@ -20,9 +20,70 @@ function MainNavbar(props) {
   let dashboard;
   if (auth.isAdmin || auth.isSeller) {
     dashboard = (
-      <Link to='/dashboard' className='nav-link'>
-        Dashboard
+      <NavDropdown.Item>
+        <Link className='dropdown-item' to='/dashboard'>
+          Dashboard
+        </Link>
+      </NavDropdown.Item>
+    );
+  }
+
+  let signUp;
+  if (!auth.isCustomer && !isLoading) {
+    signUp = (
+      <Link to='/signup' className='nav-link'>
+        Sign Up
       </Link>
+    );
+  }
+
+  let login;
+  if (!auth.isCustomer && !isLoading) {
+    login = (
+      <Link to='/login' className='nav-link'>
+        Login
+      </Link>
+    );
+  }
+
+  let userDropDown;
+  if (isLoading) {
+    userDropDown = <Spinner animation='grow' variant='info' />;
+  } else if (user) {
+    userDropDown = (
+      <span className='nav-link'>
+        <NavDropdown title={user.firstName} id='basic-nav-dropdown'>
+          <NavDropdown.Item>
+            <Link className='dropdown-item' to='/settings'>
+              My Account
+            </Link>
+          </NavDropdown.Item>
+
+          <NavDropdown.Item>
+            <Link className='dropdown-item' to='/my_addresses'>
+              My Addresses
+            </Link>
+          </NavDropdown.Item>
+
+          <NavDropdown.Item>
+            <Link className='dropdown-item' to='/wish_list'>
+              Wish List
+            </Link>
+          </NavDropdown.Item>
+
+          <NavDropdown.Item>
+            <Link className='dropdown-item' to='/my_orders'>
+              My Orders
+            </Link>
+          </NavDropdown.Item>
+
+          {dashboard}
+
+          <NavDropdown.Divider />
+
+          <NavDropdown.Item onClick={logoutUser}>Log out</NavDropdown.Item>
+        </NavDropdown>
+      </span>
     );
   }
 
@@ -42,46 +103,16 @@ function MainNavbar(props) {
           <Link to='/products' className='nav-link'>
             All Products
           </Link>
-          {dashboard}
-          {/* {auth.isAdmin ||
-            (auth.isSeller && (
-              <Link to='/dashboard' className='nav-link'>
-                Dashboard
-              </Link>
-            ))} */}
         </Nav>
-
-        {!auth.isCustomer && (
-          <Link to='/signup' className='nav-link'>
-            Sign Up
-          </Link>
-        )}
-
-        {!auth.isCustomer && (
-          <Link to='/login' className='nav-link'>
-            Login
-          </Link>
-        )}
-        {auth.isCustomer && (
-          <span className='nav-link'>
-            <NavDropdown title={user.lastName} id='basic-nav-dropdown'>
-              <NavDropdown.Item href='#action/3.1'>Settings</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item>
-                {auth.isCustomer && (
-                  <Button onClick={logoutUser} variant='link'>
-                    Log out
-                  </Button>
-                )}
-              </NavDropdown.Item>
-            </NavDropdown>
-          </span>
-        )}
-
+        {signUp}
+        {login}
+        {userDropDown}
+      </Navbar.Collapse>
+      {auth.isCustomer && (
         <Link to='/cart'>
           <FontAwesomeIcon icon={faShoppingCart} className='mr-5' />
         </Link>
-      </Navbar.Collapse>
+      )}
     </Navbar>
   );
 }

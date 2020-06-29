@@ -8,8 +8,6 @@ export const updateCategory = (id, category) => (dispatch, getState) => {
     axios
       .put(`/api/category/${id}/update`, category, tokenConfig(getState))
       .then(res => {
-        console.log(res);
-
         let updatedCategory = res.data.category;
         let successMessage = res.data.message;
 

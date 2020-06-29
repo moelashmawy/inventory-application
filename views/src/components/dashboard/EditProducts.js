@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { Container, Table, Spinner, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserProducts } from "../redux/actions/product-actions/fetchUserProductsAction";
-import { deleteProduct } from "../redux/actions/product-actions/deleteProductAction";
-import { loadUser } from "../redux/actions/auth-actions/loadUser";
-import UpdateProductForm from "./UpdateProductForm";
+import { fetchUserProducts } from "../../redux/actions/product-actions/fetchUserProductsAction";
+import { deleteProduct } from "../../redux/actions/product-actions/deleteProductAction";
+import { loadUser } from "../../redux/actions/auth-actions/loadUser";
+import UpdateProductForm from "./EditProductForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";

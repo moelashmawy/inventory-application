@@ -4,8 +4,8 @@ import { Formik, Field, ErrorMessage, Form } from "formik";
 import { Button, Container, Toast } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { toast, Slide } from "react-toastify";
-import { fetchCategories } from "./../redux/actions/category-actions/fetchCategoriesAction";
-import { addProduct } from "../redux/actions/product-actions/addProductAction";
+import { fetchCategories } from "../../redux/actions/category-actions/fetchCategoriesAction";
+import { addProduct } from "../../redux/actions/product-actions/addProductAction";
 
 // form validation useing Yup
 const validate = () =>

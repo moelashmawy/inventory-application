@@ -7,10 +7,15 @@ const UserSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  gender: { type: String },
+  nationality: { type: String },
+  birthDate: { type: String },
   creationDate: { type: Date, default: Date.now },
   isAdmin: { type: Boolean },
   isSeller: { type: Boolean },
-  isCustomer: { type: Boolean }
+  isCustomer: { type: Boolean },
+  cart: { type: Array, default: [] },
+  wishList: { type: Array, default: [] }
 });
 
 const Users = mongoose.model("User", UserSchema);

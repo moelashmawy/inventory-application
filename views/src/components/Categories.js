@@ -30,14 +30,15 @@ function Categories() {
               </td>
             </tr>
           )}
-          {categories.map(category => (
-            <tr key={category._id}>
-              <td>
-                <Link to={`/category/${category._id}`}>{category.name}</Link>
-              </td>
-              <td>{category.description}</td>
-            </tr>
-          ))}
+          {!loading &&
+            categories.map(category => (
+              <tr key={category._id}>
+                <td>
+                  <Link to={`/category/${category._id}`}>{category.name}</Link>
+                </td>
+                <td>{category.description}</td>
+              </tr>
+            ))}
         </tbody>
       </Table>
     </Container>

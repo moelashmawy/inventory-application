@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Container, Table, Spinner, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchCategories } from "./../redux/actions/category-actions/fetchCategoriesAction";
-import { deleteCategory } from "./../redux/actions/category-actions/deleteCategoryAction";
+import { fetchCategories } from "../../redux/actions/category-actions/fetchCategoriesAction";
+import { deleteCategory } from "../../redux/actions/category-actions/deleteCategoryAction";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast, Slide } from "react-toastify";
-import UpdateCategoryForm from "./UpdateCategoryForm";
+import UpdateCategoryForm from "./EditCategoryForm";
 
 function EditCategories() {
   const { categories, loading } = useSelector(state => state.categoriesss);

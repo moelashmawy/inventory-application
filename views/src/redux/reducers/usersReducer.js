@@ -6,7 +6,9 @@ import {
   LOGOUT_USER_SUCCESS,
   USER_LOADING,
   USER_LOADED,
-  AUTH_ERROR
+  AUTH_ERROR,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAILURE
 } from "../actions/types";
 
 let initialState = {
@@ -68,11 +70,35 @@ const usersReducer = (state = initialState, action) => {
         user: null,
         error: null,
         success: null,
+        isLoading: false,
         auth: {
           isAdmin: false,
           isSeller: false,
           isCustomer: false
         }
+      };
+    case UPDATE_USER_SUCCESS:
+      localStorage.setItem("token", action.payload.token);
+      return {
+        ...state,
+        token: action.payload.token,
+        user: action.payload.user,
+
+        auth: {
+          isAdmin: action.payload.user.isAdmin,
+          isSeller: action.payload.user.isSeller,
+          isCustomer: action.payload.user.isCustomer
+        },
+        isLoading: false,
+        error: null,
+        success: action.payload.successMessage
+      };
+    case UPDATE_USER_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload.error,
+        success: null
       };
 
     default:

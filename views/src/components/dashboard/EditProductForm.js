@@ -3,8 +3,8 @@ import * as Yup from "yup";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import { Button, Container, Toast, Modal } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchCategories } from "../redux/actions/category-actions/fetchCategoriesAction";
-import { updateProduct } from "../redux/actions/product-actions/updateProductAction";
+import { fetchCategories } from "../../redux/actions/category-actions/fetchCategoriesAction";
+import { updateProduct } from "../../redux/actions/product-actions/updateProductAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { toast, Slide } from "react-toastify";
@@ -29,7 +29,7 @@ const validate = () =>
       .required("This field is required")
   });
 
-function UpdateProductForm(props) {
+function EditProductForm(props) {
   //handle modal show and hide
   const [show, setShow] = useState(false);
 
@@ -186,4 +186,4 @@ function UpdateProductForm(props) {
   );
 }
 
-export default UpdateProductForm;
+export default EditProductForm;

@@ -11,7 +11,7 @@ const auth = (req, res, next) => {
 
   // check for token
   if (!token)
-    return res.status(401).json({ message: "Authorization denied, please login" });
+    return res.status(403).json({ message: "Authorization denied, please login" });
 
   try {
     //verify token
@@ -26,4 +26,22 @@ const auth = (req, res, next) => {
   }
 };
 
-module.exports = auth;
+// check only admin and seller auth
+const sellerAuth = (req, res, next) => {
+  const { isSeller } = req.user;
+
+  if (!isSeller) {
+    res.status(401).json({ message: "You aren't a seller" });
+  } else next();
+};
+
+// check only admin auth
+const adminAuth = (req, res, next) => {
+  const { isAdmin } = req.user;
+
+  if (!isAdmin) {
+    res.status(401).json({ message: "Authorization denied, only Admins" });
+  } else next();
+};
+
+module.exports = { auth, sellerAuth, adminAuth };
