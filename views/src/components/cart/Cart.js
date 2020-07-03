@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Table, Spinner, Button, Image } from "react-bootstrap";
+import { Container, Table, Spinner, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCartProducts } from "../../redux/actions/cart-actions/fetchCartProducts";
 import { removeFromCart } from "../../redux/actions/cart-actions/removeFromCart";
@@ -10,14 +10,26 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 function Cart() {
   const { cartInfo, cartItems, loading } = useSelector(state => state.carttt);
 
-  const [totalMoney, setTotalMoney] = useState(null);
+  const [totalMoney, setTotalMoney] = useState(0);
 
   const dispatch = useDispatch();
 
+  // will use this method to merge both arrays' objects depending on the _id
+  let hash = new Map();
+  cartInfo.concat(cartItems).forEach(function (obj) {
+    hash.set(obj._id, Object.assign(hash.get(obj._id) || {}, obj));
+  });
+  let cart = Array.from(hash.values());
+
+  // this function to sum the products price
+  let total = cart.reduce(function (a, b) {
+    return a + b.price * b.orderQuantity;
+  }, 0);
+
   useEffect(() => {
     dispatch(fetchCartProducts());
-  }, [dispatch]);
-  console.log(cartInfo, cartItems);
+    setTotalMoney(total);
+  }, [dispatch, total]);
 
   return (
     <Container>
@@ -41,15 +53,15 @@ function Cart() {
             </tr>
           )}
           {!loading &&
-            cartItems.map((item, index) => {
+            cart.map(item => {
               return (
                 <tr key={item._id}>
                   <td>
                     <Link to={`/product/${item._id}`}>{item.name}</Link>
                   </td>
-                  <td>{cartInfo[index].quantity}</td>
+                  <td>{item.orderQuantity}</td>
 
-                  <td>${cartInfo[index].quantity * item.price}</td>
+                  <td>${item.orderQuantity * item.price}</td>
                   <td>
                     <Button
                       className='btn btn-danger'

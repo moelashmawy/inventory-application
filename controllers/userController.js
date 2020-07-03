@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const { v4: uuidv4 } = require("uuid");
 
 // handle post requests at "api/users/signup"
 exports.createUser = [
@@ -515,15 +516,15 @@ exports.addToCart = (req, res) => {
     let duplicate = false;
 
     user.cart.forEach(item => {
-      if (item.id == req.query.productId) {
+      if (item._id == req.query.productId) {
         duplicate = true;
       }
     });
 
     if (duplicate) {
       User.findOneAndUpdate(
-        { _id: req.user.id, "cart.id": req.query.productId },
-        { $inc: { "cart.$.quantity": 1 } },
+        { _id: req.user.id, "cart._id": req.query.productId },
+        { $inc: { "cart.$.orderQuantity": 1 } },
         { new: true, useFindAndModify: false },
         (err, user) => {
           if (err) {
@@ -540,9 +541,14 @@ exports.addToCart = (req, res) => {
         {
           $push: {
             cart: {
-              id: req.query.productId,
-              quantity: 1,
-              date: Date.now()
+              _id: req.query.productId,
+              orderQuantity: 1,
+              orderState: {
+                pending: true,
+                shipped: false,
+                delivered: false,
+                returned: false
+              }
             }
           }
         },
@@ -558,26 +564,15 @@ exports.addToCart = (req, res) => {
 
 // handle GET at api/users/userCartInfo
 exports.userCartInfo = (req, res) => {
-  User.findById(req.user.id, (err, userInfo) => {
+  User.findById(req.user.id, (err, user) => {
     if (err) {
       res.status(400).json({ message: "Couldn't get user" }, err);
     } else {
-      // this function to sort our array desc
-      function compare(a, b) {
-        if (a.id < b.id) {
-          return -1;
-        }
-        if (a.id > b.id) {
-          return 1;
-        }
-        return 0;
-      }
-
-      // sort the cart by item's id so it matches the returned procuct sort
-      let cart = userInfo.cart.sort(compare);
+      // get the cart from the user
+      let cart = user.cart;
 
       let array = cart.map(item => {
-        return item.id;
+        return item._id;
       });
 
       Product.find({ _id: { $in: array } })
@@ -597,15 +592,16 @@ exports.userCartInfo = (req, res) => {
 exports.removeFromCart = (req, res) => {
   User.findOneAndUpdate(
     { _id: req.user.id },
-    { $pull: { cart: { id: req.query.productId } } },
+    { $pull: { cart: { _id: req.query.productId } } },
     { new: true, useFindAndModify: false },
     (err, userInfo) => {
       if (err) {
         res.status(400).json({ message: "Couldn't get cart", err });
       } else {
         let cart = userInfo.cart;
+
         let array = cart.map(item => {
-          return item.id;
+          return item._id;
         });
 
         Product.find({ _id: { $in: array } }).exec((err, cartDetails) => {
@@ -985,4 +981,184 @@ exports.removeFromWishlist = (req, res) => {
       }
     }
   );
+};
+
+//handle GET at api/users/orderSuccess to finish the order and move the cart to history
+let orderId = 4000;
+exports.orderSuccess = (req, res) => {
+  User.findById(req.user.id, (err, user) => {
+    if (err) res.status(400).json({ message: "Couldn't find user", err });
+    else {
+      // get the cart from the user
+      let cartInfo = user.cart;
+
+      // if the cart is empty throw a message to the user telling him the cart is empty
+      if (cartInfo.length == 0)
+        return res.status(400).json({ message: "Your cart is empty" });
+
+      // everytime we make an order we increase the order id by one
+      orderId++;
+
+      // Then we need to notify each seller about the purchased products
+      // we have the cart informations about each product and quantity
+      // 1- go to each item the user purchased
+      // 2- find its seller
+      // 3- edit the seller's ordersToDeliver
+      // by adding the products and amount
+      cartInfo.forEach(item => {
+        Product.findOne({ _id: item._id })
+          .populate("seller", "ordersToDeliver")
+          .exec((err, product) => {
+            if (err) {
+              res.status(400).json({ message: "Couldn't get items", err });
+            } else {
+              User.findOneAndUpdate(
+                { _id: product.seller._id },
+                { $push: { ordersToDeliver: item } },
+                { new: true, useFindAndModify: false },
+                (err, productSeller) => {
+                  if (err) {
+                    return res.status(400).json({
+                      message: "Couldn't update orders to deliver",
+                      err
+                    });
+                  }
+                }
+              );
+            }
+          });
+      });
+
+      // we need to decreament the item's number in stock
+      cartInfo.forEach(item => {
+        Product.updateOne(
+          { _id: item._id },
+          {
+            $inc: {
+              numberInStock: -item.orderQuantity
+            }
+          },
+          { new: true },
+          (err, item) => {
+            if (err) {
+              return res
+                .status(400)
+                .json({ message: "Couldn't decrease item's quantity", err });
+            }
+          }
+        );
+      });
+
+      //if the cart isn't empty
+      // we will make each order as an object,
+      // so we can add id and purchase date to each order
+      let newOrder = {};
+      newOrder.products = cartInfo;
+      newOrder.dateOfPurchase = Date.now();
+      newOrder.orderId = orderId;
+
+      // 1- find the user who will place the order
+      // 2- push the cart items to his history and empty the cart
+      // 3- decrease each product the user purchased by the quantity
+      User.findByIdAndUpdate(
+        req.user.id,
+        {
+          $push: { history: newOrder },
+          $set: { cart: [] }
+        },
+        { new: true, useFindAndModify: false },
+        (err, user) => {
+          if (err) res.status(400).json({ message: "Couldn't complete order", err });
+          else {
+            res.status(200).json({ message: "Order completed successfully", user });
+          }
+        }
+      );
+    }
+  });
+};
+
+//handle GET at api/users/userOrdersHistory to finish the order and move the cart to history
+exports.userOrdersHistory = (req, res) => {
+  User.findById(req.user.id, (err, user) => {
+    if (err) res.status(400).json({ message: "Couldn't find user", err });
+    else {
+      // get the history from the user which is array of objects
+      let history = user.history; //[ { 0, [{},{}] },{ 1, [{}] } ]
+
+      let ordersArrayLength = history.length;
+      let orderCurrIndex = 0;
+      let productCurrIndex = 0;
+      let allOrdersArray = [];
+
+      //  [ { id=0, products=[{},{}] },{ id=1, products=[{}] } ]
+      history.forEach(order => {
+        order.products.forEach(singleItem => {
+          // singleOrderObject = { id=0, products=[{_id, Q}, {_id, Q}] }
+          let singleOrderProductsLength = order.products.length; //2
+
+          Product.findOne({ _id: singleItem._id })
+            .populate("seller", "username")
+            .exec(function (err, product) {
+              if (err) {
+                res.status(400).json({
+                  message: "Couldn't get cart",
+                  err
+                });
+              } else {
+                singleItem.product = product.toJSON();
+                ++productCurrIndex;
+
+                if (productCurrIndex == singleOrderProductsLength) {
+                  allOrdersArray.push(order);
+                  ++orderCurrIndex;
+                  productCurrIndex = 0;
+                }
+                if (orderCurrIndex == ordersArrayLength) {
+                  res.status(200).json({ message: "Finally all orders", allOrdersArray });
+                }
+              }
+            });
+        });
+      });
+    }
+  });
+};
+
+//handle GET at api/users/ordersToDeliver to all seller's orders to be delivered
+exports.ordersToDeliver = (req, res) => {
+  User.findById(req.user.id, (err, user) => {
+    if (err) res.status(400).json({ message: "Couldn't find user", err });
+    else {
+      // get the ordersToDeliver from the user which is array of products info objects
+      let orders = user.ordersToDeliver; //[ { },{ } ]
+
+      let ordersArrayLength = orders.length;
+      let productCurrIndex = 0;
+      let ordersToDeliver = [];
+
+      // will iterate through the whole products info
+      // so we get each item details and combine the 2 objects
+      orders.forEach(order => {
+        Product.findOne({ _id: order._id }).exec(function (err, product) {
+          if (err || ordersArrayLength == 0) {
+            res.status(400).json({
+              message: "No items to deliver",
+              err
+            });
+          } else {
+            order.product = product.toJSON();
+            ordersToDeliver.push(order);
+            ++productCurrIndex;
+
+            if (productCurrIndex == ordersArrayLength) {
+              res
+                .status(200)
+                .json({ message: "All the orders to deliver", ordersToDeliver });
+            }
+          }
+        });
+      });
+    }
+  });
 };

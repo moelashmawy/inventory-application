@@ -15,7 +15,9 @@ const UserSchema = new Schema({
   isSeller: { type: Boolean },
   isCustomer: { type: Boolean },
   cart: { type: Array, default: [] },
-  wishList: { type: Array, default: [] }
+  wishList: { type: Array, default: [] },
+  history: { type: Array, default: [] },
+  ordersToDeliver: { type: Array, default: [] }
 });
 
 const Users = mongoose.model("User", UserSchema);

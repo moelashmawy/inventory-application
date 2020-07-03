@@ -16,11 +16,12 @@ import LoginForm from "./components/login&signup/LoginForm";
 import Cart from "./components/cart/Cart";
 import AccountSettings from "./components/account-settings/AccountSettings";
 import Addresses from "./components/account-settings/Addresses";
-import MyOrders from "./components/account-settings/MyOrders";
+import OrdersHistory from "./components/orders-history/OrdersHistory";
 import WishList from "./components/account-settings/WishList";
 import AddAddressForm from "./components/account-settings/AddAddressForm";
 import EditAddressForm from "./components/account-settings/EditAddressForm";
 import EditAccountForm from "./components/account-settings/EditAccountForm";
+import OrdersToDeliver from "./components/dashboard/OrdersToDeliver";
 import { loadUser } from "./redux/actions/auth-actions/loadUser";
 import { useDispatch } from "react-redux";
 
@@ -38,7 +39,7 @@ function App() {
       </div>
       <Switch>
         <Route path='/' component={Products} exact />
-        <Route path='/dashboard' component={Dashboard} />
+        <Route path='/dashboard' component={Dashboard} exact />
         <Route path='/signup' component={SignUpForm} />
         <Route path='/login' component={LoginForm} />
         <Route path='/categories' component={Categories} />
@@ -54,8 +55,9 @@ function App() {
         <Route path='/my_addresses' component={Addresses} exact />
         <Route path='/my_addresses/add_address' component={AddAddressForm} />
         <Route path='/my_addresses/edit_address' component={EditAddressForm} />
-        <Route path='/my_orders' component={MyOrders} />
+        <Route path='/my_orders' component={OrdersHistory} />
         <Route path='/wish_list' component={WishList} />
+        <Route path='/dashboard/orders_to_deliver' component={OrdersToDeliver} />
       </Switch>
     </Router>
   );

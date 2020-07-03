@@ -14,6 +14,8 @@ export const addToCart = productId => (dispatch, getState) => {
         resolve(successMessage);
       })
       .catch(err => {
+        console.log(err);
+
         let errorMessge = err.response.data.message;
         dispatch(addToCartFailure(errorMessge));
         reject(errorMessge);

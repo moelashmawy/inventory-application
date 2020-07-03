@@ -61,6 +61,8 @@ function SingleProduct(props) {
             <br />
             <div>Description: {product.description}</div>
             <br />
+            <div>Stock: {product.numberInStock}</div>
+            <br />
           </Col>
           <Col>
             <Button

@@ -8,6 +8,8 @@ import usersReducer from "./usersReducer";
 import cartReducer from "./cartReducer";
 import addressReducer from "./addressReducer";
 import wishlistReducer from "./wishlistReducer";
+import ordersHistoryReducer from "./ordersHistoryReducer";
+import ordersToDeliver from "./ordersToDeliver";
 
 const rootReducer = combineReducers({
   productsss: productReducer,
@@ -18,7 +20,9 @@ const rootReducer = combineReducers({
   userrr: usersReducer,
   carttt: cartReducer,
   addresss: addressReducer,
-  wishlisttt: wishlistReducer
+  wishlisttt: wishlistReducer,
+  historyyy: ordersHistoryReducer,
+  ordersToDeliverrr: ordersToDeliver
 });
 
 export default rootReducer;

@@ -27,6 +27,13 @@ function Dashboard() {
               Edit Products
             </Link>
           </Col>
+          <Col>
+            <h1>Seller</h1> <br />
+            <Link to='/dashboard/orders_to_deliver'>
+              <Button variant='primary'>Products for delivery</Button>
+              <br />
+            </Link>
+          </Col>
         </Row>
       </Container>
     </div>

@@ -73,4 +73,19 @@ router.get("/userWishlist", auth, users_controller.userWishlist);
 // @access  private
 router.get("/removeFromWishlist", auth, users_controller.removeFromWishlist);
 
+// @route   GET api/users/orderSuccess
+// @desc    Finish the order and move the cart to history
+// @access  private
+router.get("/orderSuccess", auth, users_controller.orderSuccess);
+
+// @route   GET api/users/userOrdersHistory
+// @desc    Get all user's orders
+// @access  private
+router.get("/userOrdersHistory", auth, users_controller.userOrdersHistory);
+
+// @route   GET api/users/ordersToDeliver
+// @desc    Get all seller's orders to be delivered
+// @access  private
+router.get("/ordersToDeliver", auth, users_controller.ordersToDeliver);
+
 module.exports = router;
