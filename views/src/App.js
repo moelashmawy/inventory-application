@@ -22,6 +22,7 @@ import AddAddressForm from "./components/account-settings/AddAddressForm";
 import EditAddressForm from "./components/account-settings/EditAddressForm";
 import EditAccountForm from "./components/account-settings/EditAccountForm";
 import OrdersToDeliver from "./components/dashboard/OrdersToDeliver";
+import Page404 from "./components/404";
 import { loadUser } from "./redux/actions/auth-actions/loadUser";
 import { useDispatch } from "react-redux";
 
@@ -58,6 +59,8 @@ function App() {
         <Route path='/my_orders' component={OrdersHistory} />
         <Route path='/wish_list' component={WishList} />
         <Route path='/dashboard/orders_to_deliver' component={OrdersToDeliver} />
+        {/* if no match just render 404 not found page */}
+        <Route component={Page404} />
       </Switch>
     </Router>
   );

@@ -19,7 +19,7 @@ let initialState = {
     isSeller: false,
     isCustomer: false
   },
-  isLoading: false,
+  loading: false,
   success: null,
   error: null
 };
@@ -29,12 +29,12 @@ const usersReducer = (state = initialState, action) => {
     case USER_LOADING:
       return {
         ...state,
-        isLoading: true
+        loading: true
       };
     case USER_LOADED:
       return {
         ...state,
-        isLoading: false,
+        loading: false,
         user: action.payload.user,
         auth: {
           isAdmin: action.payload.user.isAdmin,
@@ -55,7 +55,7 @@ const usersReducer = (state = initialState, action) => {
           isSeller: action.payload.user.isSeller,
           isCustomer: action.payload.user.isCustomer
         },
-        isLoading: false,
+        loading: false,
         error: null,
         success: action.payload.successMessage
       };
@@ -70,7 +70,7 @@ const usersReducer = (state = initialState, action) => {
         user: null,
         error: null,
         success: null,
-        isLoading: false,
+        loading: false,
         auth: {
           isAdmin: false,
           isSeller: false,
@@ -89,14 +89,14 @@ const usersReducer = (state = initialState, action) => {
           isSeller: action.payload.user.isSeller,
           isCustomer: action.payload.user.isCustomer
         },
-        isLoading: false,
+        loading: false,
         error: null,
         success: action.payload.successMessage
       };
     case UPDATE_USER_FAILURE:
       return {
         ...state,
-        isLoading: false,
+        loading: false,
         error: action.payload.error,
         success: null
       };

@@ -131,7 +131,7 @@ exports.createProduct = [
 ];
 
 // handle GET request at /api/product/:id to get details for a specific product
-exports.productDetails = (req, res, next) => {
+exports.productDetails = (req, res) => {
   Product.findById(req.params.id)
     .populate("category")
     .populate("seller")
@@ -145,7 +145,7 @@ exports.productDetails = (req, res, next) => {
 };
 
 // handle DELETE request at /api/product/:id/delete to delete an item by its id
-exports.deleteProduct = (req, res, next) => {
+exports.deleteProduct = (req, res) => {
   Product.findByIdAndDelete(req.params.id, (err, result) => {
     if (err) {
       res.status(400).json({ message: "Couldn't delete, try again" });

@@ -96,9 +96,9 @@ exports.categoryDetails = function (req, res, next) {
     },
     function (err, results) {
       if (err) {
-        return res.json(err);
+        return res.status(404).json({ message: "Couldn't load category", err });
       } else {
-        return res.json(results);
+        return res.status(200).json(results);
       }
     }
   );

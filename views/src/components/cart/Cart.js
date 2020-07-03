@@ -6,9 +6,11 @@ import { removeFromCart } from "../../redux/actions/cart-actions/removeFromCart"
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import Page404 from "./../404";
 
 function Cart() {
   const { cartInfo, cartItems, loading } = useSelector(state => state.carttt);
+  const { user, isLoading } = useSelector(state => state.userrr);
 
   const [totalMoney, setTotalMoney] = useState(0);
 
@@ -31,51 +33,55 @@ function Cart() {
     setTotalMoney(total);
   }, [dispatch, total]);
 
-  return (
-    <Container>
-      <Button>Proceed to pay</Button>
-      <p>Total: {totalMoney}</p>
-      <Table striped bordered hover variant='dark'>
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>quantity</th>
-            <th>Total Price</th>
-            <th>Remove</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading && (
+  if (!user && !cartInfo) {
+    return <Page404 />;
+  } else {
+    return (
+      <Container>
+        <Button>Proceed to pay</Button>
+        <p>Total: {totalMoney}</p>
+        <Table striped bordered hover variant='dark'>
+          <thead>
             <tr>
-              <td colSpan='3'>
-                <Spinner animation='border' /> loading...{" "}
-              </td>
+              <th>Item</th>
+              <th>quantity</th>
+              <th>Total Price</th>
+              <th>Remove</th>
             </tr>
-          )}
-          {!loading &&
-            cart.map(item => {
-              return (
-                <tr key={item._id}>
-                  <td>
-                    <Link to={`/product/${item._id}`}>{item.name}</Link>
-                  </td>
-                  <td>{item.orderQuantity}</td>
+          </thead>
+          <tbody>
+            {loading && (
+              <tr>
+                <td colSpan='3'>
+                  <Spinner animation='border' /> loading...{" "}
+                </td>
+              </tr>
+            )}
+            {!loading &&
+              cart.map(item => {
+                return (
+                  <tr key={item._id}>
+                    <td>
+                      <Link to={`/product/${item._id}`}>{item.name}</Link>
+                    </td>
+                    <td>{item.orderQuantity}</td>
 
-                  <td>${item.orderQuantity * item.price}</td>
-                  <td>
-                    <Button
-                      className='btn btn-danger'
-                      onClick={() => dispatch(removeFromCart(item._id))}>
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </Table>
-    </Container>
-  );
+                    <td>${item.orderQuantity * item.price}</td>
+                    <td>
+                      <Button
+                        className='btn btn-danger'
+                        onClick={() => dispatch(removeFromCart(item._id))}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </Table>
+      </Container>
+    );
+  }
 }
 
 export default Cart;
