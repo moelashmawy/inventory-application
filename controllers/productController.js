@@ -13,15 +13,27 @@ exports.productIndex = (req, res, next) => {
 
 // handle GET request at /api/product/:userId/products to get list of all products
 exports.userProducts = (req, res, next) => {
-  Product.find({ seller: req.params.userId })
-    .populate("seller")
-    .exec((err, result) => {
-      if (err) {
-        res.status(400).json({ message: "Couldn't find user" });
-      } else {
-        res.status(200).json(result);
-      }
-    });
+  if (req.user.isAdmin) {
+    Product.find()
+      .populate("seller")
+      .exec((err, result) => {
+        if (err) {
+          res.status(400).json({ message: "Couldn't find user" });
+        } else {
+          res.status(200).json(result);
+        }
+      });
+  } else {
+    Product.find({ seller: req.params.userId })
+      .populate("seller")
+      .exec((err, result) => {
+        if (err) {
+          res.status(400).json({ message: "Couldn't find user" });
+        } else {
+          res.status(200).json(result);
+        }
+      });
+  }
 };
 
 // Multer handling image upload Middleware at /api/product/create
@@ -165,7 +177,7 @@ exports.updateProduct = [
     .trim()
     .escape(),
   body("description")
-    .isLength({ min: 20 })
+    .isLength({ min: 10 })
     .withMessage("Must be at least 10 letters")
     .trim()
     .escape(),

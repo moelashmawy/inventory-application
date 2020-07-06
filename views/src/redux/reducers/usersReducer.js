@@ -19,7 +19,7 @@ let initialState = {
     isSeller: false,
     isCustomer: false
   },
-  loading: false,
+  loading: null,
   success: null,
   error: null
 };

@@ -23,41 +23,6 @@ router.get("/user", auth, users_controller.getUser);
 // @access  private
 router.put("/edit_account", auth, users_controller.editUser);
 
-// @route   GET api/users/addToCart?productId=
-// @desc    Add item to the cart
-// @access  private
-router.get("/addToCart", auth, users_controller.addToCart);
-
-// @route   GET api/users/userCartInfo
-// @desc    Get user cart info
-// @access  private
-router.get("/userCartInfo", auth, users_controller.userCartInfo);
-
-// @route   GET api/users/removeFromCart?productId=12313213213
-// @desc    Remove an item from the cart
-// @access  private
-router.get("/removeFromCart", auth, users_controller.removeFromCart);
-
-// @route   POST api/users/addresses?action=add
-// @desc    Add a user address
-// @access  private
-router.post("/addresses", auth, users_controller.addAddress);
-
-// @route   PUT api/users/addresses?action=edit&address=12313123123
-// @desc    Edit a user address
-// @access  private
-router.put("/addresses", auth, users_controller.editAddress);
-
-// @route   DELETE api/users/addresses?action=delete&address=12313123123
-// @desc    delete a user address
-// @access  private
-router.delete("/addresses", auth, users_controller.deleteAddress);
-
-// @route   GET api/users/addresses
-// @desc    get user addresses
-// @access  private
-router.get("/addresses", auth, users_controller.getAddresses);
-
 // @route   GET api/users/addToWishlist?productId=
 // @desc    Add item to the wish list
 // @access  private
@@ -73,19 +38,14 @@ router.get("/userWishlist", auth, users_controller.userWishlist);
 // @access  private
 router.get("/removeFromWishlist", auth, users_controller.removeFromWishlist);
 
-// @route   GET api/users/orderSuccess
-// @desc    Finish the order and move the cart to history
-// @access  private
-router.get("/orderSuccess", auth, users_controller.orderSuccess);
-
-// @route   GET api/users/userOrdersHistory
-// @desc    Get all user's orders
-// @access  private
-router.get("/userOrdersHistory", auth, users_controller.userOrdersHistory);
-
 // @route   GET api/users/ordersToDeliver
 // @desc    Get all seller's orders to be delivered
 // @access  private
 router.get("/ordersToDeliver", auth, users_controller.ordersToDeliver);
+
+// @route   PUT api/users/ordersToDeliver/markAsShipped
+// @desc    Edit seller's order's state to be shipped
+// @access  private
+router.get("/ordersToDeliver/markAsShipped", auth, users_controller.markAsShipped);
 
 module.exports = router;

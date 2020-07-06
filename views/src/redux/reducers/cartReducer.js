@@ -5,12 +5,13 @@ import {
   ADD_TO_CART_SUCCESS,
   ADD_TO_CART_FAILURE,
   DELETE_FROM_CART_SUCCESS,
-  DELETE_FROM_CART_FAILURE
+  DELETE_FROM_CART_FAILURE,
+  PLACED_ORDER_SUCCESS,
+  PLACED_ORDER_FAILURE
 } from "./../actions/types";
 
 const initialState = {
-  cartInfo: [],
-  cartItems: [],
+  cart: [],
   loading: false,
   success: null,
   error: null
@@ -26,8 +27,7 @@ const cartReducer = (state = initialState, action) => {
     case FETCH_CART_SUCCESS:
       return {
         ...state,
-        cartInfo: action.payload.cart.cart,
-        cartItems: action.payload.cart.cartDetails,
+        cart: action.payload.cart,
         loading: false
       };
     case FETCH_CART_FAILURE:
@@ -40,7 +40,7 @@ const cartReducer = (state = initialState, action) => {
     case ADD_TO_CART_SUCCESS:
       return {
         ...state,
-        cartInfo: action.payload.cart,
+        cart: action.payload.cart,
         loading: false,
         success: action.payload.message,
         error: null
@@ -55,13 +55,27 @@ const cartReducer = (state = initialState, action) => {
     case DELETE_FROM_CART_SUCCESS:
       return {
         ...state,
-        cartInfo: action.payload.cart.cart,
-        cartItems: action.payload.cart.cartDetails,
+        cart: action.payload.cart,
         loading: false,
         success: action.payload.message,
         error: null
       };
     case DELETE_FROM_CART_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        success: null,
+        error: action.payload.error
+      };
+    case PLACED_ORDER_SUCCESS:
+      return {
+        ...state,
+        cart: action.payload.cart,
+        loading: false,
+        success: action.payload.message,
+        error: null
+      };
+    case PLACED_ORDER_FAILURE:
       return {
         ...state,
         loading: false,

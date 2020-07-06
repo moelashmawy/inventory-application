@@ -10,9 +10,9 @@ export const fetchOrdersHistory = () => (dispatch, getState) => {
   dispatch(fetchHistoryStarted());
 
   axios
-    .get("/api/users/userOrdersHistory", tokenConfig(getState))
+    .get("/api/order/userOrdersHistory", tokenConfig(getState))
     .then(res => {
-      dispatch(fetchHistorySuccess(res.data.allOrdersArray));
+      dispatch(fetchHistorySuccess(res.data.orders));
     })
     .catch(err => {
       dispatch(fetchHistoryFailure(err.response.data.message));

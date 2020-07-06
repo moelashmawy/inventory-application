@@ -1,12 +1,10 @@
-import React, { useEffect, useReducer } from "react";
+import React from "react";
 import * as Yup from "yup";
 import { Formik, Field, ErrorMessage, Form } from "formik";
-import { Button, Container, Toast, Row, Col, ProgressBar } from "react-bootstrap";
+import { Button, Container, Toast, ProgressBar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, Slide } from "react-toastify";
-import { useLocation } from "react-router-dom";
 import { editUser } from "../../redux/actions/auth-actions/editUser";
-import { fetchAddresses } from "../../redux/actions/address-actions/fetchAddressesAction";
 
 // form validation useing Yup
 const validate = () =>

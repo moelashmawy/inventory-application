@@ -6,9 +6,10 @@ export const fetchCartProducts = () => (dispatch, getState) => {
   dispatch(fetchCartStarted());
 
   axios
-    .get("/api/users/userCartInfo", tokenConfig(getState))
+    .get("/api/cart/userCartInfo", tokenConfig(getState))
     .then(res => {
-      dispatch(fetchCartSuccess(res.data));
+      let cartItems = res.data.cart.items;
+      dispatch(fetchCartSuccess(cartItems));
     })
     .catch(err => {
       dispatch(fetchCartFailure(err.response.data.message));

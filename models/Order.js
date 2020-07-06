@@ -2,13 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
-  customer: { type: Schema.Types.ObjectId, ref: "User" },
-  product: { type: Schema.Types.ObjectId, ref: "Product" },
-  shipper: { type: Schema.Types.ObjectId, ref: "Shipper" },
-  payment: { type: Schema.Types.ObjectId, ref: "Payment" },
-  price: { type: Number, required: true },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   orderDate: { type: Date, default: Date.now },
-  shipDate: { type: Date, required: true }
+  products: { type: Array, default: [] },
+  totalPrice: { type: Number },
+  address: { type: Schema.Types.ObjectId, ref: "Address" }
 });
 
 const Order = mongoose.model("Order", OrderSchema);

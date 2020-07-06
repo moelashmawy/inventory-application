@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOrdersToDeliver } from "../../redux/actions/orders-to_deliver/fetchOrdersToDeliver";
-import { markOrderDelivered } from "../../redux/actions/orders-to_deliver/markOrderDelivered";
 import { Link } from "react-router-dom";
-import { Container, Table, Spinner, Button } from "react-bootstrap";
+import { Container, Table, Spinner } from "react-bootstrap";
 
-function OrdersToDeliver() {
-  const { ordersToDeliver, loading } = useSelector(state => state.ordersToDeliverrr);
+function DeliveredOrders() {
+  const { deliveredOrders, loading } = useSelector(state => state.ordersToDeliverrr);
 
   const dispatch = useDispatch();
 
@@ -15,7 +14,7 @@ function OrdersToDeliver() {
   }, [dispatch]);
 
   let emptyMessage;
-  if (!loading && ordersToDeliver.length === 0) {
+  if (!loading && deliveredOrders.length === 0) {
     emptyMessage = (
       <tr>
         <td>There are no orders yet</td>
@@ -31,7 +30,7 @@ function OrdersToDeliver() {
             <th>Item</th>
             <th>quantity</th>
             <th>Total Price</th>
-            <th>Mark as delivered</th>
+            <th>State</th>
           </tr>
         </thead>
         <tbody>
@@ -43,8 +42,8 @@ function OrdersToDeliver() {
               </td>
             </tr>
           )}
-          {ordersToDeliver &&
-            ordersToDeliver.map(item => {
+          {deliveredOrders &&
+            deliveredOrders.map(item => {
               return (
                 <tr key={item._id}>
                   <td>
@@ -53,11 +52,7 @@ function OrdersToDeliver() {
                   <td>{item.quantity}</td>
 
                   <td>${item.quantity * item.product.price}</td>
-                  <td>
-                    <Button onClick={() => dispatch(markOrderDelivered(item._id))}>
-                      Mark as shipped
-                    </Button>
-                  </td>
+                  <td>Delivered</td>
                 </tr>
               );
             })}
@@ -67,4 +62,4 @@ function OrdersToDeliver() {
   );
 }
 
-export default OrdersToDeliver;
+export default DeliveredOrders;

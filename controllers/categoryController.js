@@ -125,7 +125,7 @@ exports.updateCategory = [
   // validate that the field aren't empty with a min letters
   // then sanitize and clear it with trim and escape
   body("name")
-    .isLength({ min: 5 })
+    .isLength({ min: 2 })
     .withMessage("must be at least 2 letters")
     .trim()
     .escape(),

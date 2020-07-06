@@ -7,9 +7,9 @@ export const deleteAddress = addressId => (dispatch, getState) => {
   let params = { action: "delete", address: addressId };
 
   return new Promise((resolve, reject) => {
-    // Hit /api/users/addresses?action=delete&address=addressId
+    // Hit /api/address?action=delete&address=addressId
     axios
-      .delete("/api/users/addresses", tokenConfig(getState, params))
+      .delete("/api/address", tokenConfig(getState, params))
       .then(res => {
         let successMessage = res.data.message;
         let address = res.data.address;

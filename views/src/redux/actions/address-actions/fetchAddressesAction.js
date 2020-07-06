@@ -10,7 +10,7 @@ export const fetchAddresses = () => {
   return (dispatch, getState) => {
     dispatch(fetchAddressesStarted());
     axios
-      .get("/api/users/addresses", tokenConfig(getState))
+      .get("/api/address", tokenConfig(getState))
       .then(res => {
         dispatch(fetchAddressesSuccess(res.data.address));
       })

@@ -7,7 +7,7 @@ import { logout } from "./../redux/actions/auth-actions/logoutAction";
 import { useDispatch, useSelector } from "react-redux";
 
 function MainNavbar(props) {
-  const { user, auth, isLoading } = useSelector(state => state.userrr);
+  const { user, auth, loading } = useSelector(state => state.userrr);
 
   const dispatch = useDispatch();
   let history = useHistory();
@@ -29,7 +29,7 @@ function MainNavbar(props) {
   }
 
   let signUp;
-  if (!auth.isCustomer && !isLoading) {
+  if (!auth.isCustomer && !loading) {
     signUp = (
       <Link to='/signup' className='nav-link'>
         Sign Up
@@ -38,7 +38,7 @@ function MainNavbar(props) {
   }
 
   let login;
-  if (!auth.isCustomer && !isLoading) {
+  if (!auth.isCustomer && !loading) {
     login = (
       <Link to='/login' className='nav-link'>
         Login
@@ -47,7 +47,7 @@ function MainNavbar(props) {
   }
 
   let userDropDown;
-  if (isLoading) {
+  if (loading) {
     userDropDown = <Spinner animation='grow' variant='info' />;
   } else if (user) {
     userDropDown = (

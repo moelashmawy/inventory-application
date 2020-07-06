@@ -4,10 +4,10 @@ import axios from "axios";
 
 export const addAddress = address => (dispatch, getState) => {
   let params = { action: "add" };
-  //api/users/addresses?action=add
+  //api/address?action=add
   return new Promise((resolve, reject) => {
     axios
-      .post("/api/users/addresses", address, tokenConfig(getState, params))
+      .post("/api/address", address, tokenConfig(getState, params))
       .then(res => {
         let successMessage = res.data.message;
         let address = res.data.address;

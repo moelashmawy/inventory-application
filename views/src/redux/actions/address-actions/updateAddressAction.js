@@ -7,10 +7,10 @@ export const editAddress = (address, id) => (dispatch, getState) => {
     action: "edit",
     address: id
   };
-  // Hit /api/users/addresses?action=edit&address=id
+  // Hit /api/address/addresses?action=edit&address=id
   return new Promise((resolve, reject) => {
     axios
-      .put("/api/users/addresses", address, tokenConfig(getState, params))
+      .put("/api/address", address, tokenConfig(getState, params))
       .then(res => {
         let successMessage = res.data.message;
         let address = res.data.address;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import SettingsSidebar from "./SettingsSidebar";
@@ -29,7 +29,7 @@ function AccountSettings() {
     birthDate = "-";
   }
 
-  if (!auth.isSeller && !loading) {
+  if (!auth.isCustomer && !loading) {
     return <Page404 />;
   } else {
     return (

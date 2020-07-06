@@ -12,7 +12,8 @@ export const fetchOrdersToDeliver = () => (dispatch, getState) => {
   axios
     .get("/api/users/ordersToDeliver", tokenConfig(getState))
     .then(res => {
-      dispatch(fetchOrdersToDeliverSuccess(res.data.ordersToDeliver));
+      let ordersToDeliver = res.data.user.ordersToDeliver;
+      dispatch(fetchOrdersToDeliverSuccess(ordersToDeliver));
     })
     .catch(err => {
       dispatch(fetchOrdersToDeliverFailure(err.response.data.message));

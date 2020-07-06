@@ -14,9 +14,7 @@ const UserSchema = new Schema({
   isAdmin: { type: Boolean },
   isSeller: { type: Boolean },
   isCustomer: { type: Boolean },
-  cart: { type: Array, default: [] },
   wishList: { type: Array, default: [] },
-  history: { type: Array, default: [] },
   ordersToDeliver: { type: Array, default: [] }
 });
 

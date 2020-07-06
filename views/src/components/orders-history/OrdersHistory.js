@@ -1,21 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { Container, Image, Row, Col } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Container, Image, Row, Col, Spinner } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchOrdersHistory } from "../../redux/actions/orders-history/fetchOrdersHistory";
+import { fetchOrdersHistory } from "../../redux/actions/order-actions/fetchOrdersHistory";
 import SettingsSidebar from "../account-settings/SettingsSidebar";
 import { Link } from "react-router-dom";
 
 function Cart() {
-  const { historyOrders, loading } = useSelector(state => state.historyyy);
-
-  const [totalMoney, setTotalMoney] = useState(0);
+  const { historyOrders } = useSelector(state => state.historyyy);
+  const { loading } = useSelector(state => state.userrr);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchOrdersHistory());
-    //setTotalMoney(total);
   }, [dispatch]);
+
+  let loadingSpinner;
+  if (loading) {
+    loadingSpinner = (
+      <div>
+        <Spinner animation='border' /> loading...
+      </div>
+    );
+  }
+
+  let emptyMessage;
+  if (!loading && historyOrders.length === 0) {
+    emptyMessage = <div>No orders to show</div>;
+  }
+
+  function checkState(state) {
+    if (state.refunded) {
+      return <div>Refunded</div>;
+    } else if (state.returned) {
+      return <div>returned</div>;
+    } else if (state.delivered) {
+      return <div>delivered</div>;
+    } else if (state.shipped) {
+      return <div>shipped</div>;
+    } else {
+      return <div>pending</div>;
+    }
+  }
 
   return (
     <Container>
@@ -24,21 +50,24 @@ function Cart() {
           <SettingsSidebar />
         </Col>
         <Col lg={8}>
-          {historyOrders.map(function (order) {
+          {emptyMessage}
+          {loadingSpinner}
+
+          {historyOrders.map(order => {
             let single = (
-              <div className='mb-5'>
-                <div>Order ID: #{order.orderId}</div>
-                <div>Order placed on: {order.dateOfPurchase}</div>
+              <div className='mb-5' key={order._id}>
+                <div>Order ID: #{order._id}</div>
+                <div>Order placed on: {order.orderDate}</div>
 
                 {order.products.map(productItem => (
                   <Container key={productItem._id}>
                     <Row>
                       <Col>
-                        <Link to={`/product/${productItem._id}`}>
+                        <Link to={`/product/${productItem.product._id}`}>
                           <div>{productItem.product.name}</div>
                         </Link>
                         <br />
-                        <div>Quantity:{productItem.orderQuantity}</div>
+                        <div>Quantity:{productItem.quantity}</div>
                         <br />
                       </Col>
 
@@ -54,9 +83,7 @@ function Cart() {
                         />
                       </Col>
                       <Col>
-                        <div>
-                          ${productItem.orderQuantity * productItem.product.price}
-                        </div>
+                        <div>${productItem.quantity * productItem.product.price}</div>
                         <br />
                         <div>Description: {productItem.product.description}</div>
                         <br />
@@ -65,6 +92,7 @@ function Cart() {
                         <br />
                         <div>Seller: {productItem.product.seller.username}</div>
                         <br />
+                        <div>Order state: {checkState(productItem.orderState)}</div>
                       </Col>
                     </Row>
                   </Container>

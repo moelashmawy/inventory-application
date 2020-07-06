@@ -6,17 +6,17 @@ export const removeFromCart = productId => (dispatch, getState) => {
   return new Promise((resolve, reject) => {
     let params = { productId };
     axios
-      .get("/api/users/removeFromCart", tokenConfig(getState, params))
+      .get("/api/cart/removeFromCart", tokenConfig(getState, params))
       .then(res => {
         let successMessage = res.data.message;
-        let cart = res.data;
+        let cart = res.data.cart.items;
         dispatch(removeFromCartSuccess(cart, successMessage));
         resolve(successMessage);
       })
       .catch(err => {
-        let errorMessge = err.response.data.message;
-        dispatch(removeFromCartFailure(errorMessge));
-        reject(errorMessge);
+        let errorMessage = err.response.data.message;
+        dispatch(removeFromCartFailure(errorMessage));
+        reject(errorMessage);
       });
   });
 };

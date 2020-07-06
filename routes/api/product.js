@@ -11,7 +11,7 @@ router.get("/", product_controller.productIndex);
 // @route   GET /api/product/:userId/products
 // @desc    Get a specific user products
 // @access  public
-router.get("/:userId/products", product_controller.userProducts);
+router.get("/:userId/products", auth, product_controller.userProducts);
 
 // @route   POST /api/product/create
 // @desc    Create a new product
