@@ -14,7 +14,6 @@ const UserSchema = new Schema({
   isAdmin: { type: Boolean },
   isSeller: { type: Boolean },
   isCustomer: { type: Boolean },
-  wishList: { type: Array, default: [] },
   ordersToDeliver: { type: Array, default: [] }
 });
 

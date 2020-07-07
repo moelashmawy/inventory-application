@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, ProgressBar, Image, Row, Col, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSingleProductAction } from "../redux/actions/product-actions/fetchSingleProductAction";
@@ -10,6 +10,9 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import Page404 from "./404";
 
 function SingleProduct(props) {
+  const [orderQuantity, setOrderQuantity] = useState(0);
+
+  // import product, loading, error from redux store
   const { product, loading, error } = useSelector(state => state.singleProducttt);
 
   const dispatch = useDispatch();
@@ -18,13 +21,30 @@ function SingleProduct(props) {
     dispatch(fetchSingleProductAction(props.match.params.id));
   }, [dispatch, props.match.params.id]);
 
+  // just in case someone deleted a category
   const prodCategory = () => {
     if (product.category !== null) {
       return <div>Category: {product.category.name}</div>;
     } else {
-      return <div>Category: undefined "please consider edit this product"</div>;
+      return <div>Category: undefined "will edit soon"</div>;
     }
   };
+
+  // to return options with just order in stock
+  let numberInStock = product.numberInStock;
+  function options() {
+    let arr = [];
+
+    for (let i = 1; i <= numberInStock; i++) {
+      arr.push(
+        <option key={i} value={i}>
+          {i}
+        </option>
+      );
+    }
+
+    return arr;
+  }
 
   // handle add to cart and wishlist
   const addTo = addFunction => {
@@ -73,7 +93,8 @@ function SingleProduct(props) {
             <Col>
               <Button
                 onClick={() => {
-                  addTo(addToCart(product._id));
+                  let quantity = { orderQuantity };
+                  addTo(addToCart(product._id, quantity));
                 }}>
                 Add to cart
               </Button>
@@ -88,7 +109,13 @@ function SingleProduct(props) {
               />
               <br />
               <br />
-              <div>Condition: New</div>
+              Quantity:{" "}
+              <select
+                onChange={e => {
+                  setOrderQuantity(e.target.value);
+                }}>
+                {options()}
+              </select>
               <br />
               <div>Sold by: {product.seller.username}</div>
               <br />

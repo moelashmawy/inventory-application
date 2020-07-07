@@ -4,11 +4,14 @@ const { body, validationResult } = require("express-validator");
 const multer = require("multer");
 const Product = require("../models/ProductModel");
 
-// handle GET request at /api/product to get list of all products
+// handle GET request at /api/product to get list of all products in stock
 exports.productIndex = (req, res, next) => {
   Product.find()
     .sort({ creationDate: -1 })
-    .then(product => res.json(product));
+    .then(allProducts => {
+      let productsInStock = allProducts.filter(item => item.numberInStock !== 0);
+      res.json({ products: productsInStock });
+    });
 };
 
 // handle GET request at /api/product/:userId/products to get list of all products

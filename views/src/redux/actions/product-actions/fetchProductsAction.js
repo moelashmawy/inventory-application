@@ -12,7 +12,7 @@ export const fetchProducts = () => {
     axios
       .get("/api/product")
       .then(res => {
-        dispatch(fetchProductsSuccess(res.data));
+        dispatch(fetchProductsSuccess(res.data.products));
       })
       .catch(error => {
         dispatch(fetchProductsFailure(error.message));

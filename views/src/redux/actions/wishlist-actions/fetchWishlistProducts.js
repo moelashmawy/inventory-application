@@ -10,9 +10,9 @@ export const fetchWishlistProducts = () => (dispatch, getState) => {
   dispatch(fetchWishlistStarted());
 
   axios
-    .get("/api/users/userWishlist", tokenConfig(getState))
+    .get("/api/wishlist/userWishlist", tokenConfig(getState))
     .then(res => {
-      dispatch(fetchWishlistSuccess(res.data));
+      dispatch(fetchWishlistSuccess(res.data.wishlist.items));
     })
     .catch(err => {
       dispatch(fetchWishlistFailure(err.response.data.message));

@@ -1,5 +1,4 @@
 const User = require("./../models/UsersModel");
-const Product = require("./../models/ProductModel");
 const Order = require("./../models/Order");
 const mongoose = require("mongoose");
 const { body, validationResult } = require("express-validator");
@@ -167,7 +166,7 @@ exports.login = [
     .trim()
     .escape(),
 
-  (req, res, next) => {
+  (req, res) => {
     User.findOne({ username: req.body.username }, (err, user) => {
       if (err) {
         res.json(err);
@@ -508,97 +507,6 @@ exports.editUser = [
   }
 ];
 
-// handle get request at "/api/users/addToWishlist?productId="
-exports.addToWishlist = (req, res) => {
-  User.findById(req.user.id, (err, user) => {
-    let duplicate = false;
-
-    user.wishList.forEach(item => {
-      if (item.id == req.query.productId) {
-        duplicate = true;
-      }
-    });
-
-    if (duplicate) {
-      res.status(400).json({ message: "You already added this item" });
-    } else if (err) res.status(400).json({ message: "Couldn't find Item" });
-    else {
-      User.findOneAndUpdate(
-        { _id: req.user.id },
-        {
-          $push: {
-            wishList: {
-              id: req.query.productId,
-              date: Date.now()
-            }
-          }
-        },
-        { new: true, useFindAndModify: false },
-        (err, user) => {
-          if (err) return res.json({ message: "couldn't add", err });
-          res.status(200).json({ user, message: "Added to your wish list" });
-        }
-      );
-    }
-  });
-};
-
-// handle GET at api/users/userWishlist
-exports.userWishlist = (req, res) => {
-  User.findById(req.user.id, (err, user) => {
-    if (err) {
-      res.status(400).json({ message: "Couldn't get user" }, err);
-    } else {
-      let wishList = user.wishList;
-
-      let array = wishList.map(item => {
-        return item.id;
-      });
-
-      Product.find({ _id: { $in: array } })
-        .sort({ _id: 1 })
-        .exec((err, wishListItems) => {
-          if (err) {
-            res.status(400).json({ message: "Couldn't get wishlist", err });
-          } else {
-            res
-              .status(200)
-              .json({ message: "User wishlist info", wishList, wishListItems });
-          }
-        });
-    }
-  });
-};
-
-//handle GET at api/users/removeFromWishlist?productId=12313213213
-exports.removeFromWishlist = (req, res) => {
-  User.findOneAndUpdate(
-    { _id: req.user.id },
-    { $pull: { wishList: { id: req.query.productId } } },
-    { new: true, useFindAndModify: false },
-    (err, user) => {
-      if (err) {
-        res.status(400).json({ message: "Couldn't get wish List", err });
-      } else {
-        let wishList = user.wishList;
-        let array = wishList.map(item => {
-          return item.id;
-        });
-
-        Product.find({ _id: { $in: array } }).exec((err, wishListItems) => {
-          if (err) {
-            res.status(400).json({ message: "Couldn't get cart", err });
-          } else {
-            res
-              .status(200)
-              .json({ message: "Deleted successfully", wishList, wishListItems });
-          }
-        });
-      }
-    }
-  );
-};
-
 //handle GET at api/users/ordersToDeliver to all seller's orders to be delivered
 exports.ordersToDeliver = (req, res) => {
   let userId = req.user.id;
@@ -628,7 +536,7 @@ exports.markAsShipped = (req, res) => {
     },
     { $set: { "products.$.orderState.shipped": true } },
     { new: true, useFindAndModify: false },
-    (err, product) => {
+    err => {
       if (err)
         return res
           .status(400)

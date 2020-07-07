@@ -6,10 +6,11 @@ export const addToWishlist = productId => (dispatch, getState) => {
   return new Promise((resolve, reject) => {
     let params = { productId };
     axios
-      .get("/api/users/addToWishlist", tokenConfig(getState, params))
+      .get("/api/wishlist/addToWishlist", tokenConfig(getState, params))
       .then(res => {
         let successMessage = res.data.message;
-        let wishlist = res.data.user.wishList;
+        let wishlist = res.data.wishlist.items;
+
         dispatch(addToWishlistSuccess(wishlist, successMessage));
         resolve(successMessage);
       })

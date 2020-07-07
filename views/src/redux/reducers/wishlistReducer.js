@@ -9,7 +9,6 @@ import {
 } from "./../actions/types";
 
 const initialState = {
-  wishlistInfo: [],
   wishlistItems: [],
   loading: false,
   success: null,
@@ -26,8 +25,7 @@ const wishlistReducer = (state = initialState, action) => {
     case FETCH_WISHLIST_SUCCESS:
       return {
         ...state,
-        wishlistInfo: action.payload.wishlist.wishList,
-        wishlistItems: action.payload.wishlist.wishListItems,
+        wishlistItems: action.payload.wishlist,
         loading: false
       };
     case FETCH_WISHLIST_FAILURE:
@@ -40,7 +38,7 @@ const wishlistReducer = (state = initialState, action) => {
     case ADD_TO_WISHLIST_SUCCESS:
       return {
         ...state,
-        wishlistInfo: action.payload.wishlist,
+        wishlistItems: action.payload.wishlist,
         loading: false,
         success: action.payload.message,
         error: null
@@ -55,8 +53,7 @@ const wishlistReducer = (state = initialState, action) => {
     case DELETE_FROM_WISHLIST_SUCCESS:
       return {
         ...state,
-        wishlistInfo: action.payload.wishlist.wishList,
-        wishlistItems: action.payload.wishlist.wishListItems,
+        wishlistItems: action.payload.wishlist,
         loading: false,
         success: action.payload.message,
         error: null

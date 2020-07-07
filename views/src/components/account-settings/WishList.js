@@ -41,17 +41,19 @@ function WishList() {
                 </tr>
               )}
               {!loading &&
-                wishlistItems.map((item, index) => {
+                wishlistItems.map(item => {
                   return (
-                    <tr key={item._id}>
+                    <tr key={item.product._id}>
                       <td>
-                        <Link to={`/product/${item._id}`}>{item.name}</Link>
+                        <Link to={`/product/${item.product._id}`}>
+                          {item.product.name}
+                        </Link>
                       </td>
-                      <td>${item.price}</td>
+                      <td>${item.product.price}</td>
                       <td>
                         <Button
                           className='btn btn-danger'
-                          onClick={() => dispatch(removeFromWishlist(item._id))}>
+                          onClick={() => dispatch(removeFromWishlist(item.product._id))}>
                           <FontAwesomeIcon icon={faTrash} />
                         </Button>
                       </td>

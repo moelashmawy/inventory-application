@@ -82,12 +82,13 @@ exports.orderSuccess = (req, res) => {
       Cart.findOne({ user: userId }).then(foundCart => {
         Order.create({
           user: userId,
-          products: foundCart.items
+          products: foundCart.items,
+          totalPrice: foundCart.totalPrice
         }).then(() => {
           // Then empty the user's cart
           Cart.findOneAndUpdate(
             { user: userId },
-            { $set: { items: [] } },
+            { $set: { items: [], totalPrice: 0 } },
             { new: true, useFindAndModify: false },
             (err, cart) => {
               if (err) res.status(400).json({ message: "Error in order", err });

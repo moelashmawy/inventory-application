@@ -9,7 +9,7 @@ export const removeFromCart = productId => (dispatch, getState) => {
       .get("/api/cart/removeFromCart", tokenConfig(getState, params))
       .then(res => {
         let successMessage = res.data.message;
-        let cart = res.data.cart.items;
+        let cart = res.data.cart;
         dispatch(removeFromCartSuccess(cart, successMessage));
         resolve(successMessage);
       })

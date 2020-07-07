@@ -8,8 +8,8 @@ export const fetchCartProducts = () => (dispatch, getState) => {
   axios
     .get("/api/cart/userCartInfo", tokenConfig(getState))
     .then(res => {
-      let cartItems = res.data.cart.items;
-      dispatch(fetchCartSuccess(cartItems));
+      let cart = res.data.cart;
+      dispatch(fetchCartSuccess(cart));
     })
     .catch(err => {
       dispatch(fetchCartFailure(err.response.data.message));
