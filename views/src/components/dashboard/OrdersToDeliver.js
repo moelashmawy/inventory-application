@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchOrdersToDeliver } from "../../redux/actions/orders-to_deliver/fetchOrdersToDeliver";
-import { markOrderDelivered } from "../../redux/actions/orders-to_deliver/markOrderDelivered";
+import { fetchOrdersToDeliver } from "../../redux/actions/order-actions/fetchOrdersToDeliver";
+import { markOrderDelivered } from "../../redux/actions/order-actions/markOrderDelivered";
 import { Link } from "react-router-dom";
 import { Container, Table, Spinner, Button } from "react-bootstrap";
 

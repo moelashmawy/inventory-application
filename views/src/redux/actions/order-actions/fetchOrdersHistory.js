@@ -6,6 +6,7 @@ import {
 import { tokenConfig } from "../auth-actions/tokenConfig";
 import axios from "axios";
 
+// to fetch each user's all orders he placed
 export const fetchOrdersHistory = () => (dispatch, getState) => {
   dispatch(fetchHistoryStarted());
 

@@ -43,10 +43,10 @@ const ordersToDeliver = (state = initialState, action) => {
     case ORDER_DELIVERED_SUCCESS:
       return {
         ...state,
-        ordersToDeliver: action.payload.ordersToDeliver.filter(
-          order => order.orderState.shipped === false
+        ordersToDeliver: state.ordersToDeliver.filter(
+          order => order._id !== action.payload.deliveredOrder._id
         ),
-        deliveredOrders: action.payload.ordersToDeliver.filter(
+        deliveredOrders: state.ordersToDeliver.filter(
           order => order.orderState.shipped !== false
         ),
         loading: false,

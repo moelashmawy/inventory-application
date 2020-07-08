@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchOrdersToDeliver } from "../../redux/actions/orders-to_deliver/fetchOrdersToDeliver";
+import { fetchOrdersToDeliver } from "../../redux/actions/order-actions/fetchOrdersToDeliver";
 import { Link } from "react-router-dom";
 import { Container, Table, Spinner } from "react-bootstrap";
 
@@ -21,6 +21,16 @@ function DeliveredOrders() {
       </tr>
     );
   }
+  let loadingSpinner;
+  if (loading && deliveredOrders.length === 0) {
+    loadingSpinner = (
+      <tr>
+        <td colSpan='3'>
+          <Spinner animation='border' /> loading...
+        </td>
+      </tr>
+    );
+  }
 
   return (
     <Container>
@@ -35,13 +45,7 @@ function DeliveredOrders() {
         </thead>
         <tbody>
           {emptyMessage}
-          {loading && (
-            <tr>
-              <td colSpan='3'>
-                <Spinner animation='border' /> loading...{" "}
-              </td>
-            </tr>
-          )}
+          {loadingSpinner}
           {deliveredOrders &&
             deliveredOrders.map(item => {
               return (

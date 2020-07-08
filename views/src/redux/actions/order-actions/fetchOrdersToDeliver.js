@@ -10,9 +10,9 @@ export const fetchOrdersToDeliver = () => (dispatch, getState) => {
   dispatch(fetchOrdersToDeliverStarted());
 
   axios
-    .get("/api/users/ordersToDeliver", tokenConfig(getState))
+    .get("/api/order/ordersToDeliver", tokenConfig(getState))
     .then(res => {
-      let ordersToDeliver = res.data.user.ordersToDeliver;
+      let ordersToDeliver = res.data.ordersToDeliver;
       dispatch(fetchOrdersToDeliverSuccess(ordersToDeliver));
     })
     .catch(err => {
