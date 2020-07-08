@@ -126,3 +126,62 @@ exports.userOrdersHistory = (req, res) => {
       }
     });
 };
+
+//handle GET at api/order/ordersToDeliver to all seller's orders to be delivered
+exports.ordersToDeliver = (req, res) => {
+  let userId = req.user.id;
+
+  Order.find()
+    .populate({ path: "products.product", model: "Product" })
+    .exec((err, orders) => {
+      if (err) res.status(400).json({ message: "Couldn't find user", err });
+      else {
+        let len = orders.length;
+        let orderCurInx = 0;
+        let ordersToDeliver = [];
+
+        orders.forEach(order => {
+          ++orderCurInx;
+
+          order.products.forEach(product => {
+            if (product.product.seller == userId) {
+              ordersToDeliver.push(product);
+            }
+          });
+        });
+
+        if (len == orderCurInx) {
+          return res.status(200).json({ ordersToDeliver });
+        }
+      }
+    });
+};
+
+//handle GET at api/order/ordersToDeliver/markAsShipped to all seller's orders to be delivered
+exports.markAsShipped = (req, res) => {
+  let userId = req.user.id;
+
+  // we want to change the item state in the orders
+  // so the customer who ordered the product can track
+  // the order state
+  Order.findOneAndUpdate(
+    {
+      products: { $elemMatch: { _id: mongoose.Types.ObjectId(req.query.orderId) } }
+    },
+    { $set: { "products.$.orderState.shipped": true } },
+    { new: true, useFindAndModify: false },
+    (err, order) => {
+      if (err) {
+        res.status(400).json({ message: "Couldn't mark delivered, try again.", err });
+      } else {
+        // order contains the whole items in the order and we want to return just our updated item
+        let deliveredOrder = order.products.filter(item => item._id == req.query.orderId);
+        let updatedItemOnly = deliveredOrder[0];
+
+        res
+          .status(200)
+          .json({ message: "Marked as delivered", deliveredOrder: updatedItemOnly });
+      }
+    }
+  );
+};

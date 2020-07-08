@@ -1,5 +1,6 @@
-const config = require("config");
 const jwt = require("jsonwebtoken");
+
+const jwtSecret = process.env.JWT_SECRET;
 
 /**
  * this method to fetch the token from the frontend
@@ -15,14 +16,14 @@ const auth = (req, res, next) => {
 
   try {
     //verify token
-    const decoded = jwt.verify(token, config.get("jwtSecret"));
+    const decoded = jwt.verify(token, jwtSecret);
 
     // add user from token payload which contains the user id we attached to the token
     req.user = decoded;
 
     next();
   } catch (e) {
-    res.status(400).json({ message: "Token isn't valid" });
+    res.status(400).json({ message: "Please log in" });
   }
 };
 

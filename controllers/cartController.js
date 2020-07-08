@@ -1,6 +1,5 @@
 const Cart = require("./../models/Cart");
 const Product = require("./../models/ProductModel");
-const mongoose = require("mongoose");
 
 // handle get request at "/api/cart/addToCart?productId="
 exports.addToCart = (req, res) => {
@@ -148,7 +147,7 @@ exports.removeFromCart = (req, res) => {
     { user: userId },
     { $pull: { items: { product: req.query.productId } } },
     { new: true, useFindAndModify: false },
-    (err, cart) => {
+    err => {
       if (err) {
         res.status(400).json({ message: "Couldn't find cart", err });
       } else {

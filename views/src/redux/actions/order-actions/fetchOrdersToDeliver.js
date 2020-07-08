@@ -16,6 +16,8 @@ export const fetchOrdersToDeliver = () => (dispatch, getState) => {
       dispatch(fetchOrdersToDeliverSuccess(ordersToDeliver));
     })
     .catch(err => {
+      console.log(err);
+
       dispatch(fetchOrdersToDeliverFailure(err.response.data.message));
     });
 };

@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const product_controller = require("../../controllers/productController");
+const product_validation = require("../../middlewares/validation/validateProduct");
+const handle_images = require("../../middlewares/handleImageMulter");
 const { auth, sellerAuth } = require("../../middlewares/auth");
 
 // @route   GET /api/product
@@ -20,7 +22,8 @@ router.post(
   "/create",
   auth,
   sellerAuth,
-  product_controller.handleImages("productImage"),
+  handle_images.productImages(),
+  product_validation.validateAdd,
   product_controller.createProduct
 );
 
@@ -41,7 +44,8 @@ router.post(
   "/:id/update",
   auth,
   sellerAuth,
-  product_controller.handleImages("productImage"),
+  //product_validation.validateUpdate,
+  handle_images.productImages(),
   product_controller.updateProduct
 );
 

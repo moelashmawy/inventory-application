@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const logger = require("morgan");
 const path = require("path");
-const config = require("config");
+require("dotenv").config();
 const cors = require("cors");
 // our routes
 const productRouter = require("./routes/api/product");
@@ -28,7 +28,7 @@ app.use(logger("dev"));
 app.use("/uploads", express.static("uploads"));
 
 // Database uri
-const dbURI = config.get("dbURI");
+const dbURI = process.env.DB_URI;
 
 mongoose.connect(dbURI, {
   useNewUrlParser: true,
