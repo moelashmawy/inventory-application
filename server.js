@@ -53,6 +53,11 @@ app.use("/api/order", orderRouter);
 app.use("/api/wishlist", wishlistRouter);
 
 // serve static assets if in production
+if (app.get("env") == "development") {
+  require("dotenv").config();
+}
+if (process.env.NODE_ENV !== "production") require("dotenv").config();
+
 if (process.env.NODE_ENV == "production") {
   // set static folder
   app.use(express.static(path.join(__dirname, "views", "build")));
