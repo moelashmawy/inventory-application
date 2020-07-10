@@ -1,59 +1,59 @@
 import {
-  FETCH_ORDERS_TO_DELIVER_STARTED,
-  FETCH_ORDERS_TO_DELIVER_SUCCESS,
-  FETCH_ORDERS_TO_DELIVER_FAILURE,
-  ORDER_DELIVERED_SUCCESS,
-  ORDER_DELIVERED_FAILURE
+  FETCH_ORDERS_TO_SHIP_STARTED,
+  FETCH_ORDERS_TO_SHIP_SUCCESS,
+  FETCH_ORDERS_TO_SHIP_FAILURE,
+  ORDER_SHIPPED_SUCCESS,
+  ORDER_SHIPPED_FAILURE
 } from "../actions/types";
 
 const initialState = {
-  ordersToDeliver: [],
-  deliveredOrders: [],
+  ordersToShip: [],
+  shippedOrders: [],
   loading: false,
   success: null,
   error: null
 };
 
-const ordersToDeliver = (state = initialState, action) => {
+const ordersToShip = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_ORDERS_TO_DELIVER_STARTED:
+    case FETCH_ORDERS_TO_SHIP_STARTED:
       return {
         ...state,
         loading: true
       };
-    case FETCH_ORDERS_TO_DELIVER_SUCCESS:
+    case FETCH_ORDERS_TO_SHIP_SUCCESS:
       return {
         ...state,
-        ordersToDeliver: action.payload.ordersToDeliver.filter(
+        ordersToShip: action.payload.ordersToShip.filter(
           order => order.orderState.shipped === false
         ),
-        deliveredOrders: action.payload.ordersToDeliver.filter(
+        shippedOrders: action.payload.ordersToShip.filter(
           order => order.orderState.shipped !== false
         ),
         loading: false,
         error: null
       };
-    case FETCH_ORDERS_TO_DELIVER_FAILURE:
+    case FETCH_ORDERS_TO_SHIP_FAILURE:
       return {
         ...state,
         error: action.payload.error,
         success: null,
         loading: false
       };
-    case ORDER_DELIVERED_SUCCESS:
+    case ORDER_SHIPPED_SUCCESS:
       return {
         ...state,
-        ordersToDeliver: state.ordersToDeliver.filter(
-          order => order._id !== action.payload.deliveredOrder._id
+        ordersToShip: state.ordersToShip.filter(
+          order => order._id !== action.payload.shippedOrder._id
         ),
-        deliveredOrders: state.ordersToDeliver.filter(
+        shippedOrders: state.ordersToShip.filter(
           order => order.orderState.shipped !== false
         ),
         loading: false,
         error: null,
         success: action.payload.message
       };
-    case ORDER_DELIVERED_FAILURE:
+    case ORDER_SHIPPED_FAILURE:
       return {
         ...state,
         error: action.payload.error,
@@ -66,4 +66,4 @@ const ordersToDeliver = (state = initialState, action) => {
   }
 };
 
-export default ordersToDeliver;
+export default ordersToShip;

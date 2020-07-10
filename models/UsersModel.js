@@ -14,7 +14,8 @@ const UserSchema = new Schema({
   isAdmin: { type: Boolean },
   isSeller: { type: Boolean },
   isCustomer: { type: Boolean },
-  ordersToDeliver: { type: Array, default: [] }
+  isShipper: { type: Boolean },
+  isRestricted: { type: Boolean }
 });
 
 const Users = mongoose.model("User", UserSchema);

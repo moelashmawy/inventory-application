@@ -17,7 +17,9 @@ let initialState = {
   auth: {
     isAdmin: false,
     isSeller: false,
-    isCustomer: false
+    isCustomer: false,
+    isShipper: false,
+    isRestricted: false
   },
   loading: null,
   success: null,
@@ -39,7 +41,9 @@ const usersReducer = (state = initialState, action) => {
         auth: {
           isAdmin: action.payload.user.isAdmin,
           isSeller: action.payload.user.isSeller,
-          isCustomer: action.payload.user.isCustomer
+          isCustomer: action.payload.user.isCustomer,
+          isShipper: action.payload.user.isShipper,
+          isRestricted: action.payload.user.isRestricted
         },
         error: null
       };
@@ -53,7 +57,9 @@ const usersReducer = (state = initialState, action) => {
         auth: {
           isAdmin: action.payload.user.isAdmin,
           isSeller: action.payload.user.isSeller,
-          isCustomer: action.payload.user.isCustomer
+          isCustomer: action.payload.user.isCustomer,
+          isShipper: action.payload.user.isShipper,
+          isRestricted: action.payload.user.isRestricted
         },
         loading: false,
         error: null,
@@ -74,7 +80,9 @@ const usersReducer = (state = initialState, action) => {
         auth: {
           isAdmin: false,
           isSeller: false,
-          isCustomer: false
+          isCustomer: false,
+          isShipper: false,
+          isRestricted: false
         }
       };
     case UPDATE_USER_SUCCESS:
@@ -87,7 +95,9 @@ const usersReducer = (state = initialState, action) => {
         auth: {
           isAdmin: action.payload.user.isAdmin,
           isSeller: action.payload.user.isSeller,
-          isCustomer: action.payload.user.isCustomer
+          isCustomer: action.payload.user.isCustomer,
+          isShipper: action.payload.user.isShipper,
+          isRestricted: action.payload.user.isRestricted
         },
         loading: false,
         error: null,
@@ -100,7 +110,6 @@ const usersReducer = (state = initialState, action) => {
         error: action.payload.error,
         success: null
       };
-
     default:
       return state;
   }

@@ -45,4 +45,13 @@ const adminAuth = (req, res, next) => {
   } else next();
 };
 
-module.exports = { auth, sellerAuth, adminAuth };
+// check only shipper auth
+const shipperAuth = (req, res, next) => {
+  const { isShipper } = req.user;
+
+  if (!isShipper) {
+    res.status(401).json({ message: "Ooooof, ship" });
+  } else next();
+};
+
+module.exports = { auth, sellerAuth, adminAuth, shipperAuth };

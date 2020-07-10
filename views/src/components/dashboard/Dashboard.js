@@ -17,11 +17,26 @@ function Dashboard() {
           <Row>
             {auth.isAdmin && (
               <Col>
-                <h1>Categories</h1> <br />
+                <h1>Admin</h1> <br />
                 <AddCategoryForm />
                 <Link className='btn btn-success mt-2' to='/editCategories'>
-                  {" "}
                   Edit Categories
+                </Link>
+                <br />
+                <Link className='btn btn-success mt-2' to='/permissions'>
+                  Users permissions
+                </Link>
+                <br />
+                <Link
+                  className='btn btn-success mt-2'
+                  to='/dashboard/admin/admins_permissions'>
+                  All Admins
+                </Link>
+                <br />
+                <Link
+                  className='btn btn-success mt-2'
+                  to='/dashboard/admin/shippers_permissions'>
+                  All Shippers
                 </Link>
               </Col>
             )}
@@ -39,12 +54,12 @@ function Dashboard() {
             <Col>
               <h1>Seller</h1> <br />
               <Link to='/dashboard/orders_to_deliver'>
-                <Button variant='primary'>Products for delivery</Button>
+                <Button variant='primary'>Products to ship</Button>
                 <br />
               </Link>
               <Link className='btn btn-success mt-2' to='/dashboard/delivered_orders'>
                 {" "}
-                Delivered Orders
+                Shipped Orders
               </Link>
             </Col>
           </Row>

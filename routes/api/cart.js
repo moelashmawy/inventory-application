@@ -19,8 +19,13 @@ router.get("/userCartInfo", auth, cart_controller.userCartInfo);
 router.get("/removeFromCart", auth, cart_controller.removeFromCart);
 
 // @route   PUT api/cart/changeQuantityFromCart?productId=12313213213
-// @desc    Remove an item from the cart
+// @desc    Change any item quantity from cart
 // @access  private
 router.put("/changeQuantityFromCart", auth, cart_controller.changeQuantityFromCart);
+
+// @route   PUT api/cart/chooseOrderAddress
+// @desc    Choose the order address
+// @access  private
+router.put("/chooseOrderAddress", auth, cart_controller.chooseOrderAddress);
 
 module.exports = router;

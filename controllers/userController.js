@@ -32,7 +32,9 @@ exports.createUser = (req, res) => {
             email: req.body.email,
             isAdmin: false,
             isSeller: false,
-            isCustomer: true
+            isCustomer: true,
+            isShipper: false,
+            isRestricted: false
           });
 
           // encrypt the password using bcryptjs
@@ -58,7 +60,9 @@ exports.createUser = (req, res) => {
                       id: user.id,
                       isAdmin: user.isAdmin,
                       isSeller: user.isSeller,
-                      isCustomer: user.isCustomer
+                      isCustomer: user.isCustomer,
+                      isShipper: user.isShipper,
+                      isRestricted: user.isRestricted
                     },
                     jwtSecret,
                     { expiresIn: 3600 },
@@ -80,6 +84,8 @@ exports.createUser = (req, res) => {
                           isAdmin: user.isAdmin,
                           isSeller: user.isSeller,
                           isCustomer: user.isCustomer,
+                          isShipper: user.isShipper,
+                          isRestricted: user.isRestricted,
                           cart: user.cart,
                           wishList: user.cart
                         }
@@ -125,7 +131,9 @@ exports.login = (req, res) => {
               id: user.id,
               isAdmin: user.isAdmin,
               isSeller: user.isSeller,
-              isCustomer: user.isCustomer
+              isCustomer: user.isCustomer,
+              isShipper: user.isShipper,
+              isRestricted: user.isRestricted
             },
             jwtSecret,
             { expiresIn: 3600 },
@@ -148,6 +156,8 @@ exports.login = (req, res) => {
                     isAdmin: user.isAdmin,
                     isSeller: user.isSeller,
                     isCustomer: user.isCustomer,
+                    isShipper: user.isShipper,
+                    isRestricted: user.isRestricted,
                     cart: user.cart,
                     wishList: user.cart
                   }
@@ -226,7 +236,9 @@ exports.editUser = (req, res) => {
                         id: user.id,
                         isAdmin: user.isAdmin,
                         isSeller: user.isSeller,
-                        isCustomer: user.isCustomer
+                        isCustomer: user.isCustomer,
+                        isShipper: user.isShipper,
+                        isRestricted: user.isRestricted
                       },
                       jwtSecret,
                       { expiresIn: 3600 },
@@ -267,7 +279,9 @@ exports.editUser = (req, res) => {
                           id: user.id,
                           isAdmin: user.isAdmin,
                           isSeller: user.isSeller,
-                          isCustomer: user.isCustomer
+                          isCustomer: user.isCustomer,
+                          isShipper: user.isShipper,
+                          isRestricted: user.isRestricted
                         },
                         jwtSecret,
                         { expiresIn: 3600 },
@@ -336,7 +350,9 @@ exports.editUser = (req, res) => {
                             id: user.id,
                             isAdmin: user.isAdmin,
                             isSeller: user.isSeller,
-                            isCustomer: user.isCustomer
+                            isCustomer: user.isCustomer,
+                            isShipper: user.isShipper,
+                            isRestricted: user.isRestricted
                           },
                           jwtSecret,
                           { expiresIn: 3600 },
@@ -377,7 +393,9 @@ exports.editUser = (req, res) => {
                               id: user.id,
                               isAdmin: user.isAdmin,
                               isSeller: user.isSeller,
-                              isCustomer: user.isCustomer
+                              isCustomer: user.isCustomer,
+                              isShipper: user.isShipper,
+                              isRestricted: user.isRestricted
                             },
                             jwtSecret,
                             { expiresIn: 3600 },

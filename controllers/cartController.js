@@ -224,3 +224,23 @@ exports.changeQuantityFromCart = (req, res) => {
       }
     });
 };
+
+// handle put request at "/api/cart/chooseOrderAddress"
+exports.chooseOrderAddress = (req, res) => {
+  const userId = req.user.id;
+
+  Cart.findOneAndUpdate(
+    { user: userId },
+    { $set: { address: req.body.address } },
+    { new: true, useFindAndModify: false }
+  ).exec((err, cart) => {
+    if (err) {
+      res.status(400).json({
+        message: "Couldn't update address",
+        err
+      });
+    } else {
+      res.status(200).json(cart);
+    }
+  });
+};

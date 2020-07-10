@@ -1,24 +1,33 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchOrdersToDeliver } from "../../redux/actions/order-actions/fetchOrdersToDeliver";
-import { markOrderDelivered } from "../../redux/actions/order-actions/markOrderDelivered";
+import { fetchordersToShip } from "../../redux/actions/order-actions/fetchOrdersToShip";
 import { Link } from "react-router-dom";
-import { Container, Table, Spinner, Button } from "react-bootstrap";
+import { Container, Table, Spinner } from "react-bootstrap";
 
-function OrdersToDeliver() {
-  const { ordersToDeliver, loading } = useSelector(state => state.ordersToDeliverrr);
+function ShippedOrders() {
+  const { shippedOrders, loading } = useSelector(state => state.ordersToShippp);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchOrdersToDeliver());
+    dispatch(fetchordersToShip());
   }, [dispatch]);
 
   let emptyMessage;
-  if (!loading && ordersToDeliver.length === 0) {
+  if (!loading && shippedOrders.length === 0) {
     emptyMessage = (
       <tr>
         <td>There are no orders yet</td>
+      </tr>
+    );
+  }
+  let loadingSpinner;
+  if (loading && shippedOrders.length === 0) {
+    loadingSpinner = (
+      <tr>
+        <td colSpan='3'>
+          <Spinner animation='border' /> loading...
+        </td>
       </tr>
     );
   }
@@ -31,20 +40,14 @@ function OrdersToDeliver() {
             <th>Item</th>
             <th>quantity</th>
             <th>Total Price</th>
-            <th>Mark as delivered</th>
+            <th>State</th>
           </tr>
         </thead>
         <tbody>
           {emptyMessage}
-          {loading && (
-            <tr>
-              <td colSpan='3'>
-                <Spinner animation='border' /> loading...{" "}
-              </td>
-            </tr>
-          )}
-          {ordersToDeliver &&
-            ordersToDeliver.map(item => {
+          {loadingSpinner}
+          {shippedOrders &&
+            shippedOrders.map(item => {
               return (
                 <tr key={item._id}>
                   <td>
@@ -53,11 +56,7 @@ function OrdersToDeliver() {
                   <td>{item.quantity}</td>
 
                   <td>${item.quantity * item.product.price}</td>
-                  <td>
-                    <Button onClick={() => dispatch(markOrderDelivered(item._id))}>
-                      Mark as shipped
-                    </Button>
-                  </td>
+                  <td>Shipped</td>
                 </tr>
               );
             })}
@@ -67,4 +66,4 @@ function OrdersToDeliver() {
   );
 }
 
-export default OrdersToDeliver;
+export default ShippedOrders;

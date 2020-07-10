@@ -9,7 +9,9 @@ import cartReducer from "./cartReducer";
 import addressReducer from "./addressReducer";
 import wishlistReducer from "./wishlistReducer";
 import ordersHistoryReducer from "./ordersHistoryReducer";
-import ordersToDeliver from "./ordersToDeliver";
+import ordersToShip from "./ordersToShip";
+import permissionsReducer from "./permissionsReducer";
+import shippersReducer from "./shippersReducer";
 
 const rootReducer = combineReducers({
   productsss: productReducer,
@@ -22,7 +24,9 @@ const rootReducer = combineReducers({
   addresss: addressReducer,
   wishlisttt: wishlistReducer,
   historyyy: ordersHistoryReducer,
-  ordersToDeliverrr: ordersToDeliver
+  ordersToShippp: ordersToShip,
+  permissionsss: permissionsReducer,
+  shippersss: shippersReducer
 });
 
 export default rootReducer;

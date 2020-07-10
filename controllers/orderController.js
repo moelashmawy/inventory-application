@@ -2,6 +2,8 @@ const User = require("./../models/UsersModel");
 const Product = require("./../models/ProductModel");
 const Cart = require("./../models/Cart");
 const Order = require("./../models/Order");
+const Shipper = require("./../models/Shipper");
+const mongoose = require("mongoose");
 
 //handle GET at /api/order/orderSuccess to finish the order and move the cart to history
 exports.orderSuccess = (req, res) => {
@@ -15,46 +17,6 @@ exports.orderSuccess = (req, res) => {
     } else {
       let cartInfo = cart.items;
 
-      // we need to notify each seller about the purchased products
-      // we have the cart informations about each product and quantity
-      // 1- go to each item the user purchased
-      // 2- find its seller
-      // 3- edit the seller's ordersToDeliver
-      // by adding the products and amount
-      cartInfo.forEach(item => {
-        Product.findOne({ _id: item.product })
-          .populate("seller", "ordersToDeliver")
-          .exec((err, product) => {
-            if (err) {
-              res.status(400).json({
-                message: "Couldn't get items",
-                err
-              });
-            } else {
-              User.findOneAndUpdate(
-                { _id: product.seller._id },
-                {
-                  $push: {
-                    ordersToDeliver: item
-                  }
-                },
-                {
-                  new: true,
-                  useFindAndModify: false
-                },
-                (err, productSeller) => {
-                  if (err) {
-                    return res.status(400).json({
-                      message: "Couldn't update orders to deliver",
-                      err
-                    });
-                  }
-                }
-              );
-            }
-          });
-      });
-
       // we need to decreament the item's number in stock
       cartInfo.forEach(item => {
         Product.updateOne(
@@ -67,9 +29,10 @@ exports.orderSuccess = (req, res) => {
           { new: true },
           (err, item) => {
             if (err) {
-              return res
-                .status(400)
-                .json({ message: "Couldn't decrease item's quantity", err });
+              return res.status(400).json({
+                message: "Couldn't decrease item's quantity",
+                err
+              });
             }
           }
         );
@@ -77,13 +40,14 @@ exports.orderSuccess = (req, res) => {
 
       // Then create a new order related to the user
       // 1- find the user's cart
-      // 2- create a new order and its products are the user's cart items
+      // 2- create a new order, and its products are the user's cart items
       // 3- empty the user's cart
       Cart.findOne({ user: userId }).then(foundCart => {
         Order.create({
           user: userId,
           products: foundCart.items,
-          totalPrice: foundCart.totalPrice
+          totalPrice: foundCart.totalPrice,
+          address: foundCart.address
         }).then(() => {
           // Then empty the user's cart
           Cart.findOneAndUpdate(
@@ -91,9 +55,16 @@ exports.orderSuccess = (req, res) => {
             { $set: { items: [], totalPrice: 0 } },
             { new: true, useFindAndModify: false },
             (err, cart) => {
-              if (err) res.status(400).json({ message: "Error in order", err });
+              if (err)
+                res.status(400).json({
+                  message: "Error in order",
+                  err
+                });
               else {
-                res.status(200).json({ message: "Ordered Placed", cart });
+                res.status(200).json({
+                  message: "Ordered Placed",
+                  cart
+                });
               }
             }
           );
@@ -127,8 +98,8 @@ exports.userOrdersHistory = (req, res) => {
     });
 };
 
-//handle GET at api/order/ordersToDeliver to all seller's orders to be delivered
-exports.ordersToDeliver = (req, res) => {
+//handle GET at api/order/ordersToShip to all seller's orders to be delivered
+exports.ordersToShip = (req, res) => {
   let userId = req.user.id;
 
   Order.find()
@@ -138,37 +109,82 @@ exports.ordersToDeliver = (req, res) => {
       else {
         let len = orders.length;
         let orderCurInx = 0;
-        let ordersToDeliver = [];
+        let ordersToShip = [];
 
         orders.forEach(order => {
           ++orderCurInx;
 
           order.products.forEach(product => {
             if (product.product.seller == userId) {
-              ordersToDeliver.push(product);
+              ordersToShip.push(product);
             }
           });
         });
 
         if (len == orderCurInx) {
-          return res.status(200).json({ ordersToDeliver });
+          return res.status(200).json({ ordersToShip });
         }
       }
     });
 };
 
-//handle GET at api/order/ordersToDeliver/markAsShipped to all seller's orders to be delivered
+//handle GET at api/order/ordersToShip/markAsShipped to all seller's orders to be delivered
 exports.markAsShipped = (req, res) => {
-  let userId = req.user.id;
+  let orderId = req.query.orderId;
 
   // we want to change the item state in the orders
   // so the customer who ordered the product can track
   // the order state
   Order.findOneAndUpdate(
     {
-      products: { $elemMatch: { _id: mongoose.Types.ObjectId(req.query.orderId) } }
+      products: { $elemMatch: { _id: mongoose.Types.ObjectId(orderId) } }
     },
     { $set: { "products.$.orderState.shipped": true } },
+    { new: true, useFindAndModify: false },
+    (err, order) => {
+      if (err) {
+        res.status(400).json({ message: "Couldn't mark shipped, try again.", err });
+      } else {
+        // order contains the whole items in the order and we want to return just our updated item
+        let shippedOrder = order.products.filter(item => item._id == req.query.orderId);
+        let updatedItemOnly = shippedOrder[0];
+
+        res
+          .status(200)
+          .json({ message: "Marked as shipped", shippedOrder: updatedItemOnly });
+      }
+    }
+  );
+};
+
+//handle GET at api/order/ordersToDeliver to get all shipper's orders
+exports.ordersToDeliver = (req, res) => {
+  let userId = req.user.id;
+
+  // 1- first we get the shipper to get his area
+  Shipper.findOne({ user: userId }, (err, shipper) => {
+    // 2- we get all the order's that has the same area as shipper
+    Order.find()
+      .populate("address")
+      .exec((err, orders) => {
+        let areaOrders = orders.filter(order => order.address.state == shipper.area);
+        res.json({ areaOrders });
+      });
+  });
+};
+
+//handle GET at api/order/ordersToDeliver/markAsDelivered to mark as delivered
+exports.markAsDelivered = (req, res) => {
+  let orderId = req.query.orderId;
+
+  // we want to change the item state in the orders
+  // so the customer who ordered the product can track
+  // the order state
+  Order.findOneAndUpdate(
+    {
+      products: { $elemMatch: { _id: mongoose.Types.ObjectId(orderId) } }
+    },
+    { $set: { "products.$.orderState.delivered": true } },
     { new: true, useFindAndModify: false },
     (err, order) => {
       if (err) {

@@ -12,6 +12,7 @@ const cartRouter = require("./routes/api/cart");
 const wishlistRouter = require("./routes/api/wishlist");
 const addressRouter = require("./routes/api/address");
 const orderRouter = require("./routes/api/order");
+const permissionsRouter = require("./routes/api/permission");
 
 const app = express();
 
@@ -48,14 +49,12 @@ app.use("/api/product", productRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/wishlist", wishlistRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/order", orderRouter);
-app.use("/api/wishlist", wishlistRouter);
+app.use("/api/permissions", permissionsRouter);
 
-// serve static assets if in production
-if (app.get("env") == "development") {
-  require("dotenv").config();
-}
+// serve static assets if in production (heroku configuration)
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
 if (process.env.NODE_ENV == "production") {

@@ -21,22 +21,6 @@ function Cart() {
     dispatch(fetchCartProducts());
   }, [dispatch]);
 
-  const placeNewOrder = () => {
-    dispatch(placeOrder())
-      .then(res => {
-        toast.success(res, {
-          position: toast.POSITION.BOTTOM_LEFT,
-          transition: Slide
-        });
-      })
-      .catch(err => {
-        toast.error(err, {
-          position: toast.POSITION.BOTTOM_LEFT,
-          autoClose: false
-        });
-      });
-  };
-
   let loadingSpinner;
   if (loading) {
     loadingSpinner = (
@@ -72,7 +56,9 @@ function Cart() {
   } else if (cart) {
     return (
       <Container>
-        <Button onClick={() => placeNewOrder()}>Proceed to pay</Button>
+        <Link to='/checkout/select_address'>
+          <Button>Proceed to pay</Button>
+        </Link>
         <p>Total: ${totalPrice}</p>
         <Table striped bordered hover variant='dark'>
           <thead>

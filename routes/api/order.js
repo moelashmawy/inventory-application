@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { auth } = require("../../middlewares/auth");
+const { auth, shipperAuth } = require("../../middlewares/auth");
 const order_controller = require("./../../controllers/orderController");
 
 // @route   GET api/order/orderSuccess
@@ -13,14 +13,29 @@ router.get("/orderSuccess", auth, order_controller.orderSuccess);
 // @access  private
 router.get("/userOrdersHistory", auth, order_controller.userOrdersHistory);
 
-// @route   GET api/order/ordersToDeliver
-// @desc    Get all seller's orders to be delivered
-// @access  private
-router.get("/ordersToDeliver", auth, order_controller.ordersToDeliver);
+// @route   GET api/order/ordersToShip
+// @desc    Get all seller's orders to be shipped
+// @access  Sellers only
+router.get("/ordersToShip", auth, order_controller.ordersToShip);
 
-// @route   PUT api/order/ordersToDeliver/markAsShipped
+// @route   PUT api/order/ordersToShip/markAsShipped
 // @desc    Edit seller's order's state to be shipped
-// @access  private
-router.get("/ordersToDeliver/markAsShipped", auth, order_controller.markAsShipped);
+// @access  Sellers only
+router.get("/ordersToShip/markAsShipped", auth, order_controller.markAsShipped);
+
+// @route   GET api/order/ordersToDeliver
+// @desc    Get all shipper's orders to deliver
+// @access  shippers only
+router.get("/ordersToDeliver", auth, shipperAuth, order_controller.ordersToDeliver);
+
+// @route   PUT api/order/ordersToDeliver/markAsDelivered
+// @desc    Edit shipper's order's state to be delivered
+// @access  shippers only
+router.get(
+  "/ordersToDeliver/markAsDelivered",
+  auth,
+  shipperAuth,
+  order_controller.markAsDelivered
+);
 
 module.exports = router;

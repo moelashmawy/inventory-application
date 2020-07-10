@@ -1,10 +1,12 @@
-// Todo
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ShipperSchema = new Schema({
-  compoany: { type: String, required: true },
-  Phone: { type: Number, required: true }
+  user: { type: Schema.Types.ObjectId, ref: "User" },
+  company: { type: String },
+  area: { type: String },
+  phone: { type: String },
+  isActiveShipper: { type: Boolean }
 });
 
 const Shipper = mongoose.model("Shipper", ShipperSchema);
