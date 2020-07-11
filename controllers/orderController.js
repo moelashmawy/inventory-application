@@ -166,6 +166,7 @@ exports.ordersToDeliver = (req, res) => {
     // 2- we get all the order's that has the same area as shipper
     Order.find()
       .populate("address")
+      .populate({ path: "products.product", model: "Product" })
       .exec((err, orders) => {
         let areaOrders = orders.filter(order => order.address.state == shipper.area);
         res.json({ areaOrders });
@@ -184,9 +185,16 @@ exports.markAsDelivered = (req, res) => {
     {
       products: { $elemMatch: { _id: mongoose.Types.ObjectId(orderId) } }
     },
-    { $set: { "products.$.orderState.delivered": true } },
-    { new: true, useFindAndModify: false },
-    (err, order) => {
+    {
+      $set: {
+        "products.$.orderState.delivered": true,
+        deliveredDate: Date().toString()
+      }
+    },
+    { new: true, useFindAndModify: false }
+  )
+    .populate("address")
+    .exec((err, order) => {
       if (err) {
         res.status(400).json({ message: "Couldn't mark delivered, try again.", err });
       } else {
@@ -194,10 +202,11 @@ exports.markAsDelivered = (req, res) => {
         let deliveredOrder = order.products.filter(item => item._id == req.query.orderId);
         let updatedItemOnly = deliveredOrder[0];
 
-        res
-          .status(200)
-          .json({ message: "Marked as delivered", deliveredOrder: updatedItemOnly });
+        res.status(200).json({
+          message: "Marked as delivered",
+          order,
+          deliveredItem: updatedItemOnly
+        });
       }
-    }
-  );
+    });
 };
