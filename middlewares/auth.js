@@ -21,7 +21,10 @@ const auth = (req, res, next) => {
     // add user from token payload which contains the user id we attached to the token
     req.user = decoded;
 
-    next();
+    // restrict all permissions from the restricted users
+    if (req.user.isRestricted) {
+      res.status(401).json({ message: "Your account is banned, contact us" });
+    } else next();
   } catch (e) {
     res.status(400).json({ message: "Please log in" });
   }
