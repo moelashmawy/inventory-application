@@ -119,7 +119,7 @@ exports.addShipper = (req, res) => {
   }
 };
 
-// to handle put at /api/permissions/addShipperInfo
+// to handle put at /api/permissions/addShipperInfo to add the shipper's info
 exports.addShipperInfo = (req, res) => {
   let shipperId = req.body.shipperId;
 
@@ -142,4 +142,72 @@ exports.addShipperInfo = (req, res) => {
         res.status(200).json({ message: "Updated Info", shipper });
       }
     });
+};
+
+//handle Put at /api/permissions/addAdmin to add admin permissions to any user
+exports.addAdmin = (req, res) => {
+  let adminId = req.body.adminId;
+  let isAdmin = req.body.isAdmin; //comes from frontend
+
+  //if isAdmin true means we wanna allow the user to be an admin
+  if (isAdmin == "true") {
+    // Change user state (isAdmin) to true
+    User.findOneAndUpdate(
+      { _id: adminId },
+      { $set: { isAdmin: true } },
+      { new: true, useFindAndModify: false }
+    ).then(user => {
+      res.status(200).json({
+        message: "Added as admin",
+        user
+      });
+    });
+  } else {
+    //if false, set isAdmin to false
+    // Change user state (isAdmin) to true
+    User.findOneAndUpdate(
+      { _id: adminId },
+      { $set: { isAdmin: false } },
+      { new: true, useFindAndModify: false }
+    ).then(user => {
+      res.status(200).json({
+        message: "Admin is removed",
+        user
+      });
+    });
+  }
+};
+
+//handle Put at /api/permissions/restrictUser to finish the order and move the cart to history
+exports.restrictUser = (req, res) => {
+  let userId = req.body.userId;
+  let isRestricted = req.body.isRestricted; //comes from frontend
+
+  //if isRestricted true means we wanna allow the user to be an admin
+  if (isRestricted == "true") {
+    // Change user state (isRestricted) to true
+    User.findOneAndUpdate(
+      { _id: userId },
+      { $set: { isRestricted: true } },
+      { new: true, useFindAndModify: false }
+    ).then(user => {
+      res.status(200).json({
+        message: "User Restricted",
+        user
+      });
+    });
+  } else {
+    //if false, set isRestricted to false
+    // Change user state (isRestricted) to true
+    User.findOneAndUpdate(
+      { _id: userId },
+      { $set: { isRestricted: false } },
+      { new: true, useFindAndModify: false }
+    ).then(user => {
+      res.status(200).json({
+        message: "User is un Restricted",
+        user
+      });
+    });
+  }
 };
