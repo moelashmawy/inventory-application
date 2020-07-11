@@ -51,17 +51,36 @@ function Dashboard() {
                 Edit Products
               </Link>
             </Col>
-            <Col>
-              <h1>Seller</h1> <br />
-              <Link to='/dashboard/orders_to_deliver'>
-                <Button variant='primary'>Products to ship</Button>
-                <br />
-              </Link>
-              <Link className='btn btn-success mt-2' to='/dashboard/delivered_orders'>
-                {" "}
-                Shipped Orders
-              </Link>
-            </Col>
+            {auth.isSeller && (
+              <Col>
+                <h1>Seller</h1> <br />
+                <Link to='/dashboard/seller/orders_to_ship'>
+                  <Button variant='primary'>Products to ship</Button>
+                  <br />
+                </Link>
+                <Link
+                  className='btn btn-success mt-2'
+                  to='/dashboard/seller/shipped_orders'>
+                  {" "}
+                  Shipped Orders
+                </Link>
+              </Col>
+            )}
+            {auth.isShipper && (
+              <Col>
+                <h1>Shipper</h1> <br />
+                <Link to='/dashboard/shipper/orders_to_deliver'>
+                  <Button variant='primary'>Orders to Deliver</Button>
+                  <br />
+                </Link>
+                <Link
+                  className='btn btn-success mt-2'
+                  to='/dashboard/shipper/delivered_orders'>
+                  {" "}
+                  Delivered Orders
+                </Link>
+              </Col>
+            )}
           </Row>
         </Container>
       </div>
