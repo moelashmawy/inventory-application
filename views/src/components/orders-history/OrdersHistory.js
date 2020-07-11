@@ -54,10 +54,11 @@ function Cart() {
           {loadingSpinner}
 
           {historyOrders.map(order => {
-            let single = (
+            let singleOrder = (
               <div className='mb-5' key={order._id}>
                 <div>Order ID: #{order._id}</div>
                 <div>Order placed on: {order.orderDate}</div>
+                {order.deliveredDate && <div>Delivered on: {order.deliveredDate}</div>}
                 {order.totalPrice && <div>Total Price: ${order.totalPrice}</div>}
 
                 {order.products.map(productItem => (
@@ -101,7 +102,7 @@ function Cart() {
               </div>
             );
 
-            return single;
+            return singleOrder;
           })}
         </Col>
       </Row>
