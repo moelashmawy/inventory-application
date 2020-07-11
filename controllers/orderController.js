@@ -165,6 +165,7 @@ exports.ordersToDeliver = (req, res) => {
   Shipper.findOne({ user: userId }, (err, shipper) => {
     // 2- we get all the order's that has the same area as shipper
     Order.find()
+      .sort({ orderDate: -1 })
       .populate("address")
       .populate({ path: "products.product", model: "Product" })
       .exec((err, orders) => {
