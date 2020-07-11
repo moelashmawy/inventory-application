@@ -24,6 +24,8 @@ import EditAddressForm from "./components/account-settings/EditAddressForm";
 import EditAccountForm from "./components/account-settings/EditAccountForm";
 import OrdersToShip from "./components/dashboard/OrdersToShip";
 import ShippedOrders from "./components/dashboard/ShippedOrders";
+import OrdersToDeliver from "./components/dashboard/OrdersToDeliver";
+import DeliveredOrders from "./components/dashboard/DeliveredOrders";
 import ChooseAddressToDeliver from "./components/cart/ChooseAddressToDeliver";
 import ChooseOrderPayment from "./components/cart/ChooseOrderPayment";
 import AllShippersList from "./components/dashboard/AllShippersList";
@@ -65,8 +67,10 @@ function App() {
         <Route path='/my_addresses/edit_address' component={EditAddressForm} />
         <Route path='/my_orders' component={OrdersHistory} />
         <Route path='/wish_list' component={WishList} />
-        <Route path='/dashboard/orders_to_deliver' component={OrdersToShip} />
-        <Route path='/dashboard/delivered_orders' component={ShippedOrders} />
+        <Route path='/dashboard/seller/orders_to_ship' component={OrdersToShip} />
+        <Route path='/dashboard/seller/shipped_orders' component={ShippedOrders} />
+        <Route path='/dashboard/shipper/orders_to_deliver' component={OrdersToDeliver} />
+        <Route path='/dashboard/shipper/delivered_orders' component={DeliveredOrders} />
         <Route path='/dashboard/admin/admins_permissions' component={AllAdminsList} />
         <Route path='/dashboard/admin/shippers_permissions' component={AllShippersList} />
         <Route path='/checkout/select_address' component={ChooseAddressToDeliver} />
