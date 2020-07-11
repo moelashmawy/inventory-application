@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllUsers } from "../../redux/actions/permissions-actions/fetchAllUsers";
 import { changeShipperPermission } from "../../redux/actions/permissions-actions/shipperPermissionActions";
+import { changeAdminPermission } from "../../redux/actions/permissions-actions/adminPermissionActions";
+import { restrictUserPermission } from "../../redux/actions/permissions-actions/restrictUserActions";
 import { Container, Table, Spinner, Button } from "react-bootstrap";
 import { toast, Slide } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
 
 function AllUsersPermissions() {
-  const [isShipper, setIsShipper] = useState(false);
-
   const { allUsers, loading } = useSelector(state => state.permissionsss);
 
   const dispatch = useDispatch();
@@ -25,9 +27,8 @@ function AllUsersPermissions() {
     );
   }
 
-  // handle change shipper permission
-  const giveShipperPermission = (shipperId, isShipper) => {
-    dispatch(changeShipperPermission(shipperId, isShipper))
+  const givePermission = permissionFunction => {
+    dispatch(permissionFunction)
       .then(res => {
         toast.success(res, {
           position: toast.POSITION.BOTTOM_LEFT,
@@ -73,32 +74,59 @@ function AllUsersPermissions() {
 
                   <td>
                     <select
-                      value={user.isAdmin}
+                      //value={user.isShipper}
                       onChange={e => {
-                        console.log(e.target.value);
+                        givePermission(changeAdminPermission(user._id, e.target.value));
                       }}>
-                      <option value='false'>No</option>
-                      <option value='true'>Yes</option>
+                      <option disabled selected value=''>
+                        Change
+                      </option>
+                      <option value='false'>Disable</option>
+                      <option value='true'>Enable</option>
                     </select>
+                    {user.isAdmin && <FontAwesomeIcon className='ml-2' icon={faCheck} />}
                   </td>
 
                   <td>
                     <select
                       //value={user.isShipper}
                       onChange={e => {
-                        setIsShipper(e.target.value);
-                        giveShipperPermission(user._id, e.target.value);
+                        givePermission(changeShipperPermission(user._id, e.target.value));
                       }}>
-                      <option value=''>Change</option>
+                      <option disabled selected value=''>
+                        Change
+                      </option>
                       <option value='false'>Disable</option>
                       <option value='true'>Enable</option>
                     </select>
-                    {user.isShipper && <span>Yes</span>}
+                    {user.isShipper && (
+                      <FontAwesomeIcon className='ml-2' icon={faCheck} />
+                    )}
                   </td>
 
-                  <td>
-                    <Button variant='danger'>Restrict</Button>
-                  </td>
+                  {!user.isRestricted && (
+                    <td>
+                      <Button
+                        onClick={() => {
+                          givePermission(restrictUserPermission(user._id, "true"));
+                        }}
+                        variant='danger'>
+                        Restrict
+                      </Button>
+                    </td>
+                  )}
+                  {user.isRestricted && (
+                    <td>
+                      <Button
+                        variant='success'
+                        onClick={() => {
+                          givePermission(restrictUserPermission(user._id, "false"));
+                        }}>
+                        Un Restrict
+                      </Button>
+                      <FontAwesomeIcon className='ml-2' icon={faSkullCrossbones} />
+                    </td>
+                  )}
                 </tr>
               );
             })}

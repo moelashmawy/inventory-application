@@ -192,12 +192,13 @@ function EditAddressForm(props) {
               <Col>
                 <div className='form-group'>
                   <label>State *</label>
-                  <Field
-                    type='text'
-                    name='state'
-                    className='form-control'
-                    placeholder='Enter state'
-                  />
+                  <Field as='select' name='state' className='form-control'>
+                    <option value='' disabled selected>
+                      Choose City
+                    </option>
+                    <option value='Cairo'>Cairo</option>
+                    <option value='Alexandria'>Alexandria</option>
+                  </Field>
                   <ErrorMessage component={Toast} name='state' />
                 </div>
               </Col>

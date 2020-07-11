@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAddresses } from "../../redux/actions/address-actions/fetchAddressesAction";
 import { chooseOrderAddress } from "../../redux/actions/cart-actions/chooseOrderAddress";
 import { Link } from "react-router-dom";
 
-function ChooseAddressToDeliver() {
+function ChooseAddressToDeliver(props) {
+  const [address, setAddress] = useState(null);
+
   const { addresses, loading } = useSelector(state => state.addresss);
 
   const dispatch = useDispatch();
@@ -32,6 +34,7 @@ function ChooseAddressToDeliver() {
           value={address._id}
           onChange={e => {
             dispatch(chooseOrderAddress({ address: e.target.value }));
+            setAddress(e.target.value);
           }}
         />
         <h3>
@@ -61,10 +64,13 @@ function ChooseAddressToDeliver() {
       <Row>
         <form>
           {allAddresses}
-
-          <Link to='/checkout/payment'>
-            <input type='submit' value='Proceed to pay' />
-          </Link>
+          <Button
+            onClick={() => {
+              if (address) props.history.push("/checkout/payment");
+            }}
+            type='submit'>
+            Proceed to pay
+          </Button>
         </form>
       </Row>
     </Container>

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllUsers } from "../../redux/actions/permissions-actions/fetchAllUsers";
 import { changeShipperPermission } from "../../redux/actions/permissions-actions/shipperPermissionActions";
+import { changeAdminPermission } from "../../redux/actions/permissions-actions/adminPermissionActions";
 import { Container, Table, Spinner, Button } from "react-bootstrap";
 import { toast, Slide } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 function AllAdminsList() {
-  const [isShipper, setIsShipper] = useState(false);
-
   const { allUsers, loading } = useSelector(state => state.permissionsss);
 
   const dispatch = useDispatch();
@@ -25,9 +26,10 @@ function AllAdminsList() {
     );
   }
 
-  // handle change shipper permission
-  const giveShipperPermission = (shipperId, isShipper) => {
-    dispatch(changeShipperPermission(shipperId, isShipper))
+  let allAdmins = allUsers.filter(user => user.isAdmin == true);
+
+  const givePermission = permissionFunction => {
+    dispatch(permissionFunction)
       .then(res => {
         toast.success(res, {
           position: toast.POSITION.BOTTOM_LEFT,
@@ -50,8 +52,6 @@ function AllAdminsList() {
             <th>Username</th>
             <th>Email</th>
             <th>Admin</th>
-            <th>Shipper</th>
-            <th>Restrict</th>
           </tr>
         </thead>
         <tbody>
@@ -63,8 +63,8 @@ function AllAdminsList() {
               </td>
             </tr>
           )}
-          {allUsers &&
-            allUsers.map(user => {
+          {allAdmins &&
+            allAdmins.map(user => {
               return (
                 <tr key={user._id}>
                   <td>{user.username}</td>
@@ -73,31 +73,17 @@ function AllAdminsList() {
 
                   <td>
                     <select
-                      value={user.isAdmin}
-                      onChange={e => {
-                        console.log(e.target.value);
-                      }}>
-                      <option value='false'>No</option>
-                      <option value='true'>Yes</option>
-                    </select>
-                  </td>
-
-                  <td>
-                    <select
                       //value={user.isShipper}
                       onChange={e => {
-                        setIsShipper(e.target.value);
-                        giveShipperPermission(user._id, e.target.value);
+                        givePermission(changeAdminPermission(user._id, e.target.value));
                       }}>
-                      <option value=''>Change</option>
+                      <option disabled selected value=''>
+                        Change
+                      </option>
                       <option value='false'>Disable</option>
                       <option value='true'>Enable</option>
                     </select>
-                    {user.isShipper && <span>Yes</span>}
-                  </td>
-
-                  <td>
-                    <Button variant='danger'>Restrict</Button>
+                    {user.isAdmin && <FontAwesomeIcon className='ml-2' icon={faCheck} />}
                   </td>
                 </tr>
               );

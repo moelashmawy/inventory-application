@@ -37,6 +37,7 @@ function Cart() {
     emptyMessage = <td>Your cart is empty</td>;
   }
 
+  // number in stock range
   function options(numberInStock) {
     let arr = [];
 
@@ -56,10 +57,14 @@ function Cart() {
   } else if (cart) {
     return (
       <Container>
-        <Link to='/checkout/select_address'>
-          <Button>Proceed to pay</Button>
-        </Link>
+        {cart.length > 0 && (
+          <Link to='/checkout/select_address'>
+            <Button>Proceed to pay</Button>
+          </Link>
+        )}
+
         <p>Total: ${totalPrice}</p>
+
         <Table striped bordered hover variant='dark'>
           <thead>
             <tr>

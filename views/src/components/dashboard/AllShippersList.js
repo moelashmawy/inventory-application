@@ -5,6 +5,8 @@ import { changeShipperPermission } from "../../redux/actions/permissions-actions
 import { Container, Table, Spinner, Button } from "react-bootstrap";
 import { toast, Slide } from "react-toastify";
 import EditShipperForm from "./EditShipperForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 function AllShippersList() {
   const { shippers, loading } = useSelector(state => state.shippersss);
@@ -48,7 +50,7 @@ function AllShippersList() {
           <tr>
             <th>Username</th>
             <th>Email</th>
-            <th>Shipper</th>
+            <th>Disable</th>
             <th>Company</th>
             <th>Area</th>
             <th>Shipper info</th>
@@ -58,7 +60,7 @@ function AllShippersList() {
           {emptyMessage}
           {loading && (
             <tr>
-              <td colSpan='3'>
+              <td colSpan='6'>
                 <Spinner animation='border' /> loading...{" "}
               </td>
             </tr>
@@ -80,7 +82,9 @@ function AllShippersList() {
                       <option value='false'>Disable</option>
                       <option value='true'>Enable</option>
                     </select>
-                    {shipper.isActiveShipper && <span>Yes</span>}
+                    {shipper.isActiveShipper && (
+                      <FontAwesomeIcon className='ml-2' icon={faCheck} />
+                    )}
                   </td>
 
                   <td>{shipper.company && <span>{shipper.company}</span>}</td>
