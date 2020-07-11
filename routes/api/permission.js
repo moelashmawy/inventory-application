@@ -23,9 +23,14 @@ router.put("/addShipper", auth, adminAuth, permissions_controller.addShipper);
 // @access  private & only admin
 router.put("/addShipperInfo", auth, adminAuth, permissions_controller.addShipperInfo);
 
-module.exports = router;
-
 // @route   PUT /api/permissions/addAdmin
 // @desc    Add permissions to any user to be an Admin
 // @access  private & only admin
-//router.put("/addAdmin", auth, adminAuth, permissions_controller.addAmin);
+router.put("/addAdmin", auth, adminAuth, permissions_controller.addAdmin);
+
+// @route   PUT /api/permissions/restrictUser
+// @desc    Restrict user from doing any function
+// @access  private & only admin
+router.put("/restrictUser", auth, adminAuth, permissions_controller.restrictUser);
+
+module.exports = router;
