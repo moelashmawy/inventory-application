@@ -10,6 +10,7 @@ import addressReducer from "./addressReducer";
 import wishlistReducer from "./wishlistReducer";
 import ordersHistoryReducer from "./ordersHistoryReducer";
 import ordersToShip from "./ordersToShip";
+import ordersToDeliver from "./ordersToDeliver";
 import permissionsReducer from "./permissionsReducer";
 import shippersReducer from "./shippersReducer";
 
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   wishlisttt: wishlistReducer,
   historyyy: ordersHistoryReducer,
   ordersToShippp: ordersToShip,
+  ordersToDeliverrr: ordersToDeliver,
   permissionsss: permissionsReducer,
   shippersss: shippersReducer
 });
