@@ -22,5 +22,5 @@ exports.productImages = function () {
 
   upload = multer({ storage: storage, fileFilter: fileFilter });
 
-  return upload.single("productImage");
+  return upload.array("productImage", 12);
 };

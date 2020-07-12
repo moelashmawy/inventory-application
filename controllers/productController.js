@@ -38,7 +38,7 @@ exports.userProducts = (req, res) => {
 // handle POST request at /api/product/create to create a new product
 // will pass an array of functions as a middleware
 exports.createProduct = (req, res) => {
-  if (!req.file || !req.file.path) {
+  if (!req.files) {
     return res.status(400).json({ message: "Please upload an image" });
   }
 
@@ -50,7 +50,7 @@ exports.createProduct = (req, res) => {
     seller: req.user.id,
     price: req.body.price,
     numberInStock: req.body.numberInStock,
-    productImage: req.file.path
+    productImage: req.files
   });
 
   newProduct.save(function (err, product) {
@@ -94,8 +94,8 @@ exports.deleteProduct = (req, res) => {
 
 // handle POST request at /api/product/:id/update to update an item
 exports.updateProduct = (req, res) => {
-  // find one product in the database to get the same image
-  //if the user won't update the image
+  // find one product in the database to get the same images
+  //if the user won't update the images
   Product.findById(req.params.id, "productImage")
     .then(function (product) {
       // create updated product with the provided data
@@ -105,7 +105,7 @@ exports.updateProduct = (req, res) => {
         category: req.body.category,
         price: req.body.price,
         numberInStock: req.body.numberInStock,
-        productImage: req.file ? req.file.path : product.productImage
+        productImage: req.files ? req.files : product.productImage
       };
 
       Product.findByIdAndUpdate(req.params.id, updatedProduct, {

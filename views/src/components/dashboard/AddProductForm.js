@@ -28,11 +28,11 @@ const validate = () =>
   });
 
 function AddProductForm() {
-  const [img, setImg] = useState("");
+  const [imgs, setImgs] = useState([]);
 
-  const handleImg = e => {
+  /*  const handleImg = e => {
     setImg(e.target.files[0]);
-  };
+  }; */
 
   // importing categories and laoding state from out store
   const { categories, loading } = useSelector(state => state.categoriesss);
@@ -80,7 +80,7 @@ function AddProductForm() {
             category: values.category,
             price: values.price,
             numberInStock: values.numberInStock,
-            productImage: img
+            productImage: imgs
           };
 
           handleSubmitt(newProduct);
@@ -146,10 +146,15 @@ function AddProductForm() {
           </div>
           <input
             required
+            multiple
             className='custom custom-file mb-2'
             type='file'
             name='productImage'
-            onChange={handleImg}
+            onChange={e => {
+              console.log(e.target.files);
+
+              setImgs(e.target.files);
+            }}
           />
           <Button variant='primary' type='submit'>
             ADD{" "}

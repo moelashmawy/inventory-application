@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Container, ProgressBar, Image, Row, Col, Button } from "react-bootstrap";
+import {
+  Container,
+  ProgressBar,
+  Image,
+  Row,
+  Col,
+  Button,
+  Carousel
+} from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSingleProductAction } from "../redux/actions/product-actions/fetchSingleProductAction";
 import { toast, Slide } from "react-toastify";
@@ -77,10 +85,19 @@ function SingleProduct(props) {
             <Col>
               <div>{product.name}</div>
               <br />
-              <Image
-                src={`${process.env.PUBLIC_URL + "/" + product.productImage}`}
-                thumbnail
-              />
+              <Carousel>
+                {product.productImage.map(image => {
+                  return (
+                    <Carousel.Item>
+                      <img
+                        className='d-block w-100 product-card-image'
+                        src={`${process.env.PUBLIC_URL + "/" + image.path}`}
+                        alt='First slide'
+                      />
+                    </Carousel.Item>
+                  );
+                })}
+              </Carousel>
             </Col>
             <Col>
               <div>${product.price}</div>

@@ -9,7 +9,7 @@ const ProductSchema = new Schema({
   seller: { type: Schema.Types.ObjectId, ref: "User", required: true },
   price: { type: Number, required: true },
   numberInStock: { type: Number, required: true },
-  productImage: { type: String, required: true },
+  productImage: { type: Array, required: true, default: [] },
   creationDate: { type: Date, default: Date.now }
 });
 

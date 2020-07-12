@@ -39,7 +39,7 @@ function CategoryProducts(props) {
                     className='product-card-image'
                     variant='top'
                     height='300px'
-                    src={process.env.PUBLIC_URL + "/" + product.productImage}
+                    src={process.env.PUBLIC_URL + "/" + product.productImage[0].path}
                   />
                   <Card.Body>
                     <Card.Title>{product.name}</Card.Title>

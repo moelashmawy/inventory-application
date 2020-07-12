@@ -49,7 +49,7 @@ function Categories() {
                     className='product-card-image'
                     height='300px'
                     variant='top'
-                    src={process.env.PUBLIC_URL + "/" + product.productImage}
+                    src={process.env.PUBLIC_URL + "/" + product.productImage[0].path}
                   />
                   <Card.Body>
                     <Card.Title>{product.name}</Card.Title>

@@ -33,11 +33,7 @@ function EditProductForm(props) {
   //handle modal show and hide
   const [show, setShow] = useState(false);
 
-  const [img, setImg] = useState("");
-
-  const handleImg = e => {
-    setImg(e.target.files[0]);
-  };
+  const [imgs, setImgs] = useState([]);
 
   // importing categories and laoding state from out store
   const { categories, loading } = useSelector(state => state.categoriesss);
@@ -102,7 +98,7 @@ function EditProductForm(props) {
                 category: values.category,
                 price: values.price,
                 numberInStock: values.numberInStock,
-                productImage: img
+                productImage: imgs
               };
 
               handleSubmit(newProduct);
@@ -170,10 +166,11 @@ function EditProductForm(props) {
                 <ErrorMessage component={Toast} name='numberInStock' />
               </div>
               <input
+                multiple
                 className='custom custom-file mb-2'
                 type='file'
                 name='productImage'
-                onChange={handleImg}
+                onChange={e => setImgs(e.target.files)}
               />
               <Button variant='primary' type='submit'>
                 Update{" "}
