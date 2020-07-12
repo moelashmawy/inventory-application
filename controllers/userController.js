@@ -6,167 +6,211 @@ const jwtSecret = process.env.JWT_SECRET;
 
 // handle post requests at "api/users/signup"
 exports.createUser = (req, res) => {
-  // check if the email address is already taken
+  // create a new user after validating and sanitzing
+  // the user is a customer by default and can update himself to seller
+  const newUser = new User({
+    username: req.body.username,
+    password: req.body.password,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    isAdmin: false,
+    isSeller: false,
+    isCustomer: true,
+    isShipper: false,
+    isRestricted: false
+  });
+
+  // 1- Check is the username is taken
+  checkUsernameTaken();
+  // 2- Check is the email name is taken
+  // 3- verify the password
+  // 4- encrypt the password and save the new user
+
+  // 1- check if the Username is already taken
   // throw a message to the user if so
-  User.findOne({ email: req.body.email }, (err, userWithSameEmail) => {
-    if (err) {
-      res.status(400).json({ message: "Error getting email try gain" });
-    } else if (userWithSameEmail) {
-      res.status(400).json({ message: "This email is taken" });
+  function checkUsernameTaken() {
+    User.findOne({ username: req.body.username }, (err, userWithSameUsername) => {
+      if (err) {
+        return res.status(400).json({
+          message: "Error getting username"
+        });
+      } else if (userWithSameUsername) {
+        return res.status(400).json({ message: "Username is taken" });
+      } else {
+        checkEmailTaken();
+      }
+    });
+  }
+  // 2- check if the email address is already taken
+  // throw a message to the user if so
+  function checkEmailTaken() {
+    User.findOne({ email: req.body.email }, (err, userWithSameEmail) => {
+      if (err) {
+        res.status(400).json({
+          message: "Error getting email try gain"
+        });
+      } else if (userWithSameEmail) {
+        res.status(400).json({ message: "This email is taken" });
+      } else {
+        verifyPassword();
+      }
+    });
+  }
+
+  // 3- verify the Password the user entered
+  function verifyPassword() {
+    if (req.body.password !== req.body.verifyPassword) {
+      res.status(400).json({
+        message: "Passwords don't match"
+      });
     } else {
-      // check if the Username is already taken
-      // throw a message to the user if so
-      User.findOne({ username: req.body.username }, (err, userWithSameUsername) => {
-        if (err) {
-          res.status(400).json({ message: "Error getting username" });
-        } else if (userWithSameUsername) {
-          res.status(400).json({ message: "Username is taken" });
-        } else {
-          // create a new user after validating and sanitzing
-          // the user is a customer by default and can update himself to seller
-          const newUser = new User({
-            username: req.body.username,
-            password: req.body.password,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            isAdmin: false,
-            isSeller: false,
-            isCustomer: true,
-            isShipper: false,
-            isRestricted: false
-          });
+      encryptDataAndSave();
+    }
+  }
 
-          // encrypt the password using bcryptjs
-          //create slat and hash
-          bcrypt.genSalt(10, (err, salt) => {
-            if (err) throw err;
+  // 4- encrypt the password using bcryptjs and save the new user with hashed pass
+  const encryptDataAndSave = function () {
+    //create slat and hash
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) throw err;
 
-            // hash the password along with our new salt
-            bcrypt.hash(newUser.password, salt, (err, hash) => {
-              if (err) throw err;
+      // hash the password along with our new salt
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) throw err;
 
-              // override the cleartext password in the user with the hashed one
-              newUser.password = hash;
+        // override the cleartext password in the user with the hashed one
+        newUser.password = hash;
 
-              // if the email and the username are available, create a new user
-              // with the hashed password
-              newUser
-                .save()
-                .then(user => {
-                  // generate and json token and send it with the user
-                  jwt.sign(
-                    {
-                      id: user.id,
-                      isAdmin: user.isAdmin,
-                      isSeller: user.isSeller,
-                      isCustomer: user.isCustomer,
-                      isShipper: user.isShipper,
-                      isRestricted: user.isRestricted
-                    },
-                    jwtSecret,
-                    { expiresIn: 3600 },
-                    (err, token) => {
-                      if (err) throw err;
-                      res.json({
-                        token,
-                        message: "Registered Succefully",
-                        user: {
-                          id: user.id,
-                          username: user.username,
-                          firstName: user.firstName,
-                          lastName: user.lastName,
-                          email: user.email,
-                          gender: user.gender,
-                          nationality: user.nationality,
-                          birthDate: user.birthDate,
-                          creationDate: user.creationDate,
-                          isAdmin: user.isAdmin,
-                          isSeller: user.isSeller,
-                          isCustomer: user.isCustomer,
-                          isShipper: user.isShipper,
-                          isRestricted: user.isRestricted,
-                          cart: user.cart,
-                          wishList: user.cart
-                        }
-                      });
-                    }
-                  );
-                })
-                .catch(err => {
-                  res.status(400).json({
-                    message: "Error registering",
-                    err
-                  });
-                });
+        // if the email and the username are available, create a new user
+        // with the hashed password and save it
+        newUser
+          .save()
+          .then(user => {
+            generateNewToken(user);
+          })
+          .catch(err => {
+            res.status(400).json({
+              message: "Error registering",
+              err
             });
           });
-        }
       });
-    }
-  });
+    });
+  };
+
+  // generate and json token and send it with the user
+  function generateNewToken(user) {
+    jwt.sign(
+      {
+        id: user.id,
+        isAdmin: user.isAdmin,
+        isSeller: user.isSeller,
+        isCustomer: user.isCustomer,
+        isShipper: user.isShipper,
+        isRestricted: user.isRestricted
+      },
+      jwtSecret,
+      { expiresIn: 3600 },
+      (err, token) => {
+        if (err) throw err;
+        else
+          res.json({
+            token,
+            message: "Registered Succefully",
+            user: {
+              id: user.id,
+              username: user.username,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              gender: user.gender,
+              nationality: user.nationality,
+              birthDate: user.birthDate,
+              creationDate: user.creationDate,
+              isAdmin: user.isAdmin,
+              isSeller: user.isSeller,
+              isCustomer: user.isCustomer,
+              isShipper: user.isShipper,
+              isRestricted: user.isRestricted,
+              cart: user.cart,
+              wishList: user.cart
+            }
+          });
+      }
+    );
+  }
 };
 
 // handle POST request at "api/users/login"
 exports.login = (req, res) => {
-  User.findOne({ username: req.body.username }, (err, user) => {
+  User.findOne({ username: req.body.username }).exec((err, foundUser) => {
     if (err) {
       res.json(err);
     }
-    if (!user) {
+    if (!foundUser) {
       res.status(400).json({ message: "Invalid username" });
     }
     // compare the encryptic password with the entered password
-    else
+    else {
+      comparePassword(foundUser);
+    }
+
+    // compare the encrypted password with one the user provided
+    function comparePassword(user) {
       bcrypt.compare(req.body.password, user.password).then(isMatch => {
         // if the password doesn't match, return a message
         if (!isMatch) {
           return res.status(400).json({
             message: "Invalid password"
           });
-          // if it matches return a json with some data
+          // if it matches generate a new token and send everything is json
         } else {
-          jwt.sign(
-            {
-              id: user.id,
-              isAdmin: user.isAdmin,
-              isSeller: user.isSeller,
-              isCustomer: user.isCustomer,
-              isShipper: user.isShipper,
-              isRestricted: user.isRestricted
-            },
-            jwtSecret,
-            { expiresIn: 3600 },
-            (err, token) => {
-              if (err) res.json({ err });
-              else {
-                res.json({
-                  token,
-                  message: "Logged in Succefully",
-                  user: {
-                    id: user.id,
-                    username: user.username,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    gender: user.gender,
-                    nationality: user.nationality,
-                    birthDate: user.birthDate,
-                    creationDate: user.creationDate,
-                    isAdmin: user.isAdmin,
-                    isSeller: user.isSeller,
-                    isCustomer: user.isCustomer,
-                    isShipper: user.isShipper,
-                    isRestricted: user.isRestricted,
-                    cart: user.cart,
-                    wishList: user.cart
-                  }
-                });
-              }
-            }
-          );
+          generateNewToken(user);
         }
       });
+    }
+
+    // generate new token with the new data
+    function generateNewToken(user) {
+      jwt.sign(
+        {
+          id: user.id,
+          isAdmin: user.isAdmin,
+          isSeller: user.isSeller,
+          isCustomer: user.isCustomer,
+          isShipper: user.isShipper,
+          isRestricted: user.isRestricted
+        },
+        jwtSecret,
+        { expiresIn: 3600 },
+        (err, token) => {
+          if (err) res.json({ err });
+          else {
+            res.json({
+              token,
+              message: "Logged in Succefully",
+              user: {
+                id: user.id,
+                username: user.username,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                gender: user.gender,
+                nationality: user.nationality,
+                birthDate: user.birthDate,
+                creationDate: user.creationDate,
+                isAdmin: user.isAdmin,
+                isSeller: user.isSeller,
+                isCustomer: user.isCustomer,
+                isShipper: user.isShipper,
+                isRestricted: user.isRestricted
+              }
+            });
+          }
+        }
+      );
+    }
   });
 };
 
@@ -185,7 +229,7 @@ exports.editUser = (req, res) => {
     } else {
       //create user with the new data
       let updatedUser = {
-        password: req.body.password === "" ? userToUpdate.password : req.body.password,
+        password: req.body.password ? req.body.password : userToUpdate.password,
         firstName: req.body.firstName ? req.body.firstName : userToUpdate.firstName,
         lastName: req.body.lastName ? req.body.lastName : userToUpdate.lastName,
         email: req.body.email ? req.body.email : userToUpdate.email,
