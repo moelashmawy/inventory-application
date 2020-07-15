@@ -1,10 +1,12 @@
 import React from "react";
 import { Navbar, Nav, Spinner, NavDropdown } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { logout } from "./../redux/actions/auth-actions/logoutAction";
 import { useDispatch, useSelector } from "react-redux";
+import Search from "./Search";
+import Loader from "react-loader-spinner";
+
+import logo from "./../assets/pictures/logo.png";
 
 function MainNavbar(props) {
   const { user, auth, loading } = useSelector(state => state.userrr);
@@ -22,6 +24,7 @@ function MainNavbar(props) {
     dashboard = (
       <NavDropdown.Item>
         <Link className='dropdown-item' to='/dashboard'>
+          <i class='fa fa-tachometer' aria-hidden='true' />
           Dashboard
         </Link>
       </NavDropdown.Item>
@@ -32,7 +35,7 @@ function MainNavbar(props) {
   if (!auth.isCustomer && !loading) {
     signUp = (
       <Link to='/signup' className='nav-link'>
-        Sign Up
+        Sign Up /
       </Link>
     );
   }
@@ -48,31 +51,37 @@ function MainNavbar(props) {
 
   let userDropDown;
   if (loading) {
-    userDropDown = <Spinner animation='grow' variant='info' />;
+    userDropDown = (
+      <Loader type='ThreeDots' color='#dd1c1c' width={40} className='mr-5' />
+    );
   } else if (user) {
     userDropDown = (
       <span className='nav-link'>
         <NavDropdown title={user.firstName} id='basic-nav-dropdown'>
           <NavDropdown.Item>
             <Link className='dropdown-item' to='/settings'>
+              <i class='fa fa-user-o' aria-hidden='true' />
               My Account
             </Link>
           </NavDropdown.Item>
 
           <NavDropdown.Item>
             <Link className='dropdown-item' to='/my_addresses'>
+              <i class='fa fa-address-book-o' aria-hidden='true' />
               My Addresses
             </Link>
           </NavDropdown.Item>
 
           <NavDropdown.Item>
             <Link className='dropdown-item' to='/wish_list'>
+              <i class='fa fa-heart' aria-hidden='true' />
               Wish List
             </Link>
           </NavDropdown.Item>
 
           <NavDropdown.Item>
             <Link className='dropdown-item' to='/my_orders'>
+              <i class='fa fa-folder' aria-hidden='true' />
               My Orders
             </Link>
           </NavDropdown.Item>
@@ -81,20 +90,36 @@ function MainNavbar(props) {
 
           <NavDropdown.Divider />
 
-          <NavDropdown.Item onClick={logoutUser}>Log out</NavDropdown.Item>
+          <NavDropdown.Item onClick={logoutUser}>
+            <i class='fa fa-sign-out' aria-hidden='true' />
+            Log out
+          </NavDropdown.Item>
         </NavDropdown>
       </span>
     );
   }
 
   return (
-    <Navbar bg='light' expand='lg' className='mb-5'>
-      <Navbar.Brand>
-        <Link to='/' className='nav-link'>
-          Shopping
+    <Navbar bg='light' expand='xxl' className='main-navbar'>
+      <div>
+        <Navbar.Toggle aria-controls='basic-navbar-nav' className='navbar-toggle' />
+
+        <Link to='/'>
+          <img
+            src={logo}
+            width='100'
+            className='d-inline-block align-top'
+            alt='React Bootstrap logo'
+          />
         </Link>
-      </Navbar.Brand>
-      <Navbar.Toggle aria-controls='basic-navbar-nav' />
+      </div>
+
+      <Search />
+
+      <div className='navbar-login'>
+        {signUp} {login}
+      </div>
+
       <Navbar.Collapse id='basic-navbar-nav'>
         <Nav className='mr-auto'>
           <Link to='/categories' className='nav-link'>
@@ -104,13 +129,13 @@ function MainNavbar(props) {
             All Products
           </Link>
         </Nav>
-        {signUp}
-        {login}
-        {userDropDown}
       </Navbar.Collapse>
+
+      {userDropDown}
+
       {auth.isCustomer && (
         <Link to='/cart'>
-          <FontAwesomeIcon icon={faShoppingCart} className='mr-5' />
+          <i class='fa fa-shopping-cart cart-icon' aria-hidden='true' />
         </Link>
       )}
     </Navbar>

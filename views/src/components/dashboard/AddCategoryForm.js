@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Button, Modal, Toast } from "react-bootstrap";
+import { Button, Toast, Row, Col, Container } from "react-bootstrap";
 import { addCategory } from "../../redux/actions/category-actions/addCategoryAction";
 import { useDispatch } from "react-redux";
 import { toast, Slide } from "react-toastify";
+import DashboardSidebar from "./DashboardSidebar";
 
 // form validation useing Yup
 const validate = () =>
@@ -18,12 +19,6 @@ const validate = () =>
   });
 
 function AddCategoryForm() {
-  const [show, setShow] = useState(false);
-
-  // handle modal show and hide
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   // dispatch our redux action
   const dispatch = useDispatch();
 
@@ -49,16 +44,12 @@ function AddCategoryForm() {
   };
 
   return (
-    <div>
-      <Button variant='primary' onClick={handleShow}>
-        Add Category
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Category</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+    <Container fluid>
+      <Row>
+        <Col md='3'>
+          <DashboardSidebar />
+        </Col>
+        <Col>
           <Formik
             initialValues={{
               name: "",
@@ -97,16 +88,13 @@ function AddCategoryForm() {
                 <ErrorMessage component={Toast} name='description' />
               </div>
               <Button variant='primary' type='submit'>
-                Submit{" "}
-              </Button>{" "}
-              <Button variant='secondary' onClick={handleClose}>
-                Close{" "}
-              </Button>{" "}
+                Add
+              </Button>
             </Form>
           </Formik>
-        </Modal.Body>
-      </Modal>
-    </div>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

@@ -1,0 +1,28 @@
+.cart {
+  .total-price {
+    font-size: 23px;
+    font-weight: 600;
+  }
+
+  .cart-pay {
+    margin-left: 50%;
+  }
+
+  .cart-table {
+    margin-top: 25px;
+
+    a {
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+      &:hover {
+        color: rgb(194, 191, 191);
+      }
+    }
+
+    .custom-select {
+      width: 40%;
+      background-color: rgb(194, 191, 191);
+    }
+  }
+}

@@ -1,25 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Table } from "react-bootstrap";
 
 function SettingsSidebar() {
   return (
-    <Table striped bordered hover>
-      <tbody>
-        <tr>
-          <Link to='/settings'>Account Settings</Link>
-        </tr>
-        <tr>
-          <Link to='/my_orders'>My Orders</Link>
-        </tr>
-        <tr>
-          <Link to='/my_addresses'>Shipping Addresses</Link>
-        </tr>
-        <tr>
-          <Link to='/wish_list'>Wish List</Link>
-        </tr>
-      </tbody>
-    </Table>
+    <ul className='settings-sidebar'>
+      <li>
+        <i class='fa fa-user' aria-hidden='true'></i>
+        <Link to='/settings'>Account Settings</Link>
+      </li>
+      <li>
+        <i class='fa fa-folder' aria-hidden='true'></i>
+        <Link to='/my_orders'>My Orders</Link>
+      </li>
+      <li>
+        <i class='fa fa-address-book-o' aria-hidden='true' />
+        <Link to='/my_addresses'>Shipping Addresses</Link>
+      </li>
+      <li>
+        <i class='fa fa-heart' aria-hidden='true' />
+        <Link to='/wish_list'>Wish List</Link>
+      </li>
+    </ul>
   );
 }
 

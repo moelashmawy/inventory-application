@@ -1,0 +1,28 @@
+.featured-products {
+  min-height: 400px;
+  padding: 50px 0;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: grey;
+  }
+  .slick-slider {
+    width: 95%;
+    margin: 0 auto;
+
+    .fa-arrow-left {
+      position: absolute;
+      bottom: 50% !important;
+      left: -10px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .fa-arrow-right {
+      position: absolute;
+      left: 100%;
+      top: 50% !important;
+      cursor: pointer;
+    }
+  }
+}

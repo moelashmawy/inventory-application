@@ -1,0 +1,17 @@
+.main-slider {
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-top: -50px;
+  .carousel-item {
+    height: 570px;
+  }
+
+  .carousel-control-next,
+  .carousel-control-prev {
+    top: -200px;
+  }
+
+  .carousel-caption {
+    top: 20px;
+  }
+}

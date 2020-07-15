@@ -1,0 +1,105 @@
+/*variables*/
+$main-color: rgb(221, 28, 28);
+
+.main-navbar {
+  padding: 0 !important;
+  margin-bottom: 50px;
+  z-index: 2000;
+
+  .nav-link {
+    padding: 0 !important;
+  }
+
+  /*Logo*/
+  .logo-image {
+    width: 100px;
+    height: auto;
+  }
+
+  /*the toggler*/
+  .navbar-toggler {
+    margin-top: 17px;
+    margin-left: 5px;
+    border: none !important;
+    :hover {
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 2px;
+    }
+  }
+
+  /*Search bar*/
+  @media (max-width: 576px) {
+    .navbar-search {
+      order: 2;
+      margin-bottom: 10px;
+    }
+  }
+  .navbar-login {
+    display: flex;
+    a {
+      margin: 0 5px;
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+  .input-group-text {
+    cursor: pointer;
+    background-color: white;
+  }
+  .form-control {
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
+
+  /* login and sign in */
+  .navbar-login {
+    margin-right: 15px;
+  }
+
+  /*navbar toggle menue*/
+  #basic-navbar-nav {
+    top: 76px;
+    position: absolute;
+    z-index: 1000;
+
+    .collapsing,
+    .mr-auto {
+      width: 300%;
+      min-height: 100px;
+      background-color: #fff;
+    }
+  }
+
+  /*cart icon*/
+  .cart-icon {
+    margin-right: 25px;
+    font-size: 20px;
+    color: $main-color;
+  }
+
+  /*user dropdpwn menue*/
+  .nav-link {
+    #basic-nav-dropdown {
+      color: gray;
+    }
+
+    .dropdown-menu {
+      left: -40px;
+      top: 150%;
+
+      :hover {
+        a {
+          margin-left: 2px;
+        }
+      }
+      .dropdown-item {
+        padding-left: 5px;
+      }
+
+      i {
+        margin-right: 10px;
+      }
+    }
+  }
+}

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
+import DashboardSidebar from "./DashboardSidebar";
 import { Formik, Field, ErrorMessage, Form } from "formik";
-import { Button, Container, Toast } from "react-bootstrap";
+import { Button, Container, Toast, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { toast, Slide } from "react-toastify";
 import { fetchCategories } from "../../redux/actions/category-actions/fetchCategoriesAction";
@@ -29,10 +30,6 @@ const validate = () =>
 
 function AddProductForm() {
   const [imgs, setImgs] = useState([]);
-
-  /*  const handleImg = e => {
-    setImg(e.target.files[0]);
-  }; */
 
   // importing categories and laoding state from out store
   const { categories, loading } = useSelector(state => state.categoriesss);
@@ -63,104 +60,114 @@ function AddProductForm() {
   };
 
   return (
-    <Container>
-      <Formik
-        initialValues={{
-          name: "",
-          description: "",
-          category: "",
-          price: "",
-          numberInStock: ""
-        }}
-        validationSchema={validate}
-        onSubmit={(values, { setSubmitting }) => {
-          const newProduct = {
-            name: values.name,
-            description: values.description,
-            category: values.category,
-            price: values.price,
-            numberInStock: values.numberInStock,
-            productImage: imgs
-          };
-
-          handleSubmitt(newProduct);
-
-          setSubmitting(false);
-        }}>
-        <Form action='/api/product/create' method='post' encType='multipart/form-data'>
-          <div className='form-group'>
-            <Field
-              type='text'
-              name='name'
-              className='form-control'
-              placeholder='Enter product name'
-            />
-            <ErrorMessage component={Toast} name='name' />
-          </div>
-          <div className='form-group'>
-            <Field
-              as='textarea'
-              name='description'
-              className='form-control'
-              placeholder='Enter product description'
-            />
-            <ErrorMessage component={Toast} name='description' />
-          </div>
-          <div className='form-group'>
-            <Field as='select' name='category' className='form-control'>
-              {loading && <option>loading...</option>}
-              {!loading && (
-                <>
-                  <option value='' disabled>
-                    Choose product category
-                  </option>
-                  {categories.map(cat => {
-                    return (
-                      <option key={cat._id} value={cat._id}>
-                        {cat.name}
-                      </option>
-                    );
-                  })}
-                </>
-              )}
-            </Field>
-            <ErrorMessage component={Toast} name='category' />
-          </div>
-          <div className='form-group'>
-            <Field
-              type='text'
-              name='price'
-              className='form-control'
-              placeholder='Enter product price'
-            />
-            <ErrorMessage component={Toast} name='price' />
-          </div>
-          <div className='form-group'>
-            <Field
-              type='text'
-              name='numberInStock'
-              className='form-control'
-              placeholder='Enter product numberInStock'
-            />
-            <ErrorMessage component={Toast} name='numberInStock' />
-          </div>
-          <input
-            required
-            multiple
-            className='custom custom-file mb-2'
-            type='file'
-            name='productImage'
-            onChange={e => {
-              console.log(e.target.files);
-
-              setImgs(e.target.files);
+    <Container fluid>
+      <Row>
+        <Col md='3'>
+          <DashboardSidebar />
+        </Col>
+        <Col>
+          <Formik
+            initialValues={{
+              name: "",
+              description: "",
+              category: "",
+              price: "",
+              numberInStock: ""
             }}
-          />
-          <Button variant='primary' type='submit'>
-            ADD{" "}
-          </Button>{" "}
-        </Form>
-      </Formik>
+            validationSchema={validate}
+            onSubmit={(values, { setSubmitting }) => {
+              const newProduct = {
+                name: values.name,
+                description: values.description,
+                category: values.category,
+                price: values.price,
+                numberInStock: values.numberInStock,
+                productImage: imgs
+              };
+
+              handleSubmitt(newProduct);
+
+              setSubmitting(false);
+            }}>
+            <Form
+              action='/api/product/create'
+              method='post'
+              encType='multipart/form-data'>
+              <div className='form-group'>
+                <Field
+                  type='text'
+                  name='name'
+                  className='form-control'
+                  placeholder='Enter product name'
+                />
+                <ErrorMessage component={Toast} name='name' />
+              </div>
+              <div className='form-group'>
+                <Field
+                  as='textarea'
+                  name='description'
+                  className='form-control'
+                  placeholder='Enter product description'
+                />
+                <ErrorMessage component={Toast} name='description' />
+              </div>
+              <div className='form-group'>
+                <Field as='select' name='category' className='form-control'>
+                  {loading && <option>loading...</option>}
+                  {!loading && (
+                    <>
+                      <option value='' disabled>
+                        Choose product category
+                      </option>
+                      {categories.map(cat => {
+                        return (
+                          <option key={cat._id} value={cat._id}>
+                            {cat.name}
+                          </option>
+                        );
+                      })}
+                    </>
+                  )}
+                </Field>
+                <ErrorMessage component={Toast} name='category' />
+              </div>
+              <div className='form-group'>
+                <Field
+                  type='text'
+                  name='price'
+                  className='form-control'
+                  placeholder='Enter product price'
+                />
+                <ErrorMessage component={Toast} name='price' />
+              </div>
+              <div className='form-group'>
+                <Field
+                  type='text'
+                  name='numberInStock'
+                  className='form-control'
+                  placeholder='Enter product numberInStock'
+                />
+                <ErrorMessage component={Toast} name='numberInStock' />
+              </div>
+              <input
+                required
+                multiple
+                className='custom custom-file mb-2'
+                type='file'
+                name='productImage'
+                onChange={e => {
+                  console.log(e.target.files);
+
+                  setImgs(e.target.files);
+                }}
+              />
+              <Button variant='primary' type='submit'>
+                ADD{" "}
+              </Button>{" "}
+            </Form>
+          </Formik>
+        </Col>
+      </Row>
     </Container>
   );
 }

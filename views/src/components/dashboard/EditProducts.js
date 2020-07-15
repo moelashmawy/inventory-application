@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Table, Spinner, Button } from "react-bootstrap";
+import { Container, Table, Spinner, Button, Col, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserProducts } from "../../redux/actions/product-actions/fetchUserProductsAction";
 import { deleteProduct } from "../../redux/actions/product-actions/deleteProductAction";
@@ -8,6 +8,7 @@ import UpdateProductForm from "./EditProductForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import DashboardSidebar from "./DashboardSidebar";
 
 function EditProducts() {
   const { user } = useSelector(state => state.userrr);
@@ -38,56 +39,65 @@ function EditProducts() {
   };
 
   return (
-    <Container>
-      <Table striped bordered hover variant='dark'>
-        <thead>
-          <tr>
-            <th>category</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Edit</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading && (
-            <tr>
-              <td colSpan='4'>
-                <Spinner animation='border' /> loading...{" "}
-              </td>
-            </tr>
-          )}
+    <Container fluid>
+      <Row>
+        <Col md='3'>
+          <DashboardSidebar />
+        </Col>
+        <Col>
+          <Table striped bordered hover variant='dark'>
+            <thead>
+              <tr>
+                <th>category</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading && (
+                <tr>
+                  <td colSpan='4'>
+                    <Spinner animation='border' /> loading...{" "}
+                  </td>
+                </tr>
+              )}
 
-          {!user && !loading && (
-            <tr>
-              <td colSpan='4'>Please Log in to access this page</td>
-            </tr>
-          )}
+              {!user && !loading && (
+                <tr>
+                  <td colSpan='4'>Please Log in to access this page</td>
+                </tr>
+              )}
 
-          {products.map(product => (
-            <tr key={product._id}>
-              <td>{product.name}</td>
-              <td>{product.description}</td>
-              <td>${product.price}</td>
-              <td>
-                <span className='btn btn-primary mr-3'>
-                  <UpdateProductForm
-                    id={product._id}
-                    name={product.name}
-                    description={product.description}
-                    category={product.category}
-                    price={product.price}
-                    numberInStock={product.numberInStock}
-                    productImage={product.productImage}
-                  />
-                </span>
-                <Button className='btn btn-danger' onClick={() => deleteIt(product._id)}>
-                  <FontAwesomeIcon icon={faTrash} />
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+              {products.map(product => (
+                <tr key={product._id}>
+                  <td>{product.name}</td>
+                  <td>{product.description}</td>
+                  <td>${product.price}</td>
+                  <td>
+                    <span className='btn btn-primary mr-3'>
+                      <UpdateProductForm
+                        id={product._id}
+                        name={product.name}
+                        description={product.description}
+                        category={product.category}
+                        price={product.price}
+                        numberInStock={product.numberInStock}
+                        productImage={product.productImage}
+                      />
+                    </span>
+                    <Button
+                      className='btn btn-danger'
+                      onClick={() => deleteIt(product._id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
     </Container>
   );
 }

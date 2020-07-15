@@ -1,7 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Button, Toast, Container } from "react-bootstrap";
+import { Button, Toast, Container, Row, Col } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast, Slide } from "react-toastify";
@@ -14,6 +14,9 @@ const validate = () =>
       .min(2, "Must be more than one character")
       .required("Username is required"),
     password: Yup.string()
+      .min(8, "Must be more than 8 characters")
+      .required("This field is required"),
+    verifyPassword: Yup.string()
       .min(8, "Must be more than 8 characters")
       .required("This field is required"),
     firstName: Yup.string()
@@ -52,6 +55,7 @@ function SignUpForm(props) {
         initialValues={{
           username: "",
           password: "",
+          verifyPassword: "",
           firstName: "",
           lastName: "",
           email: ""
@@ -61,6 +65,7 @@ function SignUpForm(props) {
           const newUser = {
             username: values.username,
             password: values.password,
+            verifyPassword: values.verifyPassword,
             firstName: values.firstName,
             lastName: values.lastName,
             email: values.email
@@ -70,62 +75,106 @@ function SignUpForm(props) {
 
           setSubmitting(false);
         }}>
-        <Form>
-          <div className='form-group'>
-            <Field
-              name='username'
-              className='form-control'
-              placeholder='Enter username'
-              required
-            />
-            <ErrorMessage component={Toast} name='username' />
-          </div>
-          <div className='form-group'>
-            <Field
-              type='password'
-              name='password'
-              className='form-control'
-              placeholder='Enter password'
-              required
-            />
-            <ErrorMessage component={Toast} name='password' />
-          </div>
-          <div className='form-group'>
-            <Field
-              name='firstName'
-              className='form-control'
-              placeholder='Enter your firstName'
-              required
-            />
-            <ErrorMessage component={Toast} name='firstName' />
-          </div>
-          <div className='form-group'>
-            <Field
-              name='lastName'
-              className='form-control'
-              placeholder='Enter your lastName'
-              required
-            />
-            <ErrorMessage component={Toast} name='lastName' />
-          </div>
-          <div className='form-group'>
-            <Field
-              name='email'
-              className='form-control'
-              placeholder='Enter a valid email'
-              required
-            />
-            <ErrorMessage component={Toast} name='email' />
-          </div>
-          <Button variant='primary' type='submit'>
-            Register{" "}
-          </Button>{" "}
-        </Form>
+        <div className='signup-form'>
+          <Container>
+            <Row>
+              <Col sm='12' lg='6' className='main-col'>
+                <div className='form-container'>
+                  <Form className='form-horizontal'>
+                    {/* username input */}
+                    <div className='form-group'>
+                      <span className='input-icon'>
+                        <i className='fa fa-user'></i>
+                      </span>
+                      <Field
+                        name='username'
+                        className='form-control'
+                        placeholder='Enter username'
+                      />
+                      <ErrorMessage component={Toast} name='username' />
+                    </div>
+                    <Row>
+                      <Col>
+                        <div className='form-group'>
+                          <span className='input-icon'>
+                            <i className='fa fa-user'></i>
+                          </span>
+                          <Field
+                            type='password'
+                            name='password'
+                            className='form-control'
+                            placeholder='Enter password'
+                          />
+                          <ErrorMessage component={Toast} name='password' />
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className='form-group'>
+                          <span className='input-icon'>
+                            <i className='fa fa-user'></i>
+                          </span>
+                          <Field
+                            type='password'
+                            name='verifyPassword'
+                            className='form-control'
+                            placeholder='Re Enter password'
+                          />
+                          <ErrorMessage component={Toast} name='verifyPassword' />
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <div className='form-group'>
+                          <span className='input-icon'>
+                            <i className='fa fa-user'></i>
+                          </span>
+                          <Field
+                            name='firstName'
+                            className='form-control'
+                            placeholder='Enter your firstName'
+                          />
+                          <ErrorMessage component={Toast} name='firstName' />
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className='form-group'>
+                          <span className='input-icon'>
+                            <i className='fa fa-user'></i>
+                          </span>
+                          <Field
+                            name='lastName'
+                            className='form-control'
+                            placeholder='Enter your lastName'
+                          />
+                          <ErrorMessage component={Toast} name='lastName' />
+                        </div>
+                      </Col>
+                    </Row>
+                    <div className='form-group'>
+                      <span className='input-icon'>
+                        <i className='fa fa-user'></i>
+                      </span>
+                      <Field
+                        name='email'
+                        className='form-control'
+                        placeholder='Enter a valid email'
+                      />
+                      <ErrorMessage component={Toast} name='email' />
+                    </div>
+                    <div className='forgot-pass'>
+                      Already have account, <Link to='/login'>Log in</Link>
+                    </div>
+                    <Button variant='primary' type='submit'>
+                      Register{" "}
+                    </Button>{" "}
+                  </Form>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </Formik>
-      <div className='mt-3'>
-        <span>Already have account, </span>
-        <Link to='/login'>Log in</Link>
-      </div>
     </Container>
   );
 }

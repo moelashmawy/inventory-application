@@ -18,7 +18,7 @@ function WishList() {
   }, [dispatch]);
 
   return (
-    <Container>
+    <Container fluid>
       <Row>
         <Col lg={4}>
           <SettingsSidebar />

@@ -1,0 +1,18 @@
+.explore-more {
+  max-height: 700px;
+  margin: 50px 0;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: Grey;
+  }
+
+  .item {
+    img {
+      object-fit: contain;
+      width: 90%;
+      height: 90%;
+    }
+  }
+}

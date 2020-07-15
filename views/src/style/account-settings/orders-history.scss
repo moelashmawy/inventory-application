@@ -1,0 +1,134 @@
+.orders-history {
+  margin-bottom: 60px;
+  .spinner {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .heading {
+    font-size: 2.7rem;
+    font-weight: 700;
+    color: grey;
+    padding-bottom: 50px;
+  }
+
+  .single-order {
+    margin: 0 15px 15px 0;
+    border: 1px solid #123;
+    border-radius: 5px;
+
+    .single-order-heading {
+      overflow: hidden;
+      padding: 5px 0;
+      width: 100%;
+      background-color: #f6f6f6;
+      margin: 0;
+      border-radius: 5px 5px 0 0;
+      border-bottom: 1px solid #123;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #555;
+
+      .order-todal-price {
+        span {
+          color: #123;
+        }
+      }
+    }
+
+    .order-delivered-time {
+      width: 100%;
+      margin: 0;
+      padding: 2px 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #555;
+      border-bottom: 1px solid #123;
+    }
+
+    /***** Single item *****/
+    .single-order-item {
+      width: 100%;
+      padding: 10px;
+      margin: 0;
+      border-bottom: 1px solid #555;
+
+      img {
+        width: 100%;
+        border: none;
+      }
+
+      a {
+        font-size: 19px;
+        &:hover {
+          text-decoration: underline;
+          cursor: pointer;
+          color: #c45500;
+        }
+      }
+
+      .quantity,
+      .price {
+        font-weight: 600;
+        font-size: 16px;
+
+        span {
+          font-weight: 500;
+          color: #555;
+        }
+      }
+
+      button {
+        margin-top: 25px;
+      }
+    }
+  }
+}
+
+/******* Progress bar **********/
+.container1 {
+  width: 100%;
+  margin-top: 10%;
+  padding-bottom: 10%;
+}
+
+.progressbar li {
+  width: 40px;
+  height: 40px;
+  margin-left: 50px;
+  list-style-type: none;
+  float: left;
+  font-size: 12px;
+  position: relative;
+  text-align: center;
+  color: #7d7d7d;
+  border: 1px solid #7d7d7d;
+  border-radius: 50%;
+
+  i {
+    font-size: 20px;
+    line-height: 40px;
+  }
+}
+.progressbar li:before {
+  width: 50px;
+  height: 5px;
+  content: "";
+  position: absolute;
+  background-color: #7d7d7d;
+  top: 16px;
+  left: -51px;
+  z-index: 1;
+}
+
+.progressbar li:first-child:before {
+  content: none;
+}
+.progressbar li.active {
+  color: #55b776;
+  border: 1px solid #55b776;
+}
+.progressbar li.active:before {
+  border-color: #55b776;
+  background-color: #55b776;
+}

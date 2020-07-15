@@ -38,7 +38,9 @@ function ChooseOrderPayment() {
               <h6>###Todo</h6>
             </Col>
             <Col>
-              <Button onClick={() => placeNewOrder()}>Order Now</Button>
+              <Button variant='success' onClick={() => placeNewOrder()}>
+                Order Now
+              </Button>
             </Col>
           </Row>
         </Col>

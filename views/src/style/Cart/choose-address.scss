@@ -1,0 +1,44 @@
+.choose-address {
+  padding-bottom: 70px;
+  h3 {
+    color: grey;
+  }
+
+  .warning {
+    margin-top: 50px;
+    width: 80%;
+  }
+
+  .address-list {
+    margin-top: 50px;
+
+    button {
+      margin-top: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 25px;
+      line-height: 2rem;
+    }
+
+    .recipent {
+      color: #123;
+      font-weight: 600;
+      span {
+        font-size: 27;
+        color: grey;
+      }
+    }
+
+    .address,
+    .phone {
+      color: #123;
+      font-weight: 700;
+      span {
+        font-weight: 500;
+        color: grey;
+      }
+    }
+  }
+}

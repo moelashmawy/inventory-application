@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
-import { Container, Table, Spinner, Button } from "react-bootstrap";
+import { Container, Table, Spinner, Button, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCartProducts } from "../../redux/actions/cart-actions/fetchCartProducts";
 import { removeFromCart } from "../../redux/actions/cart-actions/removeFromCart";
 import { changeCartQuantity } from "../../redux/actions/cart-actions/changeCartQuantity";
-import { placeOrder } from "../../redux/actions/order-actions/placeOrderAction";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Page404 from "./../404";
-import { toast, Slide } from "react-toastify";
 
 function Cart() {
   const { cart, totalPrice } = useSelector(state => state.carttt);
@@ -56,16 +54,21 @@ function Cart() {
     return <Page404 />;
   } else if (cart) {
     return (
-      <Container>
-        {cart.length > 0 && (
-          <Link to='/checkout/select_address'>
-            <Button>Proceed to pay</Button>
-          </Link>
-        )}
+      <Container className='cart'>
+        <Row>
+          <Col className='total-price'>
+            <p>Total: ${totalPrice}</p>
+          </Col>
+          <Col>
+            {cart.length > 0 && (
+              <Link className='cart-pay' to='/checkout/select_address'>
+                <Button variant='secondary'>Proceed to pay</Button>
+              </Link>
+            )}
+          </Col>
+        </Row>
 
-        <p>Total: ${totalPrice}</p>
-
-        <Table striped bordered hover variant='dark'>
+        <Table striped bordered hover variant='dark' className='cart-table'>
           <thead>
             <tr>
               <th>Item</th>
@@ -87,8 +90,8 @@ function Cart() {
 
                     <td>
                       <select
+                        className='custom-select'
                         value={item.quantity}
-                        //defaultValue={item.quantity}
                         onChange={e => {
                           let quantity = { orderQuantity: e.target.value };
                           dispatch(changeCartQuantity(item._id, quantity));
@@ -97,7 +100,9 @@ function Cart() {
                       </select>
                     </td>
 
-                    <td>${item.quantity * item.product.price}</td>
+                    <td className='cart-product-price'>
+                      ${item.quantity * item.product.price}
+                    </td>
                     <td>
                       <Button
                         className='btn btn-danger'

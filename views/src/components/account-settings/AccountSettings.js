@@ -33,37 +33,48 @@ function AccountSettings() {
     return <Page404 />;
   } else {
     return (
-      <Container>
+      <Container fluid className='account-settings'>
         <Row>
           <Col lg={4}>
             <SettingsSidebar />
           </Col>
           {user && (
             <Col lg={8}>
-              <Row>
+              <Row className='header'>
                 <Col>
-                  <h3>Account Settings</h3>
+                  <h1>Account Settings</h1>
                 </Col>
                 <Col>
                   <Link to='/settings/edit_account'>
-                    <Button>Edit</Button>
+                    <Button variant='secondary'>Edit</Button>
                   </Link>
                 </Col>
               </Row>
-              <div>
+              <Row className='account-iformation'>
                 <h3>Account Information</h3>
-                <h5>
-                  Name: {user.firstName} {user.lastName}
-                </h5>
-                <h5>Email: {user.email}</h5>
-                <h5>Password: ********</h5>
-              </div>
-              <div>
+                <p>
+                  Name:{" "}
+                  <span>
+                    {user.firstName} {user.lastName}
+                  </span>
+                </p>
+                <p>
+                  Email: <span>{user.email}</span>
+                </p>
+                <p>Password: ********</p>
+              </Row>
+              <Row className='personal-iformation'>
                 <h3>Personal Information</h3>
-                <h5>Gender: {gender}</h5>
-                <h5>Nationality: {nationality}</h5>
-                <h5>Birthdate: {birthDate}</h5>
-              </div>
+                <p>
+                  Gender: <span>{gender}</span>
+                </p>
+                <p>
+                  Nationality: <span>{nationality}</span>
+                </p>
+                <p>
+                  Birthdate: <span>{birthDate}</span>
+                </p>
+              </Row>
             </Col>
           )}
         </Row>

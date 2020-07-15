@@ -1,0 +1,60 @@
+/*variables*/
+$main-color: rgb(221, 28, 28);
+
+.main-footer {
+  background-color: #fff;
+  padding-top: 25px;
+  position: relative;
+
+  &:after {
+    background: linear-gradient(
+      to right,
+      #977272 0%,
+      #927070 0%,
+      #cec5c5 25%,
+      #ffcd02 25%,
+      #ffcd02 50%,
+      #e84f47 50%,
+      #e84f47 75%,
+      #65c1ac 75%,
+      #244f86 100%,
+      #244f86 100%
+    );
+    position: absolute;
+    content: "";
+    height: 5px;
+    right: 0;
+    left: 0;
+    top: 0;
+  }
+
+  .row {
+    h2 {
+      margin-bottom: 15px;
+      font-size: 23px;
+      font-weight: 600;
+      color: $main-color;
+      text-transform: uppercase;
+    }
+
+    .shop-summary {
+      text-align: center;
+    }
+
+    ul {
+      padding-left: 0;
+      li {
+        list-style: none;
+
+        a {
+          text-decoration: none;
+          color: #919191;
+
+          &:hover {
+            color: rgb(102, 101, 101);
+          }
+        }
+      }
+    }
+  }
+}

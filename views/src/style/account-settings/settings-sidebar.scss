@@ -1,0 +1,24 @@
+.settings-sidebar {
+  margin-left: -15px;
+  background-color: #123;
+
+  li {
+    padding: 10px 0;
+    margin-left: -40px;
+    border: 1px solid #fff;
+    list-style: none;
+
+    &:hover {
+      i {
+        margin-left: 12px;
+      }
+    }
+
+    a,
+    i {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 10px;
+    }
+  }
+}

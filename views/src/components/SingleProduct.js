@@ -13,9 +13,10 @@ import { fetchSingleProductAction } from "../redux/actions/product-actions/fetch
 import { toast, Slide } from "react-toastify";
 import { addToCart } from "./../redux/actions/cart-actions/addToCart";
 import { addToWishlist } from "./../redux/actions/wishlist-actions/addToWishlist";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import ProductsCarousel from "./home-page/ProductsCarousel";
 import Page404 from "./404";
+import { Link } from "react-router-dom";
+import ExploreMore from "./home-page/ExploreMore";
 
 function SingleProduct(props) {
   const [orderQuantity, setOrderQuantity] = useState(0);
@@ -32,9 +33,14 @@ function SingleProduct(props) {
   // just in case someone deleted a category
   const prodCategory = () => {
     if (product.category !== null) {
-      return <div>Category: {product.category.name}</div>;
+      return (
+        <div className='product-category'>
+          Category:{" "}
+          <Link to={`/category/${product.category._id}`}>{product.category.name}</Link>
+        </div>
+      );
     } else {
-      return <div>Category: undefined "will edit soon"</div>;
+      return <div className='product-category'>Category: undefined "will edit soon"</div>;
     }
   };
 
@@ -77,14 +83,12 @@ function SingleProduct(props) {
     return <Page404 />;
   } else {
     return (
-      <Container>
+      <Container fluid>
         {loading && <ProgressBar animated now={100} />}
         {error && <div>{error}</div>}
         {product.category !== undefined && (
-          <Row>
+          <Row className='single-product-page'>
             <Col>
-              <div>{product.name}</div>
-              <br />
               <Carousel>
                 {product.productImage.map(image => {
                   return (
@@ -99,47 +103,62 @@ function SingleProduct(props) {
                 })}
               </Carousel>
             </Col>
+
             <Col>
-              <div>${product.price}</div>
-              <br />
-              <div>Description: {product.description}</div>
-              <br />
-              <div>Stock: {product.numberInStock}</div>
-              <br />
-            </Col>
-            <Col>
-              <Button
-                onClick={() => {
-                  let quantity = { orderQuantity };
-                  addTo(addToCart(product._id, quantity));
-                }}>
-                Add to cart
-              </Button>
-              <FontAwesomeIcon
-                onClick={() => {
-                  addTo(addToWishlist(product._id));
-                }}
-                color='red'
-                size='lg'
-                icon={faHeart}
-                className='ml-5'
-              />
-              <br />
-              <br />
-              Quantity:{" "}
-              <select
-                onChange={e => {
-                  setOrderQuantity(e.target.value);
-                }}>
-                {options()}
-              </select>
-              <br />
-              <div>Sold by: {product.seller.username}</div>
-              <br />
+              <h2 className='product-name'>{product.name}</h2>
+              <Row>
+                <Col>
+                  <div className='product-price'>${product.price}</div>
+                </Col>
+                <Col>
+                  <i
+                    class='fa fa-heart add-to-wish-list'
+                    onClick={() => {
+                      addTo(addToWishlist(product._id));
+                    }}
+                    aria-hidden='true'
+                    title='Add to wish list'></i>
+                </Col>
+              </Row>
+
+              <div className='product-desc'>Description: {product.description}</div>
+              {product.numberInStock < 67 && (
+                <div className='product-stock'>
+                  only {product.numberInStock} left in Stock, order soon.
+                </div>
+              )}
+
+              <Row>
+                <Col className='order-quantity'>
+                  <span>Quantity:</span>
+                  <select
+                    className='browser-default custom-select'
+                    onChange={e => {
+                      setOrderQuantity(e.target.value);
+                    }}>
+                    {options()}
+                  </select>
+                </Col>
+                <Col>
+                  <Button
+                    className='add-to-cart'
+                    variant='secondary'
+                    onClick={() => {
+                      let quantity = { orderQuantity };
+                      addTo(addToCart(product._id, quantity));
+                    }}>
+                    Add to cart
+                  </Button>
+                </Col>
+              </Row>
+              <div className='sold-by'>Sold by: {product.seller.username}</div>
               {prodCategory()}
             </Col>
           </Row>
         )}
+
+        <ProductsCarousel title='Similar Products' productsNumber='4' />
+        <ExploreMore />
       </Container>
     );
   }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Spinner, Button } from "react-bootstrap";
+import { Container, Row, Col, Spinner, Button, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAddresses } from "../../redux/actions/address-actions/fetchAddressesAction";
 import { chooseOrderAddress } from "../../redux/actions/cart-actions/chooseOrderAddress";
@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 function ChooseAddressToDeliver(props) {
   const [address, setAddress] = useState(null);
 
-  const { addresses, loading } = useSelector(state => state.addresss);
+  const { addresses } = useSelector(state => state.addresss);
+  const { loading } = useSelector(state => state.userrr);
 
   const dispatch = useDispatch();
 
@@ -16,16 +17,17 @@ function ChooseAddressToDeliver(props) {
     dispatch(fetchAddresses());
   }, [dispatch]);
 
-  let allAddresses;
-  if (loading) {
-    allAddresses = (
-      <div>
-        <Spinner animation='border' role='status' />
-        loading...
-      </div>
+  let addAddressWarning;
+  if (addresses.length == 0 && !loading) {
+    addAddressWarning = (
+      <Alert className='warning' variant='warning'>
+        Please add a shipping address for your order
+      </Alert>
     );
-  } else {
-    allAddresses = addresses.map(address => (
+  }
+
+  let allAddresses = () =>
+    addresses.map(address => (
       <label key={address._id}>
         <input
           type='radio'
@@ -37,20 +39,28 @@ function ChooseAddressToDeliver(props) {
             setAddress(e.target.value);
           }}
         />
-        <h3>
-          {address.firstName} {address.lastName}
+        <h3 className='recipent'>
+          Recipent:{" "}
+          <span>
+            {" "}
+            {address.firstName} {address.lastName}
+          </span>
         </h3>
-        <div>
-          {address.city}, {address.state}, {address.country}
+        <div className='address'>
+          Address:{" "}
+          <span>
+            {address.city}, {address.state}, {address.country}
+          </span>
         </div>
-        <div>+20{address.phoneNumber}</div>
+        <div className='phone'>
+          Phone: <span>+20{address.phoneNumber}</span>
+        </div>
         <Link to={`/my_addresses/edit_address?addressId=${address._id}`}>Edit</Link>
       </label>
     ));
-  }
 
   return (
-    <Container>
+    <Container className='choose-address'>
       <Row>
         <Col>
           <h3>Choose shipping address</h3>
@@ -61,18 +71,25 @@ function ChooseAddressToDeliver(props) {
           </Link>
         </Col>
       </Row>
-      <Row>
-        <form>
-          {allAddresses}
-          <Button
-            onClick={() => {
-              if (address) props.history.push("/checkout/payment");
-            }}
-            type='submit'>
-            Proceed to pay
-          </Button>
-        </form>
-      </Row>
+      {loading && <i class='fa fa-spinner fa-pulse mr-5 fa-2x'></i>}
+
+      {addAddressWarning}
+
+      {addresses.length > 0 && (
+        <Row className='address-list'>
+          <form>
+            {allAddresses()}
+            <Button
+              variant='secondary'
+              onClick={() => {
+                if (address) props.history.push("/checkout/payment");
+              }}
+              type='submit'>
+              Proceed to pay
+            </Button>
+          </form>
+        </Row>
+      )}
     </Container>
   );
 }

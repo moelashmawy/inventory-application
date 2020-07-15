@@ -1,7 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Button, Toast, Container } from "react-bootstrap";
+import { Button, Toast, Container, Row, Col } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast, Slide } from "react-toastify";
@@ -55,35 +55,52 @@ function LoginForm(props) {
           loginUser(newUser);
           setSubmitting(false);
         }}>
-        <Form>
-          <div className='form-group'>
-            <Field
-              name='username'
-              className='form-control'
-              placeholder='Enter username'
-              required
-            />
-            <ErrorMessage component={Toast} name='username' />
-          </div>
-          <div className='form-group'>
-            <Field
-              type='password'
-              name='password'
-              className='form-control'
-              placeholder='Enter password'
-              required
-            />
-            <ErrorMessage component={Toast} name='password' />
-          </div>
-          <Button variant='primary' type='submit'>
-            Login{" "}
-          </Button>{" "}
-        </Form>
+        <div className='login-form'>
+          <Container>
+            <Row>
+              <Col md='4' sm='6' className='main-col'>
+                <div className='form-container'>
+                  <Form className='form-horizontal'>
+                    <div className='form-group'>
+                      <span className='input-icon'>
+                        <i className='fa fa-user'></i>
+                      </span>
+                      <Field
+                        name='username'
+                        className='form-control'
+                        placeholder='Enter username'
+                      />
+                      <ErrorMessage component={Toast} name='username' />
+                    </div>
+                    <div className='form-group'>
+                      <span className='input-icon'>
+                        <i className='fa fa-lock'></i>
+                      </span>
+                      <Field
+                        type='password'
+                        name='password'
+                        className='form-control'
+                        placeholder='Enter password'
+                      />
+                      <ErrorMessage component={Toast} name='password' />
+                    </div>
+                    <div className='forgot-pass'>
+                      <a href='#'>Lost password?</a>
+                    </div>
+                    <br />
+                    <div className='forgot-pass'>
+                      Not a user, <Link to='/signup'>Sign up</Link>
+                    </div>
+                    <Button variant='primary' type='submit' className='btn signin'>
+                      Login
+                    </Button>
+                  </Form>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </Formik>
-      <div className='mt-3'>
-        <span>Not a user, </span>
-        <Link to='/signup'>Sign up</Link>
-      </div>
     </Container>
   );
 }
