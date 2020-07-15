@@ -4,6 +4,7 @@ const logger = require("morgan");
 const path = require("path");
 require("dotenv").config();
 const cors = require("cors");
+
 // our routes
 const productRouter = require("./routes/api/product");
 const categoryRouter = require("./routes/api/category");

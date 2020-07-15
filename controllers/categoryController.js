@@ -4,7 +4,9 @@ const Product = require("../models/ProductModel");
 
 // hanle GET request at /api/category to get all the categories
 exports.categoryIndex = (req, res) => {
-  Category.find().then(category => res.json(category));
+  Category.find()
+    .sort({ name: 1 })
+    .then(category => res.json(category));
 };
 
 //handle POST reqest at /api/category/create to create a new category

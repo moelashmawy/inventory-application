@@ -89,6 +89,7 @@ exports.userOrdersHistory = (req, res) => {
         select: "username"
       }
     })
+    .populate("address")
     .exec((err, orders) => {
       if (err) {
         res.status(400).json({ message: "Couldn't find cart", err });

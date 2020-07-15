@@ -2,8 +2,8 @@
 
 > Built with MERN stack (MongoDB, Express, React and Node).
 
-> Shopping App for The Odin Project practice
-> From The Odin Project's [curriculum](https://www.theodinproject.com/courses/nodejs/lessons/inventory-application)
+> Shopping App, it started for The Odin Project practice
+> Started from here [curriculum](https://www.theodinproject.com/courses/nodejs/lessons/inventory-application)
 > The Code can be found [here](https://github.com/hamohuh/inventory-application)
 
 ### <h2 align="center"> ⚡️⚡️⚡️ &nbsp; [Live Demo](https://afternoon-atoll-93127.herokuapp.com/) ⚡️⚡️⚡️ </h2>
@@ -17,11 +17,23 @@
 
 ## 🚩 &nbsp; Main Features
 
-- Add categories contains products
-- Edit and delete categories
-- Add products
-- Edit and delete products
+> This App was made to track the order state since the customer place it
+> once it's shipped the seller mark it as shipped, and then the shipper mark it as delivered.
+
+- Controlling the life cycle of the product
+  - A seller add a product
+  - A customer order some products
+  - A shipper pick the product and deliver it
+  - The customer may want to turn it back (to be done)
+- Control categories that contain products
+  - Add Delete Update (only admins)
+- Controll products
+  - Add, Update (for sellers) & Delete (Only admins)
 - Register and signin system
+  - Everyone is registered as only a customer
+  - Customers can apply to be a seller
+  - Shipper is only approved by the Admin
+  - Admin can create any other admins
 
 ## 💹 &nbsp; Technologies
 
@@ -44,6 +56,7 @@
 - React-toastify
 - Formik (To handle forms state and validation)
 - Yup (To handle client side form validation)
+- Sass
 
 ## 💡 &nbsp; Key Concepts
 
