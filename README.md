@@ -13,6 +13,7 @@
 - [Main Features](#main-features)
 - [Technologies](#technologies)
 - [Key Concepts](#key-concepts)
+- [UML Diagram](#UML-diagram)
 - [Setup](#setup)
 
 ## 🚩 &nbsp; Main Features
@@ -66,6 +67,12 @@
 - Encrypting passwords
 - Images handling using multer
 - OOP (Object Oriented Programming)
+
+## 📈 &nbsp; UML Diagram
+
+> It's my first time to design a UML so maybe it sucks :D
+
+![alt text](https://i.imgur.com/vGa9f8e.jpg)
 
 ## 💻 &nbsp;Setup
 
