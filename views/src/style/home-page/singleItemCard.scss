@@ -54,7 +54,8 @@ $main-color: #dd1c1c;
       margin-top: 10px;
       margin-left: 10px;
       font-size: 20px;
-      color: $main-color;
+      color: #555;
+      font-weight: 600;
     }
 
     .add-to-wishlist {
@@ -62,7 +63,12 @@ $main-color: #dd1c1c;
       margin-top: 10px;
       margin-left: 10px;
       font-size: 20px;
-      color: $main-color;
+      color: #555;
+      font-weight: 600;
+
+      &:hover {
+        color: $main-color;
+      }
     }
   }
 }

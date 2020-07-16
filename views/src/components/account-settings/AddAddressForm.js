@@ -1,7 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
 import { Formik, Field, ErrorMessage, Form } from "formik";
-import { Button, Container, Toast, Row, Col } from "react-bootstrap";
+import { Button, Container, Toast, Row, Col, Breadcrumb } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast, Slide } from "react-toastify";
 import { addAddress } from "../../redux/actions/address-actions/addAddressAction";
@@ -82,6 +82,11 @@ function AddAddressForm() {
 
   return (
     <Container>
+      <Breadcrumb>
+        <Breadcrumb.Item href='/my_addresses'>My Addresses</Breadcrumb.Item>
+        <Breadcrumb.Item active>Add address</Breadcrumb.Item>
+      </Breadcrumb>
+
       <Formik
         initialValues={initialValues}
         validationSchema={validate}
@@ -106,7 +111,11 @@ function AddAddressForm() {
 
           setSubmitting(false);
         }}>
-        <Form action='/api/product/create' method='post' encType='multipart/form-data'>
+        <Form
+          action='/api/product/create'
+          method='post'
+          encType='multipart/form-data'
+          className='add-category-form mb-5'>
           <Row>
             <Col>
               <div className='form-group'>

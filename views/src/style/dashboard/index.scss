@@ -1,2 +1,17 @@
 @import "./dashboard.scss";
 @import "./dashboard-sidebar.scss";
+@import "./forms.scss";
+@import "./users-permissions.scss";
+
+/***** Public elements *******/
+.dashboard-headline {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: grey;
+  margin-bottom: 15px;
+}
+
+.dashboard-spinner {
+  text-align: center;
+  margin-top: 30px;
+}

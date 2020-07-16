@@ -1,0 +1,93 @@
+.addresses-list {
+  margin-bottom: 50px;
+  .header {
+    font-size: 2.7rem;
+    font-weight: 700;
+    color: grey;
+    margin-bottom: 25px;
+  }
+
+  .spinner {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  /*****  Add Address button *******/
+  .add-address {
+    display: block;
+    text-align: center;
+    width: 90%;
+    height: 266px;
+    border: 2px dashed #cccccc;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 auto;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    i {
+      margin-top: 25%;
+      font-size: 3rem;
+      color: #ccc;
+    }
+
+    span {
+      font-size: 2rem;
+      color: #555;
+      text-decoration: none;
+    }
+  }
+
+  /****** One Address *******/
+  .one-address {
+    margin-top: 20px;
+
+    &:nth-child(2) {
+      margin-top: 0;
+    }
+
+    .wrapper {
+      height: 266px;
+      width: 90%;
+      border-radius: 5px;
+      border-width: 1px;
+      border-color: #c7c7c7;
+      box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.16);
+      border-style: solid;
+      padding: 15px;
+      margin: 0 auto;
+      line-height: 27px;
+
+      span {
+        display: block;
+        color: #555;
+      }
+
+      .name {
+        font-weight: 700 !important;
+        font-weight: 700;
+        font-size: 19px;
+        margin-bottom: 10px;
+      }
+
+      .edit {
+        a {
+          color: #0066c0;
+        }
+
+        p {
+          color: #0066c0;
+          display: inline;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+            color: red;
+          }
+        }
+      }
+    }
+  }
+}

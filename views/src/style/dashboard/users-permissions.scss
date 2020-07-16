@@ -1,0 +1,21 @@
+.users-permissions {
+  select {
+    background-color: #ccc;
+    width: 70%;
+  }
+  i {
+    font-size: 1.4rem;
+    margin-left: 10px;
+  }
+
+  table {
+    .fa-truck,
+    .fa-check {
+      color: rgb(1, 175, 1);
+    }
+  }
+
+  .fa-ban {
+    color: red;
+  }
+}

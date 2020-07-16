@@ -40,6 +40,7 @@ function ShippedOrders() {
           <DashboardSidebar />
         </Col>
         <Col>
+          <h1 className='dashboard-headline'>Shipped orders</h1>
           <Table striped bordered hover variant='dark'>
             <thead>
               <tr>

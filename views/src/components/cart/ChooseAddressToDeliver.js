@@ -4,12 +4,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchAddresses } from "../../redux/actions/address-actions/fetchAddressesAction";
 import { chooseOrderAddress } from "../../redux/actions/cart-actions/chooseOrderAddress";
 import { Link } from "react-router-dom";
+import Loader from "react-loader-spinner";
 
 function ChooseAddressToDeliver(props) {
   const [address, setAddress] = useState(null);
 
-  const { addresses } = useSelector(state => state.addresss);
-  const { loading } = useSelector(state => state.userrr);
+  const { addresses, loading } = useSelector(state => state.addresss);
+  const { user } = useSelector(state => state.userrr);
 
   const dispatch = useDispatch();
 
@@ -18,11 +19,18 @@ function ChooseAddressToDeliver(props) {
   }, [dispatch]);
 
   let addAddressWarning;
-  if (addresses.length == 0 && !loading) {
+  if (addresses.length == 0 && !loading && !user) {
     addAddressWarning = (
       <Alert className='warning' variant='warning'>
         Please add a shipping address for your order
       </Alert>
+    );
+  }
+
+  let loadingSpinner;
+  if (loading && addresses.length === 0) {
+    loadingSpinner = (
+      <Loader type='Circles' color='#123' height={100} width={100} className='spinner' />
     );
   }
 
@@ -71,7 +79,7 @@ function ChooseAddressToDeliver(props) {
           </Link>
         </Col>
       </Row>
-      {loading && <i class='fa fa-spinner fa-pulse mr-5 fa-2x'></i>}
+      {loadingSpinner}
 
       {addAddressWarning}
 

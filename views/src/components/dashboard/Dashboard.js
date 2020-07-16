@@ -6,7 +6,7 @@ import DashboardSidebar from "./DashboardSidebar";
 import Loader from "react-loader-spinner";
 
 function Dashboard() {
-  const { user, loading, auth } = useSelector(state => state.userrr);
+  const { user, loading } = useSelector(state => state.userrr);
 
   if (!user && !loading) {
     return <Page404 />;

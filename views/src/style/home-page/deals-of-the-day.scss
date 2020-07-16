@@ -25,7 +25,7 @@
       border-radius: 50%;
       position: absolute;
       bottom: 50% !important;
-      left: -10px;
+      left: -12px;
       cursor: pointer;
     }
     .fa-arrow-right {
@@ -39,6 +39,10 @@
       top: 40% !important;
       cursor: pointer;
       z-index: 5;
+
+      @media (max-width: 576px) {
+        left: 90%;
+      }
     }
 
     .slick-dots {

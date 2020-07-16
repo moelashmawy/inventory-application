@@ -75,6 +75,19 @@ const MainFooter = () => {
         </Col>
         <Col sm={3}>
           <h2>Subscribe</h2>
+          <div className='signup'>
+            <div className='title'>
+              <span className='signup-icon'>S</span>
+              <p>Sign up for our Newsletter</p>
+            </div>
+            <a href='/doSomething' className='signup-1b'>
+              SIGN UP
+            </a>
+            <br />
+            <a href='/update' className='signup-2b'>
+              Update your preferences »
+            </a>
+          </div>
         </Col>
       </Row>
     </Container>

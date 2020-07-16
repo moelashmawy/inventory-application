@@ -4,8 +4,6 @@ import { Form, ErrorMessage, Field, Formik } from "formik";
 import * as Yup from "yup";
 import { updateCategory } from "../../redux/actions/category-actions/updateCategoryAction";
 import { useDispatch } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -52,14 +50,14 @@ function EditCategoryForm(props) {
   };
 
   return (
-    <div>
-      <Button className='btn' variant='primary' onClick={handleShow}>
-        <FontAwesomeIcon icon={faEdit} />{" "}
+    <>
+      <Button variant='secondary' onClick={handleShow}>
+        <i class='fa fa-cog' aria-hidden='true'></i>
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title> Add New Category </Modal.Title>{" "}
-        </Modal.Header>{" "}
+          <Modal.Title> Edit Category </Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           <Formik
             initialValues={{
@@ -98,7 +96,7 @@ function EditCategoryForm(props) {
           </Formik>
         </Modal.Body>
       </Modal>
-    </div>
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Button, Toast, Row, Col, Container } from "react-bootstrap";
@@ -50,6 +50,7 @@ function AddCategoryForm() {
           <DashboardSidebar />
         </Col>
         <Col>
+          <h1 className='dashboard-headline'>Add Category</h1>
           <Formik
             initialValues={{
               name: "",
@@ -66,9 +67,9 @@ function AddCategoryForm() {
 
               setSubmitting(false);
             }}>
-            <Form>
+            <Form className='add-category-form'>
               <div className='form-group'>
-                <label htmlFor='name'>name</label>
+                <label htmlFor='name'>Name</label>
                 <Field
                   type='text'
                   name='name'
@@ -78,7 +79,7 @@ function AddCategoryForm() {
                 <ErrorMessage component={Toast} name='name' />
               </div>
               <div className='form-group'>
-                <label htmlFor='description'>description</label>
+                <label htmlFor='description'>Description</label>
                 <Field
                   as='textarea'
                   name='description'
@@ -87,7 +88,7 @@ function AddCategoryForm() {
                 />
                 <ErrorMessage component={Toast} name='description' />
               </div>
-              <Button variant='primary' type='submit'>
+              <Button variant='secondary' type='submit'>
                 Add
               </Button>
             </Form>

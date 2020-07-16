@@ -1,0 +1,22 @@
+.add-category-form {
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 25px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 25px;
+
+  .form-group {
+    label {
+      color: #123;
+      font-weight: 600;
+    }
+  }
+}
+
+.edit-modal {
+  .modal-dialog {
+    position: relative;
+    top: 50px;
+  }
+}

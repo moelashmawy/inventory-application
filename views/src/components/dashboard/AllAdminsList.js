@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllUsers } from "../../redux/actions/permissions-actions/fetchAllUsers";
 import { changeShipperPermission } from "../../redux/actions/permissions-actions/shipperPermissionActions";
@@ -8,6 +8,7 @@ import { toast, Slide } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import DashboardSidebar from "./DashboardSidebar";
+import DashboardSpinner from "./DashboardSpinner";
 
 function AllAdminsList() {
   const { allUsers, loading } = useSelector(state => state.permissionsss);
@@ -46,60 +47,57 @@ function AllAdminsList() {
   };
 
   return (
-    <Container fluid>
+    <Container fluid className='users-permissions'>
       <Row>
         <Col md='3'>
           <DashboardSidebar />
         </Col>
         <Col>
-          <Table striped bordered hover variant='dark'>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Admin</th>
-              </tr>
-            </thead>
-            <tbody>
-              {emptyMessage}
-              {loading && (
+          <h1 className='dashboard-headline'>Admins</h1>
+          {loading && <DashboardSpinner />}
+          {!loading && (
+            <Table striped bordered hover variant='dark'>
+              <thead>
                 <tr>
-                  <td colSpan='3'>
-                    <Spinner animation='border' /> loading...{" "}
-                  </td>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Admin</th>
                 </tr>
-              )}
-              {allAdmins &&
-                allAdmins.map(user => {
-                  return (
-                    <tr key={user._id}>
-                      <td>{user.username}</td>
+              </thead>
+              <tbody>
+                {emptyMessage}
+                {allAdmins &&
+                  allAdmins.map(user => {
+                    return (
+                      <tr key={user._id}>
+                        <td>{user.username}</td>
 
-                      <td>{user.email}</td>
+                        <td>{user.email}</td>
 
-                      <td>
-                        <select
-                          //value={user.isShipper}
-                          onChange={e => {
-                            givePermission(
-                              changeAdminPermission(user._id, e.target.value)
-                            );
-                          }}>
-                          <option disabled selected value=''>
-                            Change
-                          </option>
-                          <option value='false'>Disable</option>
-                          <option value='true'>Enable</option>
-                        </select>
-                        {user.isAdmin && (
-                          <FontAwesomeIcon className='ml-2' icon={faCheck} />
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </Table>
+                        <td>
+                          <select
+                            className='custom-select'
+                            onChange={e => {
+                              givePermission(
+                                changeAdminPermission(user._id, e.target.value)
+                              );
+                            }}>
+                            <option disabled selected value=''>
+                              Change
+                            </option>
+                            <option value='false'>Disable</option>
+                            <option value='true'>Enable</option>
+                          </select>
+                          {user.isAdmin && (
+                            <FontAwesomeIcon className='ml-2' icon={faCheck} />
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </Table>
+          )}
         </Col>
       </Row>
     </Container>

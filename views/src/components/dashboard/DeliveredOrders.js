@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOrdersToDeliver } from "../../redux/actions/order-actions/fetchOrdersToDeliver";
 import DashboardSidebar from "./DashboardSidebar";
-import { Container, Table, Spinner, Col, Row } from "react-bootstrap";
+import { Container, Col, Row, Image, Button } from "react-bootstrap";
+import OrderProgress from "./../account-settings/OrderProgress";
+import { Link } from "react-router-dom";
+import DashboardSpinner from "./DashboardSpinner";
 
 function DeliveredOrders() {
   const { deliveredOrders, loading } = useSelector(state => state.ordersToDeliverrr);
@@ -22,60 +25,111 @@ function DeliveredOrders() {
     );
   }
 
+  let loadingSpinner;
+  if (loading && deliveredOrders.length === 0) {
+    emptyMessage = <DashboardSpinner />;
+  }
+
   return (
-    <Container fluid>
+    <Container fluid className='orders-history'>
       <Row>
-        <Col md='3'>
+        <Col md={3}>
           <DashboardSidebar />
         </Col>
-        <Col>
-          {" "}
+        {/*
+         ******************* My orders History *********
+         */}
+        <Col md={9}>
+          <h1 className='dashboard-headline'>Delivered orders</h1>
+          {loadingSpinner}
           {emptyMessage}
-          {loading && (
-            <tr>
-              <td colSpan='3'>
-                <Spinner animation='border' /> loading...{" "}
-              </td>
-            </tr>
-          )}
-          {deliveredOrders &&
-            deliveredOrders.map(order => {
-              let singleOrder = (
-                <div className='mb-5' key={order._id}>
-                  <div>Order ID: #{order._id}</div>
-                  <div>Order placed on: {order.orderDate}</div>
-                  {order.totalPrice && <div>Total Price: ${order.totalPrice}</div>}
-                  <div>Address: {order.address.state + " " + order.address.city}</div>
-                  <div>
-                    Recipient: {order.address.firstName + " " + order.address.lastName}
-                  </div>
-                  <div>Phone No.: {order.address.phoneNumber}</div>
 
-                  <Table striped bordered hover variant='dark'>
-                    <thead>
-                      <tr>
-                        <th>Item</th>
-                        <th>quantity</th>
-                        <th>Total Price</th>
-                        <th>Mark as Delivered</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {order.products.map(product => (
-                        <tr key={product._id}>
-                          <td>{product.product.name}</td>
-                          <td>{product.quantity}</td>
-                          <td>{product.product.price * product.quantity}</td>
-                          <td>Delivered</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
-              );
+          {deliveredOrders.map(order => {
+            let singleOrder = (
+              <Row className='single-order' key={order._id}>
+                <Row className='single-order-heading'>
+                  <Col>
+                    <div className='order-time'>
+                      Order placed <span>{order.orderDate}</span>
+                    </div>
+                  </Col>
+                  <Col>
+                    {order.totalPrice && (
+                      <div className='order-todal-price'>
+                        Total: <span>${order.totalPrice}</span>
+                      </div>
+                    )}
+                  </Col>
+                  <Col md='4'>
+                    <Col>
+                      Recipient:{" "}
+                      <span>
+                        {order.address.firstName + " " + order.address.lastName}
+                      </span>
+                    </Col>
+                    <Col>
+                      Phone: +20<span>{order.address.phoneNumber}</span>
+                    </Col>
+                  </Col>
+                  <Col>
+                    <div className='order-id'>
+                      Order ID: #<span>{order._id}</span>
+                    </div>
+                  </Col>
+                </Row>
 
-              return singleOrder;
-            })}
+                <Row className='order-delivered-time'>
+                  {order.deliveredDate && <div>Delivered on: {order.deliveredDate}</div>}
+                </Row>
+
+                {order.products.map(productItem => (
+                  <Row className='single-order-item' key={productItem._id}>
+                    <Col md='3'>
+                      <Image
+                        src={`${
+                          process.env.PUBLIC_URL +
+                          "/" +
+                          productItem.product.productImage[0].path
+                        }`}
+                        thumbnail
+                      />
+                    </Col>
+
+                    <Col md='9'>
+                      <Row>
+                        <Col md='9'>
+                          <Link to={`/product/${productItem.product._id}`}>
+                            <div>{productItem.product.name}</div>
+                          </Link>
+                          <div className='quantity'>
+                            Quantity: <span>{productItem.quantity}</span>
+                          </div>
+                          <div className='price'>
+                            $Total:
+                            <span>
+                              {" "}
+                              ${productItem.quantity * productItem.product.price}
+                            </span>
+                          </div>
+                        </Col>
+                        <Col md='3'>
+                          {productItem.orderState.delivered && (
+                            <Button variant='success' disabled>
+                              <i class='fa fa-check' aria-hidden='true'></i>
+                            </Button>
+                          )}
+                        </Col>
+                      </Row>
+
+                      <OrderProgress state={productItem.orderState} />
+                    </Col>
+                  </Row>
+                ))}
+              </Row>
+            );
+
+            return singleOrder;
+          })}
         </Col>
       </Row>
     </Container>

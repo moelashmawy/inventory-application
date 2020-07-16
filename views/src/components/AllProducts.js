@@ -6,6 +6,7 @@ import { fetchProducts } from "../redux/actions/product-actions/fetchProductsAct
 import { addToCart } from "../redux/actions/cart-actions/addToCart";
 import { addToWishlist } from "./../redux/actions/wishlist-actions/addToWishlist";
 import { toast, Slide } from "react-toastify";
+import DashboardSpinner from "./dashboard/DashboardSpinner";
 
 function AllProducts() {
   const { products, loading, error } = useSelector(state => state.productsss);
@@ -34,13 +35,9 @@ function AllProducts() {
   };
 
   return (
-    <Container fluid>
+    <Container fluid className='all-products'>
       <Row>
-        {loading && (
-          <Col>
-            <Spinner animation='border' /> Loading...
-          </Col>
-        )}
+        {loading && <DashboardSpinner />}
         {error && <Col>{error}</Col>}
         {!loading &&
           products.map(product => {
@@ -90,7 +87,7 @@ function AllProducts() {
                           onClick={() => {
                             addTo(addToWishlist(product._id));
                           }}
-                          class='fa fa-heart add-to-wishlist'
+                          class='fa fa-heart-o add-to-wishlist'
                           aria-hidden='true'
                           title='Add to wish list'
                         />

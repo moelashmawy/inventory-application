@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import SettingsSidebar from "./SettingsSidebar";
+import Loader from "react-loader-spinner";
 
 function WishList() {
   const { wishlistItems, loading } = useSelector(state => state.wishlisttt);
@@ -17,6 +18,13 @@ function WishList() {
     dispatch(fetchWishlistProducts());
   }, [dispatch]);
 
+  let loadingSpinner;
+  if (loading) {
+    loadingSpinner = (
+      <Loader type='Circles' color='#123' height={100} width={100} className='spinner' />
+    );
+  }
+
   return (
     <Container fluid>
       <Row>
@@ -24,24 +32,18 @@ function WishList() {
           <SettingsSidebar />
         </Col>
         <Col lg={8}>
-          <Table striped bordered hover variant='dark'>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Price</th>
-                <th>Remove</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading && (
+          {loadingSpinner}
+          {!loading && (
+            <Table striped bordered hover variant='dark'>
+              <thead>
                 <tr>
-                  <td colSpan='3'>
-                    <Spinner animation='border' /> loading...{" "}
-                  </td>
+                  <th>Item</th>
+                  <th>Price</th>
+                  <th>Remove</th>
                 </tr>
-              )}
-              {!loading &&
-                wishlistItems.map(item => {
+              </thead>
+              <tbody>
+                {wishlistItems.map(item => {
                   return (
                     <tr key={item.product._id}>
                       <td>
@@ -60,8 +62,9 @@ function WishList() {
                     </tr>
                   );
                 })}
-            </tbody>
-          </Table>
+              </tbody>
+            </Table>
+          )}
         </Col>
       </Row>
     </Container>

@@ -56,10 +56,15 @@
       img {
         width: 100%;
         border: none;
+        margin-top: 15px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
       }
 
       a {
         font-size: 19px;
+        color: #555;
+        text-decoration: underline;
+        font-weight: 600;
         &:hover {
           text-decoration: underline;
           cursor: pointer;
@@ -120,6 +125,13 @@
   left: -51px;
   z-index: 1;
 }
+.progressbar .fa-truck {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotatey(-180deg);
+}
 
 .progressbar li:first-child:before {
   content: none;
@@ -131,4 +143,10 @@
 .progressbar li.active:before {
   border-color: #55b776;
   background-color: #55b776;
+}
+
+@media (max-width: 576px) {
+  .progressbar {
+    margin-left: -80px;
+  }
 }

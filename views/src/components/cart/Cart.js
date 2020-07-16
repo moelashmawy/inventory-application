@@ -10,8 +10,8 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Page404 from "./../404";
 
 function Cart() {
-  const { cart, totalPrice } = useSelector(state => state.carttt);
-  const { user, loading } = useSelector(state => state.userrr);
+  const { cart, totalPrice, loading } = useSelector(state => state.carttt);
+  const { user } = useSelector(state => state.userrr);
 
   const dispatch = useDispatch();
 
@@ -20,7 +20,7 @@ function Cart() {
   }, [dispatch]);
 
   let loadingSpinner;
-  if (loading) {
+  if (loading && cart.length === 0) {
     loadingSpinner = (
       <tr>
         <td colSpan='3'>

@@ -58,3 +58,71 @@ $main-color: rgb(221, 28, 28);
     }
   }
 }
+
+/****************** Sign up  *************************/
+.main-footer {
+  .signup {
+    margin: 0 auto 35px;
+    border: 1px solid #e5e5e5;
+    background-color: #f6f6f6;
+    padding: 20px;
+  }
+  .title {
+    display: flex;
+  }
+
+  .title .signup-icon {
+    flex: none;
+    display: block;
+    width: 29px;
+    height: 28px;
+    line-height: 28px;
+    background-color: $main-color;
+    color: #fff;
+    font-weight: 900;
+    font-size: 20px;
+    text-align: center;
+    margin-right: 10px;
+    position: relative;
+    top: 8px;
+  }
+  .title p {
+    font-size: 1.4rem;
+    line-height: 20px !important;
+    font-weight: 700;
+  }
+
+  .signup-1b {
+    background-color: #666;
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 10px 10px 10px 12px;
+    margin-bottom: 5px;
+    display: inline-block;
+  }
+  .signup-1b::after {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    margin-left: 10px;
+    background: url(https://g.newsweek.com/www/images/icon-arrow-right.svg) center/contain
+      no-repeat;
+  }
+  .signup-1b:hover {
+    background-color: #999;
+    text-decoration: none;
+    color: white;
+  }
+
+  .signup-2b {
+    color: #333;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .signup-2b:hover {
+    text-decoration: none;
+    color: black;
+  }
+}

@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import DashboardSidebar from "./DashboardSidebar";
+import DashboardSpinner from "./DashboardSpinner";
 
 function EditProducts() {
   const { user } = useSelector(state => state.userrr);
@@ -45,37 +46,23 @@ function EditProducts() {
           <DashboardSidebar />
         </Col>
         <Col>
-          <Table striped bordered hover variant='dark'>
-            <thead>
-              <tr>
-                <th>category</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Edit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading && (
+          <h1 className='dashboard-headline'>Edit Products</h1>
+          {loading && <DashboardSpinner />}
+          {!loading && (
+            <Table striped bordered hover variant='dark'>
+              <thead>
                 <tr>
-                  <td colSpan='4'>
-                    <Spinner animation='border' /> loading...{" "}
-                  </td>
+                  <th>category</th>
+                  <th>Price</th>
+                  <th>Edit</th>
                 </tr>
-              )}
-
-              {!user && !loading && (
-                <tr>
-                  <td colSpan='4'>Please Log in to access this page</td>
-                </tr>
-              )}
-
-              {products.map(product => (
-                <tr key={product._id}>
-                  <td>{product.name}</td>
-                  <td>{product.description}</td>
-                  <td>${product.price}</td>
-                  <td>
-                    <span className='btn btn-primary mr-3'>
+              </thead>
+              <tbody>
+                {products.map(product => (
+                  <tr key={product._id}>
+                    <td>{product.name}</td>
+                    <td>${product.price}</td>
+                    <td>
                       <UpdateProductForm
                         id={product._id}
                         name={product.name}
@@ -85,17 +72,18 @@ function EditProducts() {
                         numberInStock={product.numberInStock}
                         productImage={product.productImage}
                       />
-                    </span>
-                    <Button
-                      className='btn btn-danger'
-                      onClick={() => deleteIt(product._id)}>
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+                      <Button
+                        variant='danger'
+                        className='ml-3 '
+                        onClick={() => deleteIt(product._id)}>
+                        <i class='fa fa-trash' aria-hidden='true' title='Delete'></i>
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
         </Col>
       </Row>
     </Container>

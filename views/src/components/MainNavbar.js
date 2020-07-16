@@ -51,9 +51,7 @@ function MainNavbar(props) {
 
   let userDropDown;
   if (loading) {
-    userDropDown = (
-      <Loader type='ThreeDots' color='#dd1c1c' width={40} className='mr-5' />
-    );
+    userDropDown = <Loader type='ThreeDots' color='#123' width={40} className='mr-5' />;
   } else if (user) {
     userDropDown = (
       <span className='nav-link'>
@@ -121,13 +119,50 @@ function MainNavbar(props) {
       </div>
 
       <Navbar.Collapse id='basic-navbar-nav'>
-        <Nav className='mr-auto'>
-          <Link to='/categories' className='nav-link'>
-            All Categories
-          </Link>
-          <Link to='/products' className='nav-link'>
-            All Products
-          </Link>
+        <Nav>
+          {user && <div className='welcome'>Hello, {user.firstName}</div>}
+          {!user && <div className='welcome'>Hello, visitor</div>}
+          <div className='shop-by'>Shop by</div>
+          <ul>
+            <li>
+              <a href='/categories' className='nav-link'>
+                All Categories
+              </a>
+            </li>
+            <li>
+              <a href='/products' className='nav-link'>
+                All Products
+              </a>
+            </li>
+          </ul>
+          {/* Help and settings */}
+          <div className='shop-by'>help & settings</div>
+          <ul>
+            <li>
+              <a href='/settings' className='nav-link'>
+                <i class='fa fa-user' aria-hidden='true'></i>
+                Your Account
+              </a>
+            </li>
+            <li>
+              <a href='/products' className='nav-link'>
+                <i class='fa fa-phone' aria-hidden='true'></i>
+                Customer Service
+              </a>
+            </li>
+            <li>
+              <a href='/products' className='nav-link'>
+                <i class='fa fa-globe' aria-hidden='true'></i>
+                English
+              </a>
+            </li>
+            <li>
+              <a href='/#' className='nav-link' onClick={() => logout()}>
+                <i class='fa fa-sign-out' aria-hidden='true'></i>
+                Sign Out
+              </a>
+            </li>
+          </ul>
         </Nav>
       </Navbar.Collapse>
 

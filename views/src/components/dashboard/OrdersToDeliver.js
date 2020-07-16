@@ -2,9 +2,11 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOrdersToDeliver } from "../../redux/actions/order-actions/fetchOrdersToDeliver";
 import { markOrderDelivered } from "../../redux/actions/order-actions/markOrderDelivered";
-import { Container, Table, Spinner, Button, Col, Row } from "react-bootstrap";
+import { Container, Button, Col, Row, Image, Alert } from "react-bootstrap";
 import { toast, Slide } from "react-toastify";
 import DashboardSidebar from "./DashboardSidebar";
+import { Link } from "react-router-dom";
+import DashboardSpinner from "./DashboardSpinner";
 
 function OrdersToDeliver() {
   const { ordersToDeliver, loading } = useSelector(state => state.ordersToDeliverrr);
@@ -17,11 +19,12 @@ function OrdersToDeliver() {
 
   let emptyMessage;
   if (!loading && ordersToDeliver.length === 0) {
-    emptyMessage = (
-      <tr>
-        <td>There are no orders yet</td>
-      </tr>
-    );
+    emptyMessage = <Alert variant='warning'>There are no orders yet</Alert>;
+  }
+
+  let loadingSpinner;
+  if (loading && ordersToDeliver.length === 0) {
+    emptyMessage = <DashboardSpinner />;
   }
 
   /**
@@ -46,20 +49,114 @@ function OrdersToDeliver() {
   };
 
   return (
-    <Container fluid>
+    <Container fluid className='orders-history'>
       <Row>
         <Col md='3'>
           <DashboardSidebar />
         </Col>
+        {/*
+         ******************* My orders History *********
+         */}
         <Col>
+          <h1 className='dashboard-headline'>Orders to deliver</h1>
+          {loadingSpinner}
           {emptyMessage}
-          {loading && (
-            <tr>
-              <td colSpan='3'>
-                <Spinner animation='border' /> loading...{" "}
-              </td>
-            </tr>
-          )}
+          {ordersToDeliver.map(order => {
+            let singleOrder = (
+              <Row className='single-order' key={order._id}>
+                <Row className='single-order-heading'>
+                  <Col>
+                    <div className='order-time'>
+                      Order placed <span>{order.orderDate}</span>
+                    </div>
+                  </Col>
+                  <Col>
+                    {order.totalPrice && (
+                      <div className='order-todal-price'>
+                        Total: <span>${order.totalPrice}</span>
+                      </div>
+                    )}
+                  </Col>
+                  <Col md='4'>
+                    <Col>
+                      Recipient:{" "}
+                      <span>
+                        {order.address.firstName + " " + order.address.lastName}
+                      </span>
+                    </Col>
+                    <Col>
+                      Phone: +20<span>{order.address.phoneNumber}</span>
+                    </Col>
+                  </Col>
+                  <Col>
+                    <div className='order-id'>
+                      Order ID: #<span>{order._id}</span>
+                    </div>
+                  </Col>
+                </Row>
+
+                <Row className='order-delivered-time'>
+                  {order.deliveredDate && <div>Delivered on: {order.deliveredDate}</div>}
+                </Row>
+
+                {order.products.map(productItem => (
+                  <Row className='single-order-item' key={productItem._id}>
+                    <Col md='3'>
+                      <Image
+                        src={`${
+                          process.env.PUBLIC_URL +
+                          "/" +
+                          productItem.product.productImage[0].path
+                        }`}
+                        thumbnail
+                      />
+                    </Col>
+
+                    <Col md='9'>
+                      <Row>
+                        <Col md='9'>
+                          <Link to={`/product/${productItem.product._id}`}>
+                            <div>{productItem.product.name}</div>
+                          </Link>
+                          <div className='quantity'>
+                            Quantity: <span>{productItem.quantity}</span>
+                          </div>
+                          <div className='price'>
+                            $Total:
+                            <span>
+                              {" "}
+                              ${productItem.quantity * productItem.product.price}
+                            </span>
+                          </div>
+                        </Col>
+                        <Col md='3'>
+                          {!productItem.orderState.delivered && (
+                            <Button
+                              onClick={() => {
+                                handleMarkOrderDelivered(productItem._id);
+                              }}>
+                              Deliver
+                            </Button>
+                          )}
+
+                          {productItem.orderState.delivered && (
+                            <Button variant='secondary' disabled>
+                              Delivered
+                            </Button>
+                          )}
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                ))}
+              </Row>
+            );
+
+            return singleOrder;
+          })}
+        </Col>
+
+        {/*  <Col>
           {ordersToDeliver &&
             ordersToDeliver.map(order => {
               let singleOrder = (
@@ -89,13 +186,7 @@ function OrdersToDeliver() {
                           <td>{product.quantity}</td>
                           <td>{product.product.price * product.quantity}</td>
                           <td>
-                            <Button
-                              onClick={() => {
-                                handleMarkOrderDelivered(product._id);
-                              }}>
-                              Delivered
-                            </Button>
-                            {product.orderState.delivered && <span>yes</span>}
+                            
                           </td>
                         </tr>
                       ))}
@@ -106,7 +197,7 @@ function OrdersToDeliver() {
 
               return singleOrder;
             })}
-        </Col>
+        </Col> */}
       </Row>
     </Container>
   );

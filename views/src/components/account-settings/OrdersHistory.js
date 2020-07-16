@@ -8,8 +8,8 @@ import Loader from "react-loader-spinner";
 import OrderProgress from "./OrderProgress";
 
 function Cart() {
-  const { historyOrders } = useSelector(state => state.historyyy);
-  const { loading } = useSelector(state => state.userrr);
+  const { historyOrders, loading } = useSelector(state => state.historyyy);
+  const { user } = useSelector(state => state.userrr);
 
   const dispatch = useDispatch();
 
@@ -18,29 +18,15 @@ function Cart() {
   }, [dispatch]);
 
   let loadingSpinner;
-  if (loading) {
+  if (loading && historyOrders.length === 0) {
     loadingSpinner = (
       <Loader type='Circles' color='#123' height={100} width={100} className='spinner' />
     );
   }
 
   let emptyMessage;
-  if (!loading && historyOrders.length === 0) {
+  if (!user && !loading && historyOrders.length === 0) {
     emptyMessage = <Alert variant='warning'>No orders to show</Alert>;
-  }
-
-  function checkState(state) {
-    if (state.refunded) {
-      return <div>Refunded</div>;
-    } else if (state.returned) {
-      return <div>returned</div>;
-    } else if (state.delivered) {
-      return <div>delivered</div>;
-    } else if (state.shipped) {
-      return <div>shipped</div>;
-    } else {
-      return <div>pending</div>;
-    }
   }
 
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Table, Spinner, Button, Col, Row } from "react-bootstrap";
+import { Container, Table, Button, Col, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategories } from "../../redux/actions/category-actions/fetchCategoriesAction";
 import { deleteCategory } from "../../redux/actions/category-actions/deleteCategoryAction";
@@ -9,6 +9,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast, Slide } from "react-toastify";
 import UpdateCategoryForm from "./EditCategoryForm";
 import DashboardSidebar from "./DashboardSidebar";
+import DashboardSpinner from "./DashboardSpinner";
 
 function EditCategories() {
   const { categories, loading } = useSelector(state => state.categoriesss);
@@ -42,46 +43,42 @@ function EditCategories() {
           <DashboardSidebar />
         </Col>
         <Col>
-          <Table striped bordered hover variant='dark'>
-            <thead>
-              <tr>
-                <th>category</th>
-                <th>Description</th>
-                <th>Edit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading && (
+          <h1 className='dashboard-headline'>Edit Categories</h1>
+          {loading && <DashboardSpinner />}
+          {!loading && (
+            <Table striped bordered hover variant='dark'>
+              <thead>
                 <tr>
-                  <td colSpan='3'>
-                    <Spinner animation='border' /> loading...{" "}
-                  </td>
+                  <th>category</th>
+                  <th>Description</th>
+                  <th>Edit</th>
                 </tr>
-              )}
-              {categories.map(category => (
-                <tr key={category._id}>
-                  <td>
-                    <Link to={`/category/${category._id}`}>{category.name}</Link>
-                  </td>
-                  <td>{category.description}</td>
-                  <td>
-                    <span className='btn btn-primary mr-3'>
+              </thead>
+              <tbody>
+                {categories.map(category => (
+                  <tr key={category._id}>
+                    <td>
+                      <Link to={`/category/${category._id}`}>{category.name}</Link>
+                    </td>
+                    <td>{category.description}</td>
+                    <td>
                       <UpdateCategoryForm
                         categoryId={category._id}
                         categoryName={category.name}
                         categoryDescription={category.description}
                       />
-                    </span>
-                    <Button
-                      className='btn btn-danger'
-                      onClick={() => handleDelete(category._id)}>
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+                      <Button
+                        variant='danger'
+                        className='ml-3'
+                        onClick={() => handleDelete(category._id)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
         </Col>
       </Row>
     </Container>

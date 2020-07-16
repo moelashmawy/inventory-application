@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Row, Col, Image } from "react-bootstrap";
 import poster1 from "./../../assets/pictures/poster1.jpg";
 import poster2 from "./../../assets/pictures/poster2.jpg";
@@ -9,17 +9,17 @@ const ExploreMore = () => {
     <div className='explore-more'>
       <h2>Explore More</h2>
       <Row>
-        <Col className='item'>
+        <Col md='4' sm='12' className='item'>
           <a href='/category/shoes'>
             <Image src={poster1} />
           </a>
         </Col>
-        <Col className='item'>
+        <Col md='4' sm='12' className='item'>
           <a href='/category/shoes'>
             <Image src={poster2} />
           </a>
         </Col>
-        <Col className='item'>
+        <Col md='4' sm='12' className='item'>
           <a href='/category/shoes'>
             <Image src={poster3} />
           </a>

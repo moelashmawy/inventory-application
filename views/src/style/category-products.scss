@@ -1,0 +1,20 @@
+.category-products {
+  .spinner {
+    text-align: center;
+    margin-top: 50px;
+  }
+}
+
+.breadcrumb {
+  margin-bottom: 25px;
+  font-weight: 600;
+  background-color: unset !important;
+
+  .active {
+    color: #c45500 !important;
+  }
+
+  a {
+    color: #555 !important;
+  }
+}

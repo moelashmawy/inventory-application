@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 // handle get request at api/permissions/allUsers;
 exports.getAllUsers = (req, res) => {
-  User.find()
+  User.find({ username: { $nin: ["admin"] } })
     .sort({ creationDate: -1 })
     .select("-password")
     .then(users => {

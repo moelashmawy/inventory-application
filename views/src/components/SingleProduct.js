@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  ProgressBar,
-  Image,
-  Row,
-  Col,
-  Button,
-  Carousel
-} from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSingleProductAction } from "../redux/actions/product-actions/fetchSingleProductAction";
-import { toast, Slide } from "react-toastify";
+import { toast, Slide as toastSlide } from "react-toastify";
 import { addToCart } from "./../redux/actions/cart-actions/addToCart";
 import { addToWishlist } from "./../redux/actions/wishlist-actions/addToWishlist";
 import ProductsCarousel from "./home-page/ProductsCarousel";
 import Page404 from "./404";
 import { Link } from "react-router-dom";
 import ExploreMore from "./home-page/ExploreMore";
+import Loader from "react-loader-spinner";
+import {
+  CarouselProvider,
+  Slider,
+  Slide,
+  ButtonBack,
+  ButtonNext,
+  ImageWithZoom
+} from "pure-react-carousel";
+import "pure-react-carousel/dist/react-carousel.es.css";
 
 function SingleProduct(props) {
   const [orderQuantity, setOrderQuantity] = useState(0);
@@ -66,7 +68,7 @@ function SingleProduct(props) {
       .then(res => {
         toast.success(res, {
           position: toast.POSITION.BOTTOM_LEFT,
-          transition: Slide
+          transition: toastSlide
         });
       })
       .catch(err => {
@@ -83,25 +85,45 @@ function SingleProduct(props) {
     return <Page404 />;
   } else {
     return (
-      <Container fluid>
-        {loading && <ProgressBar animated now={100} />}
+      <Container fluid className='single-product-page'>
+        {loading && (
+          <Loader
+            type='Circles'
+            color='#123'
+            height={100}
+            width={100}
+            className='dashboard-spinner'
+          />
+        )}
         {error && <div>{error}</div>}
         {product.category !== undefined && (
-          <Row className='single-product-page'>
-            <Col>
-              <Carousel>
-                {product.productImage.map(image => {
-                  return (
-                    <Carousel.Item>
-                      <img
-                        className='d-block w-100 product-card-image'
-                        src={`${process.env.PUBLIC_URL + "/" + image.path}`}
-                        alt='First slide'
-                      />
-                    </Carousel.Item>
-                  );
-                })}
-              </Carousel>
+          <Row>
+            <Col md='6' sm='12'>
+              <CarouselProvider
+                naturalSlideWidth={90}
+                naturalSlideHeight={90}
+                hasMasterSpinner='true'
+                totalSlides={product.productImage.length}>
+                <Slider>
+                  {product.productImage.map(image => {
+                    let imgPath = image.path.replace(/\\/g, "/");
+                    return (
+                      <Slide>
+                        <ImageWithZoom
+                          className='d-block w-100 product-card-image'
+                          src={`${process.env.PUBLIC_URL + "/" + imgPath}`}
+                        />
+                      </Slide>
+                    );
+                  })}
+                </Slider>
+                <ButtonBack>
+                  <i class='fa fa-arrow-left' aria-hidden='true'></i>
+                </ButtonBack>
+                <ButtonNext>
+                  <i class='fa fa-arrow-right' aria-hidden='true'></i>
+                </ButtonNext>
+              </CarouselProvider>
             </Col>
 
             <Col>
@@ -112,7 +134,7 @@ function SingleProduct(props) {
                 </Col>
                 <Col>
                   <i
-                    class='fa fa-heart add-to-wish-list'
+                    class='fa fa-heart-o add-to-wish-list'
                     onClick={() => {
                       addTo(addToWishlist(product._id));
                     }}

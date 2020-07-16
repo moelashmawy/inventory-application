@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { Container, Row, Col, Spinner, Button } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAddresses } from "../../redux/actions/address-actions/fetchAddressesAction";
 import { deleteAddress } from "../../redux/actions/address-actions/deleteAddressAction";
 import SettingsSidebar from "./SettingsSidebar";
 import { Link } from "react-router-dom";
 import { toast, Slide } from "react-toastify";
+import Loader from "react-loader-spinner";
 
 function Addresses() {
   const { addresses, loading } = useSelector(state => state.addresss);
@@ -36,44 +37,52 @@ function Addresses() {
   let allAddresses;
   if (loading) {
     allAddresses = (
-      <div>
-        <Spinner animation='border' role='status' />
-        loading...
-      </div>
+      <Loader type='Circles' color='#123' height={100} width={100} className='spinner' />
     );
   } else {
-    allAddresses = addresses.map(address => (
-      <Row key={address._id}>
-        <h3>
-          {address.firstName} {address.lastName}
-        </h3>
-        <div>
-          {address.city}, {address.state}, {address.country}
-        </div>
-        <div>+20{address.phoneNumber}</div>
-        <Link to={`/my_addresses/edit_address?addressId=${address._id}`}>Edit</Link>
-        <Button variant='danger' onClick={() => handleDelete(address._id)}>
-          Delete
-        </Button>
+    allAddresses = (
+      <Row>
+        <Col md='6'>
+          <Link to='/my_addresses/add_address' className='add-address'>
+            <i class='fa fa-plus' aria-hidden='true'></i>
+            <br />
+            <span>Add Address</span>
+          </Link>
+        </Col>
+        {addresses.map(address => (
+          <Col md='6' key={address._id} className='one-address'>
+            <div className='wrapper'>
+              <span className='name'>
+                {address.firstName} {address.lastName}
+              </span>
+              <span className='city'>
+                {address.city}, {address.state}
+              </span>
+              <span className='country'>{address.country}</span>
+              <span className='phone'>+20{address.phoneNumber}</span>
+              <span className='edit'>
+                <Link to={`/my_addresses/edit_address?addressId=${address._id}`}>
+                  Edit{" "}
+                </Link>
+                | <p onClick={() => handleDelete(address._id)}>Delete</p>
+              </span>
+            </div>
+          </Col>
+        ))}
       </Row>
-    ));
+    );
   }
 
   return (
-    <Container fluid>
+    <Container fluid className='addresses-list'>
       <Row>
         <Col lg={4}>
           <SettingsSidebar />
         </Col>
         <Col lg={8}>
-          <Row>
+          <Row className='header'>
             <Col>
               <h3>Shipping Addresses</h3>
-            </Col>
-            <Col>
-              <Link to='/my_addresses/add_address'>
-                <Button>Add new Address</Button>
-              </Link>
             </Col>
           </Row>
           {allAddresses}

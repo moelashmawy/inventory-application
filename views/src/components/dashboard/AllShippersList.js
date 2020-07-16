@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllShippers } from "../../redux/actions/shippers-actions/fetchAllShippers";
 import { changeShipperPermission } from "../../redux/actions/permissions-actions/shipperPermissionActions";
 import { Container, Table, Spinner, Col, Row } from "react-bootstrap";
 import { toast, Slide } from "react-toastify";
 import EditShipperForm from "./EditShipperForm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import DashboardSidebar from "./DashboardSidebar";
+import DashboardSpinner from "./DashboardSpinner";
 
 function AllShippersList() {
   const { shippers, loading } = useSelector(state => state.shippersss);
@@ -45,65 +44,63 @@ function AllShippersList() {
   };
 
   return (
-    <Container fluid>
+    <Container fluid className='users-permissions'>
       <Row>
         <Col md='3'>
           <DashboardSidebar />
         </Col>
         <Col>
-          {" "}
-          <Table striped bordered hover variant='dark'>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Disable</th>
-                <th>Company</th>
-                <th>Area</th>
-                <th>Shipper info</th>
-              </tr>
-            </thead>
-            <tbody>
-              {emptyMessage}
-              {loading && (
+          <h1 className='dashboard-headline'>Shippers</h1>
+          {loading && <DashboardSpinner />}
+          {!loading && (
+            <Table striped bordered hover variant='dark'>
+              <thead>
                 <tr>
-                  <td colSpan='6'>
-                    <Spinner animation='border' /> loading...{" "}
-                  </td>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Disable</th>
+                  <th>Company</th>
+                  <th>Area</th>
+                  <th>Shipper info</th>
                 </tr>
-              )}
-              {shippers &&
-                shippers.map(shipper => {
-                  return (
-                    <tr key={shipper._id}>
-                      <td>{shipper.user.username}</td>
+              </thead>
+              <tbody>
+                {emptyMessage}
 
-                      <td>{shipper.user.email}</td>
+                {shippers &&
+                  shippers.map(shipper => {
+                    return (
+                      <tr key={shipper._id}>
+                        <td>{shipper.user.username}</td>
 
-                      <td>
-                        <select
-                          onChange={e => {
-                            giveShipperPermission(shipper.user._id, e.target.value);
-                          }}>
-                          <option value=''>Change</option>
-                          <option value='false'>Disable</option>
-                          <option value='true'>Enable</option>
-                        </select>
-                        {shipper.isActiveShipper && (
-                          <FontAwesomeIcon className='ml-2' icon={faCheck} />
-                        )}
-                      </td>
+                        <td>{shipper.user.email}</td>
 
-                      <td>{shipper.company && <span>{shipper.company}</span>}</td>
+                        <td>
+                          <select
+                            className='custom-select'
+                            onChange={e => {
+                              giveShipperPermission(shipper.user._id, e.target.value);
+                            }}>
+                            <option value=''>Change</option>
+                            <option value='false'>Disable</option>
+                            <option value='true'>Enable</option>
+                          </select>
+                          {shipper.isActiveShipper && (
+                            <i class='fa fa-truck' aria-hidden='true'></i>
+                          )}
+                        </td>
 
-                      <td>{shipper.area && <span>{shipper.area}</span>}</td>
+                        <td>{shipper.company && <span>{shipper.company}</span>}</td>
 
-                      <td>{<EditShipperForm shipper={shipper} />}</td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </Table>
+                        <td>{shipper.area && <span>{shipper.area}</span>}</td>
+
+                        <td>{<EditShipperForm shipper={shipper} />}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </Table>
+          )}
         </Col>
       </Row>
     </Container>

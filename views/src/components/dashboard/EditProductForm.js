@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import { Formik, Field, ErrorMessage, Form } from "formik";
-import { Button, Container, Toast, Modal } from "react-bootstrap";
+import { Button, Toast, Modal } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategories } from "../../redux/actions/category-actions/fetchCategoriesAction";
 import { updateProduct } from "../../redux/actions/product-actions/updateProductAction";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { toast, Slide } from "react-toastify";
 
 // form validation useing Yup
@@ -78,14 +76,14 @@ function EditProductForm(props) {
   };
 
   return (
-    <Container>
-      <Button variant='primary' onClick={handleShow}>
-        <FontAwesomeIcon icon={faEdit} />
+    <>
+      <Button variant='secondary' onClick={handleShow}>
+        <i class='fa fa-cog' aria-hidden='true' title='Edit'></i>
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add New Product</Modal.Title>
+          <Modal.Title>Edit Product</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Formik
@@ -179,7 +177,7 @@ function EditProductForm(props) {
           </Formik>
         </Modal.Body>
       </Modal>
-    </Container>
+    </>
   );
 }
 

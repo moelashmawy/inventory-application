@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, Card, Button, ProgressBar } from "react-bootstrap";
+import { Row, Col, Card, ProgressBar } from "react-bootstrap";
 import { connect } from "react-redux";
 import { fetchProducts } from "../../redux/actions/product-actions/fetchProductsAction";
 import "slick-carousel/slick/slick.css";
@@ -16,7 +16,7 @@ function SamplePrevArrow(props) {
 
 // custom next arrow
 function SampleNextArrow(props) {
-  const { className, style, onClick } = props;
+  const { onClick } = props;
   return <i onClick={onClick} class='fa fa-arrow-right' aria-hidden='true'></i>;
 }
 

@@ -11,7 +11,10 @@ export const fetchCategoryProducts = id => {
     axios
       .get(`/api/category/${id}`)
       .then(res => {
-        dispatch(fetchCategoriesProductsSuccess(res.data));
+        let category = res.data.category;
+        let products = res.data.products;
+
+        dispatch(fetchCategoriesProductsSuccess(products, category));
       })
       .catch(err => {
         dispatch(fetchCategoriesProductsFailure(err.message));
@@ -25,11 +28,12 @@ const fetchCategoriesProductsStarted = () => {
   };
 };
 
-const fetchCategoriesProductsSuccess = products => {
+const fetchCategoriesProductsSuccess = (products, category) => {
   return {
     type: FETCH_CATEGORY_PRODUCTS_SUCCESS,
     payload: {
-      products
+      products,
+      category
     }
   };
 };

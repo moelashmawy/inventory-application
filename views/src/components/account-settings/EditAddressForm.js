@@ -1,7 +1,15 @@
 import React, { useEffect } from "react";
 import * as Yup from "yup";
 import { Formik, Field, ErrorMessage, Form } from "formik";
-import { Button, Container, Toast, Row, Col, ProgressBar } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Toast,
+  Row,
+  Col,
+  ProgressBar,
+  Breadcrumb
+} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, Slide } from "react-toastify";
 import { useLocation } from "react-router-dom";
@@ -104,6 +112,12 @@ function EditAddressForm(props) {
   return (
     <Container>
       {loading && <ProgressBar animated now={100} />}
+
+      <Breadcrumb>
+        <Breadcrumb.Item href='/my_addresses'>My Addresses</Breadcrumb.Item>
+        <Breadcrumb.Item active>Edit address</Breadcrumb.Item>
+      </Breadcrumb>
+
       {currentAddress[0] && (
         <Formik
           initialValues={initialValues}
@@ -129,7 +143,10 @@ function EditAddressForm(props) {
 
             setSubmitting(false);
           }}>
-          <Form action='/api/product/create' method='post' encType='multipart/form-data'>
+          <Form
+            method='post'
+            encType='multipart/form-data'
+            className='add-category-form mb-5'>
             <Row>
               <Col>
                 <div className='form-group'>

@@ -66,6 +66,7 @@ function AddProductForm() {
           <DashboardSidebar />
         </Col>
         <Col>
+          <h1 className='dashboard-headline'>Add product</h1>
           <Formik
             initialValues={{
               name: "",
@@ -90,6 +91,7 @@ function AddProductForm() {
               setSubmitting(false);
             }}>
             <Form
+              className='add-category-form'
               action='/api/product/create'
               method='post'
               encType='multipart/form-data'>
@@ -161,7 +163,7 @@ function AddProductForm() {
                   setImgs(e.target.files);
                 }}
               />
-              <Button variant='primary' type='submit'>
+              <Button variant='secondary' type='submit'>
                 ADD{" "}
               </Button>{" "}
             </Form>

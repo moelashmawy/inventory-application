@@ -53,7 +53,7 @@ exports.categoryDetails = function (req, res) {
       category: function (callback) {
         Category.findById(req.params.id).exec(callback);
       },
-      product: function (callback) {
+      products: function (callback) {
         Product.find({
           category: req.params.id
         }).exec(callback);
@@ -63,7 +63,13 @@ exports.categoryDetails = function (req, res) {
       if (err) {
         return res.status(404).json({ message: "Couldn't load category", err });
       } else {
-        return res.status(200).json(results);
+        let categoryProducts = results.products;
+        let category = results.category;
+
+        // get only products in stock
+        let products = categoryProducts.filter(item => item.numberInStock !== 0);
+
+        return res.status(200).json({ products, category });
       }
     }
   );

@@ -59,7 +59,7 @@ function EditShipperForm(props) {
       <Button className='btn' variant='primary' onClick={handleShow}>
         <FontAwesomeIcon icon={faEdit} />{" "}
       </Button>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} className='edit-modal'>
         <Modal.Header closeButton>
           <Modal.Title> Add New Category </Modal.Title>{" "}
         </Modal.Header>{" "}
@@ -83,7 +83,7 @@ function EditShipperForm(props) {
 
               setSubmitting(false);
             }}>
-            <Form action={`/api/product/${props.categoryId}/update`} method='put'>
+            <Form method='put'>
               <div className='form-group'>
                 <label htmlFor='name'>Company</label>
                 <Field type='text' name='company' className='form-control' />

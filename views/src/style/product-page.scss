@@ -2,7 +2,6 @@
   position: relative;
   line-height: 4rem;
   margin-bottom: 50px;
-  min-height: 600px;
 
   &:before {
     background: linear-gradient(
@@ -23,6 +22,42 @@
     margin-top: -50px;
   }
 
+  .dashboard-spinner {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 600px;
+  }
+
+  /********   Product images carousel   *******/
+  .carousel {
+    width: 80%;
+    margin: 0 auto;
+
+    .carousel__back-button {
+      height: 50px;
+      width: 50px;
+      line-height: 50px;
+      background-color: #ccc;
+      border: none;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      right: 96%;
+    }
+    .carousel__next-button {
+      height: 50px;
+      width: 50px;
+      line-height: 50px;
+      background-color: #ccc;
+      border: none;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      right: -6%;
+    }
+  }
+
+  /********   Product details  *******/
   .product-name {
     font-weight: 600;
     color: #222;
@@ -50,14 +85,19 @@
   }
 
   .custom-select {
-    width: 25%;
+    width: 5rem;
     text-align: center;
   }
 
   .add-to-wish-list {
-    color: red;
+    color: rgb(139, 102, 102);
     font-size: 23px;
+    font-weight: 600;
     cursor: pointer;
+
+    &:hover {
+      color: rgb(228, 25, 25);
+    }
   }
 
   .sold-by {

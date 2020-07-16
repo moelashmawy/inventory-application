@@ -5,6 +5,7 @@ import { markOrderShipped } from "../../redux/actions/order-actions/markOrderShi
 import { Link } from "react-router-dom";
 import { Container, Table, Spinner, Button, Col, Row } from "react-bootstrap";
 import DashboardSidebar from "./DashboardSidebar";
+import DashboardSpinner from "./DashboardSpinner";
 
 function OrdersToShip() {
   const { ordersToShip, loading } = useSelector(state => state.ordersToShippp);
@@ -31,26 +32,21 @@ function OrdersToShip() {
           <DashboardSidebar />
         </Col>
         <Col>
-          <Table striped bordered hover variant='dark'>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>quantity</th>
-                <th>Total Price</th>
-                <th>Mark as Shiped</th>
-              </tr>
-            </thead>
-            <tbody>
-              {emptyMessage}
-              {loading && (
+          <h1 className='dashboard-headline'>Orders to ship</h1>
+          {loading && <DashboardSpinner />}
+          {!loading && (
+            <Table striped bordered hover variant='dark'>
+              <thead>
                 <tr>
-                  <td colSpan='3'>
-                    <Spinner animation='border' /> loading...{" "}
-                  </td>
+                  <th>Item</th>
+                  <th>quantity</th>
+                  <th>Total Price</th>
+                  <th>Mark as Shiped</th>
                 </tr>
-              )}
-              {ordersToShip &&
-                ordersToShip.map(item => {
+              </thead>
+              <tbody>
+                {emptyMessage}
+                {ordersToShip.map(item => {
                   return (
                     <tr key={item._id}>
                       <td>
@@ -69,8 +65,9 @@ function OrdersToShip() {
                     </tr>
                   );
                 })}
-            </tbody>
-          </Table>
+              </tbody>
+            </Table>
+          )}
         </Col>
       </Row>
     </Container>
