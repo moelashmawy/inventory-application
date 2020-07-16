@@ -10,11 +10,11 @@
 
 ## 📜 &nbsp; Table of contents
 
-- [Main Features](#main-features)
-- [Technologies](#technologies)
-- [Key Concepts](#key-concepts)
-- [UML Diagram](#UML-diagram)
-- [Setup](#setup)
+- [Main Features](#--main-features)
+- [Technologies](#--technologies)
+- [Key Concepts](#--key-concepts)
+- [UML Diagram](#--uml-diagram)
+- [Setup](#--setup)
 
 ## 🚩 &nbsp; Main Features
 
@@ -74,7 +74,7 @@
 
 ![alt text](https://i.imgur.com/vGa9f8e.jpg)
 
-## 💻 &nbsp;Setup
+## 💻 &nbsp; Setup
 
 To run this project, install it locally using npm:
 
