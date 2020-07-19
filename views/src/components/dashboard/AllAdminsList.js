@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllUsers } from "../../redux/actions/permissions-actions/fetchAllUsers";
-import { changeShipperPermission } from "../../redux/actions/permissions-actions/shipperPermissionActions";
 import { changeAdminPermission } from "../../redux/actions/permissions-actions/adminPermissionActions";
-import { Container, Table, Spinner, Col, Row } from "react-bootstrap";
+import { Container, Table, Col, Row } from "react-bootstrap";
 import { toast, Slide } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -28,7 +27,7 @@ function AllAdminsList() {
     );
   }
 
-  let allAdmins = allUsers.filter(user => user.isAdmin == true);
+  let allAdmins = allUsers.filter(user => user.isAdmin === true);
 
   const givePermission = permissionFunction => {
     dispatch(permissionFunction)

@@ -38,7 +38,7 @@ function CategoryProducts(props) {
   };
 
   let emptyMessage;
-  if (!loading && categoryProducts.length == 0) {
+  if (!loading && categoryProducts.length === 0) {
     emptyMessage = <Alert variant='warning'>No items in this category</Alert>;
   }
   if (error === "Request failed with status code 404") {

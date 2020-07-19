@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchAddresses } from "../../redux/actions/address-actions/fetchAddressesAction";
 import { placeOrder } from "../../redux/actions/order-actions/placeOrderAction";
 import { toast, Slide } from "react-toastify";

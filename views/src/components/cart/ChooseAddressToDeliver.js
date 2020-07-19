@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Spinner, Button, Alert } from "react-bootstrap";
+import { Container, Row, Col, Button, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAddresses } from "../../redux/actions/address-actions/fetchAddressesAction";
 import { chooseOrderAddress } from "../../redux/actions/cart-actions/chooseOrderAddress";
@@ -19,7 +19,7 @@ function ChooseAddressToDeliver(props) {
   }, [dispatch]);
 
   let addAddressWarning;
-  if (addresses.length == 0 && !loading && !user) {
+  if (addresses.length === 0 && !loading && !user) {
     addAddressWarning = (
       <Alert className='warning' variant='warning'>
         Please add a shipping address for your order

@@ -12,6 +12,7 @@ import {
 
 const initialState = {
   products: [],
+  pagesCount: null,
   loading: false,
   error: null,
   success: null
@@ -30,7 +31,8 @@ const productReducer = (state = initialState, action) => {
         loading: false,
         error: null,
         success: null,
-        products: action.payload.products
+        products: action.payload.products,
+        pagesCount: action.payload.pagesCount
       };
     case FETCH_USER_PRODUCTS_FAILURE:
       return {

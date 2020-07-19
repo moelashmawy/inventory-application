@@ -4,15 +4,21 @@ import {
   FETCH_PRODUCTS_FAILURE
 } from "./../types";
 import axios from "axios";
+import { tokenConfig } from "../auth-actions/tokenConfig";
 
-export const fetchProducts = () => {
+export const fetchProducts = (pageNumber, perPage) => {
+  let params = { page: pageNumber, perPage };
+
   return dispatch => {
     dispatch(fetchProductsStarted());
 
     axios
-      .get("/api/product")
+      .get("/api/product", tokenConfig(null, params))
       .then(res => {
-        dispatch(fetchProductsSuccess(res.data.products));
+        let products = res.data.products;
+        let pagesCount = res.data.pagesCount;
+
+        dispatch(fetchProductsSuccess(products, pagesCount, perPage));
       })
       .catch(error => {
         dispatch(fetchProductsFailure(error.message));
@@ -26,11 +32,12 @@ const fetchProductsStarted = () => {
   };
 };
 
-const fetchProductsSuccess = products => {
+const fetchProductsSuccess = (products, pagesCount) => {
   return {
     type: FETCH_PRODUCTS_SUCCESS,
     payload: {
-      products
+      products,
+      pagesCount
     }
   };
 };

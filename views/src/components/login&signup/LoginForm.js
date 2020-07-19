@@ -85,7 +85,7 @@ function LoginForm(props) {
                       <ErrorMessage component={Toast} name='password' />
                     </div>
                     <div className='forgot-pass'>
-                      <a href='#'>Lost password?</a>
+                      <a href='/'>Lost password?</a>
                     </div>
                     <br />
                     <div className='forgot-pass'>

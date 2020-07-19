@@ -14,9 +14,9 @@ import {
   CarouselProvider,
   Slider,
   Slide,
-  ButtonBack,
-  ButtonNext,
-  ImageWithZoom
+  ImageWithZoom,
+  Dot,
+  Image
 } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 
@@ -36,10 +36,10 @@ function SingleProduct(props) {
   const prodCategory = () => {
     if (product.category !== null) {
       return (
-        <div className='product-category'>
+        <p className='product-category'>
           Category:{" "}
           <Link to={`/category/${product.category._id}`}>{product.category.name}</Link>
-        </div>
+        </p>
       );
     } else {
       return <div className='product-category'>Category: undefined "will edit soon"</div>;
@@ -105,10 +105,10 @@ function SingleProduct(props) {
                 hasMasterSpinner='true'
                 totalSlides={product.productImage.length}>
                 <Slider>
-                  {product.productImage.map(image => {
+                  {product.productImage.map((image, index) => {
                     let imgPath = image.path.replace(/\\/g, "/");
                     return (
-                      <Slide>
+                      <Slide index={index}>
                         <ImageWithZoom
                           className='d-block w-100 product-card-image'
                           src={`${process.env.PUBLIC_URL + "/" + imgPath}`}
@@ -116,18 +116,33 @@ function SingleProduct(props) {
                       </Slide>
                     );
                   })}
+                  <div className='down'>Roll over image to zoom in</div>
                 </Slider>
-                <ButtonBack>
-                  <i class='fa fa-arrow-left' aria-hidden='true'></i>
-                </ButtonBack>
-                <ButtonNext>
-                  <i class='fa fa-arrow-right' aria-hidden='true'></i>
-                </ButtonNext>
+
+                <div className='all-dots'>
+                  {product.productImage.map((image, index) => {
+                    let imgPath = image.path.replace(/\\/g, "/");
+                    return (
+                      <Dot slide={index}>
+                        <Image
+                          className='d-block w-100 product-card-image'
+                          src={`${process.env.PUBLIC_URL + "/" + imgPath}`}
+                        />
+                      </Dot>
+                    );
+                  })}
+                </div>
               </CarouselProvider>
             </Col>
 
+            {/* *** Product Details *** */}
             <Col>
-              <h2 className='product-name'>{product.name}</h2>
+              <span className='product-name'>{product.name}</span>
+
+              <p className='sold-by'>
+                by <span>{product.seller.username}</span>
+              </p>
+
               <Row>
                 <Col>
                   <div className='product-price'>${product.price}</div>
@@ -143,7 +158,10 @@ function SingleProduct(props) {
                 </Col>
               </Row>
 
-              <div className='product-desc'>Description: {product.description}</div>
+              <p className='product-desc'>
+                Description: <span>{product.description}</span>
+              </p>
+
               {product.numberInStock < 67 && (
                 <div className='product-stock'>
                   only {product.numberInStock} left in Stock, order soon.
@@ -173,7 +191,7 @@ function SingleProduct(props) {
                   </Button>
                 </Col>
               </Row>
-              <div className='sold-by'>Sold by: {product.seller.username}</div>
+
               {prodCategory()}
             </Col>
           </Row>

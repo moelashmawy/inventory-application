@@ -1,29 +1,31 @@
-import React, { useEffect } from "react";
-import { Container, Table, Spinner, Button, Col, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Table, Button, Col, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserProducts } from "../../redux/actions/product-actions/fetchUserProductsAction";
 import { deleteProduct } from "../../redux/actions/product-actions/deleteProductAction";
-import { loadUser } from "../../redux/actions/auth-actions/loadUser";
 import UpdateProductForm from "./EditProductForm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import DashboardSidebar from "./DashboardSidebar";
 import DashboardSpinner from "./DashboardSpinner";
+import MainPagination from "./../MainPagination";
 
-function EditProducts() {
-  const { user } = useSelector(state => state.userrr);
-  const { loading, products } = useSelector(state => state.userProductsss);
+function EditProducts(props) {
+  const { loading, products, pagesCount } = useSelector(state => state.userProductsss);
 
-  const userId = user ? user._id : null;
+  let [perPageP, setPerPageP] = useState(5);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(loadUser());
+  // get the page number from the url
+  const query = new URLSearchParams(props.location.search);
+  const page = parseInt(query.get("page") || "1", 10);
 
-    dispatch(fetchUserProducts(userId));
-  }, [dispatch, userId]);
+  // will let the user decide how many products to show per page
+  let perPage = perPageP || 5;
+
+  useEffect(() => {
+    dispatch(fetchUserProducts(page, perPage));
+  }, [dispatch, page, perPage]);
 
   // this function will delete the item and trigger a message after it's done
   const deleteIt = id => {
@@ -46,7 +48,22 @@ function EditProducts() {
           <DashboardSidebar />
         </Col>
         <Col>
-          <h1 className='dashboard-headline'>Edit Products</h1>
+          <Row>
+            <Col>
+              <h1 className='dashboard-headline'>Edit Products</h1>
+            </Col>
+            <Col className='per-page'>
+              <span>Per page</span>
+              <select
+                className='custom-select'
+                onChange={e => setPerPageP(e.target.value)}>
+                <option value='5'>5</option>
+                <option value='10'>10</option>
+                <option value='15'>15</option>
+              </select>
+            </Col>
+          </Row>
+
           {loading && <DashboardSpinner />}
           {!loading && (
             <Table striped bordered hover variant='dark'>
@@ -84,6 +101,7 @@ function EditProducts() {
               </tbody>
             </Table>
           )}
+          {!loading && <MainPagination path='/editProducts' pagesCount={pagesCount} />}
         </Col>
       </Row>
     </Container>

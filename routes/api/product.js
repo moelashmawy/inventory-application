@@ -8,12 +8,12 @@ const { auth, sellerAuth } = require("../../middlewares/auth");
 // @route   GET /api/product
 // @desc    Get all products
 // @access  public
-router.get("/", product_controller.productIndex);
+router.get("/", product_controller.allProducts);
 
 // @route   GET /api/product/:userId/products
 // @desc    Get a specific user products
 // @access  public
-router.get("/:userId/products", auth, product_controller.userProducts);
+router.get("/my_products", auth, product_controller.userProducts);
 
 // @route   POST /api/product/create
 // @desc    Create a new product

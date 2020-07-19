@@ -21,24 +21,52 @@
 > This App was made to track the order state since the customer place it
 > once it's shipped the seller mark it as shipped, and then the shipper mark it as delivered.
 
-- Controlling the life cycle of the product
-  - A seller add a product
-  - A customer order some products
-  - A shipper pick the product and deliver it
-  - The customer may want to turn it back (to be done)
-- Control categories that contain products
-  - Add Delete Update (only admins)
-- Controll products
-  - Add, Update (for sellers) & Delete (Only admins)
-- Register and signin system
-  - Everyone is registered as only a customer
-  - Customers can apply to be a seller
-  - Shipper is only approved by the Admin
-  - Admin can create any other admins
+#### Project methodology
+
+- **Register and signin system**
+  - Everyone is registered as only a customer.
+  - Customers can apply to be sellers.
+  - Shipper only created by the Admin.
+  - Admins can create any other admins.
+- **Product life cycle**
+  - A seller add a product.
+  - A customer order some products, number in stock decreases.
+  - Depends on the address the customer provided, the area shipper get notification.
+  - The product's seller get a notification about the order.
+  - The shipper pick the product, the seller mark it as shipped.
+  - The shipper deliver the order, and mark it as delivered.
+  - The customer may want to turn it back (to be done).
+- **Other facilities**
+  - Users can edit their account info
+  - Users can track their order's state
+  - Users can add, delete or edit addresses
+  - Users can have a wishlist with any amount of products
+
+#### Users roles
+
+- **Customer**
+  - Sign up & login.
+  - Switch the account to seller.
+  - Purchase order of any amount of products.
+  - Tracking order state.
+  - Return order (To do).
+- **Seller** -> all above plus.
+  - Add and edit his own products.
+  - Receive notifications of the new orders the customer make (only his products).
+  - Mark the orders the customers make as shipped when the Shipper takes it.
+- **Shipper** -> all above plus
+  - Receive notifications of orders (According to the customer address provided).
+  - Ship orders to the customer's address and mark the order as Delivered.
+- **Admin** -> all above plus
+  - Add, Edit and Delete categories.
+  - Add, Edit and Delete any products.
+  - Create other Admins.
+  - Create Shippers and add Shipper area he will be responsible for.
+  - Restrict any user from all the permissions.
 
 ## 💹 &nbsp; Technologies
 
-#### Project is created with:
+> Project is created with:
 
 #### Backend
 
@@ -53,8 +81,8 @@
 - Redux
 - Axios (For http requests)
 - React Bootstrap
-- React-router
-- React-toastify
+- React-router (To handle routing)
+- React-toastify (To handle success and error messages)
 - Formik (To handle forms state and validation)
 - Yup (To handle client side form validation)
 - Sass
@@ -72,7 +100,7 @@
 
 > It's my first time to design a UML so maybe it sucks :D
 
-![alt text](https://i.imgur.com/vGa9f8e.jpg)
+![UML Diagram](https://i.imgur.com/vGa9f8e.jpg)
 
 ## 💻 &nbsp; Setup
 

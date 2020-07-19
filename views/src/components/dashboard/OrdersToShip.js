@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchordersToShip } from "../../redux/actions/order-actions/fetchOrdersToShip";
 import { markOrderShipped } from "../../redux/actions/order-actions/markOrderShipped";
 import { Link } from "react-router-dom";
-import { Container, Table, Spinner, Button, Col, Row } from "react-bootstrap";
+import { Container, Image, Button, Col, Row } from "react-bootstrap";
 import DashboardSidebar from "./DashboardSidebar";
 import DashboardSpinner from "./DashboardSpinner";
 
@@ -26,48 +26,114 @@ function OrdersToShip() {
   }
 
   return (
-    <Container fluid>
+    <Container fluid className='orders-history'>
       <Row>
         <Col md='3'>
           <DashboardSidebar />
         </Col>
+        {/*
+         ******************* Orders to ship *********
+         */}
         <Col>
           <h1 className='dashboard-headline'>Orders to ship</h1>
-          {loading && <DashboardSpinner />}
-          {!loading && (
-            <Table striped bordered hover variant='dark'>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>quantity</th>
-                  <th>Total Price</th>
-                  <th>Mark as Shiped</th>
-                </tr>
-              </thead>
-              <tbody>
-                {emptyMessage}
-                {ordersToShip.map(item => {
-                  return (
-                    <tr key={item._id}>
-                      <td>
-                        <Link to={`/product/${item.product._id}`}>
-                          {item.product.name}
-                        </Link>
-                      </td>
-                      <td>{item.quantity}</td>
 
-                      <td>${item.quantity * item.product.price}</td>
-                      <td>
-                        <Button onClick={() => dispatch(markOrderShipped(item._id))}>
-                          Mark as shipped
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          )}
+          {loading && <DashboardSpinner />}
+
+          {emptyMessage}
+
+          {ordersToShip.map(order => {
+            let singleOrder = (
+              <Row className='single-order' key={order.products._id}>
+                <Row className='single-order-heading'>
+                  <Col>
+                    <div className='order-time'>
+                      Order placed <span>{order.orderDate}</span>
+                    </div>
+                  </Col>
+                  <Col>
+                    <div className='order-todal-price'>
+                      Total:{" "}
+                      <span>
+                        ${order.products.quantity * order.products.product.price}
+                      </span>
+                    </div>
+                  </Col>
+                  <Col md='4'>
+                    <Col>
+                      Recipient:{" "}
+                      <span>
+                        {order.address.firstName + " " + order.address.lastName}
+                      </span>
+                    </Col>
+                    <Col>
+                      Phone: +20<span>{order.address.phoneNumber}</span>
+                    </Col>
+                  </Col>
+                  <Col>
+                    <div className='order-id'>
+                      Order ID: #<span>{order._id}</span>
+                    </div>
+                  </Col>
+                </Row>
+
+                <Row className='order-delivered-time'>
+                  {order.deliveredDate && <div>Delivered on: {order.deliveredDate}</div>}
+                </Row>
+
+                {/* Order product */}
+                <Row className='single-order-item'>
+                  <Col md='3'>
+                    <Image
+                      src={`${
+                        process.env.PUBLIC_URL +
+                        "/" +
+                        order.products.product.productImage[0].path
+                      }`}
+                      thumbnail
+                    />
+                  </Col>
+
+                  <Col md='9'>
+                    <Row>
+                      <Col md='9'>
+                        <Link to={`/product/${order.products.product._id}`}>
+                          <div>{order.products.product.name}</div>
+                        </Link>
+                        <div className='quantity'>
+                          Quantity: <span>{order.products.quantity}</span>
+                        </div>
+                        <div className='price'>
+                          $Total:
+                          <span>
+                            {" "}
+                            ${order.products.quantity * order.products.product.price}
+                          </span>
+                        </div>
+                      </Col>
+                      <Col md='3'>
+                        {!order.products.orderState.shipped && (
+                          <Button
+                            onClick={() => {
+                              dispatch(markOrderShipped(order.products._id));
+                            }}>
+                            Mark shipped
+                          </Button>
+                        )}
+
+                        {order.products.orderState.shipped && (
+                          <Button variant='secondary' disabled>
+                            Shipped
+                          </Button>
+                        )}
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </Row>
+            );
+
+            return singleOrder;
+          })}
         </Col>
       </Row>
     </Container>

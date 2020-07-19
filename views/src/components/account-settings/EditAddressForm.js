@@ -54,7 +54,7 @@ const validate = () =>
       .required("This field is required")
   });
 
-function EditAddressForm(props) {
+function EditAddressForm() {
   const { addresses, loading } = useSelector(state => state.addresss);
 
   const dispatch = useDispatch();

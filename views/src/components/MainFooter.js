@@ -13,23 +13,23 @@ const MainFooter = () => {
           <h2>Policy Info</h2>
           <ul>
             <li>
-              <a href='#'>Privacy policy</a>
+              <a href='/'>Privacy policy</a>
             </li>
 
             <li>
-              <a href='#'>Terms of sale</a>
+              <a href='/'>Terms of sale</a>
             </li>
 
             <li>
-              <a href='#'>Terms of use</a>
+              <a href='/'>Terms of use</a>
             </li>
 
             <li>
-              <a href='#'>Report product</a>
+              <a href='/'>Report product</a>
             </li>
 
             <li>
-              <a href='#'>Some policy</a>
+              <a href='/'>Some policy</a>
             </li>
           </ul>
         </Col>
@@ -37,19 +37,19 @@ const MainFooter = () => {
           <h2>Company</h2>
           <ul>
             <li>
-              <a href='#'>About us</a>
+              <a href='/'>About us</a>
             </li>
             <li>
-              <a href='#'>Blog</a>
+              <a href='/'>Blog</a>
             </li>
             <li>
-              <a href='#'>Inroduction</a>
+              <a href='/'>Inroduction</a>
             </li>
             <li>
-              <a href='#'>FAQ</a>
+              <a href='/'>FAQ</a>
             </li>
             <li>
-              <a href='#'>Contact us</a>
+              <a href='/'>Contact us</a>
             </li>
           </ul>
         </Col>
@@ -57,19 +57,19 @@ const MainFooter = () => {
           <h2>Business</h2>
           <ul>
             <li>
-              <a href='#'>Sell with us</a>
+              <a href='/'>Sell with us</a>
             </li>
             <li>
-              <a href='#'>Advertisment</a>
+              <a href='/'>Advertisment</a>
             </li>
             <li>
-              <a href='#'>Terms of use</a>
+              <a href='/'>Terms of use</a>
             </li>
             <li>
-              <a href='#'>Affliciate sys</a>
+              <a href='/'>Affliciate sys</a>
             </li>
             <li>
-              <a href='#'>Deal of the day</a>
+              <a href='/'>Deal of the day</a>
             </li>
           </ul>
         </Col>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar, Nav, Spinner, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { logout } from "./../redux/actions/auth-actions/logoutAction";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +8,7 @@ import Loader from "react-loader-spinner";
 
 import logo from "./../assets/pictures/logo.png";
 
-function MainNavbar(props) {
+function MainNavbar() {
   const { user, auth, loading } = useSelector(state => state.userrr);
 
   const dispatch = useDispatch();

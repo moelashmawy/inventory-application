@@ -18,6 +18,11 @@ router.get("/userOrdersHistory", auth, order_controller.userOrdersHistory);
 // @access  Sellers only
 router.get("/ordersToShip", auth, order_controller.ordersToShip);
 
+// @route   GET api/order/shippedOrders
+// @desc    Get all seller's shipped orders
+// @access  Sellers only
+router.get("/shippedOrders", auth, order_controller.shippedOrders);
+
 // @route   PUT api/order/ordersToShip/markAsShipped
 // @desc    Edit seller's order's state to be shipped
 // @access  Sellers only

@@ -2,9 +2,9 @@
  * This function to Setup config/headers and token
  * it gets the token from our main state and attach it to the header
  */
-export const tokenConfig = (getState, optionalParams = null) => {
+export const tokenConfig = (getState = null, optionalParams = null) => {
   // Get token from localstorage
-  const token = getState().userrr.token;
+  const token = getState ? getState().userrr.token : null;
 
   const config = {
     headers: {

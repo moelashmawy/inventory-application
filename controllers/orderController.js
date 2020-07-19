@@ -1,4 +1,3 @@
-const User = require("./../models/UsersModel");
 const Product = require("./../models/ProductModel");
 const Cart = require("./../models/Cart");
 const Order = require("./../models/Order");
@@ -27,7 +26,7 @@ exports.orderSuccess = (req, res) => {
             }
           },
           { new: true },
-          (err, item) => {
+          err => {
             if (err) {
               return res.status(400).json({
                 message: "Couldn't decrease item's quantity",
@@ -43,32 +42,42 @@ exports.orderSuccess = (req, res) => {
       // 2- create a new order, and its products are the user's cart items
       // 3- empty the user's cart
       Cart.findOne({ user: userId }).then(foundCart => {
-        Order.create({
-          user: userId,
-          products: foundCart.items,
-          totalPrice: foundCart.totalPrice,
-          address: foundCart.address
-        }).then(() => {
-          // Then empty the user's cart
-          Cart.findOneAndUpdate(
-            { user: userId },
-            { $set: { items: [], totalPrice: 0 } },
-            { new: true, useFindAndModify: false },
-            (err, cart) => {
-              if (err)
-                res.status(400).json({
-                  message: "Error in order",
-                  err
-                });
-              else {
-                res.status(200).json({
-                  message: "Ordered Placed",
-                  cart
-                });
+        // check if the user chose an address
+        // just in case the customer is tricky and wanna skip choosing address page
+        if (!foundCart.address) {
+          res.status(400).json({ message: "Please Select order address" });
+        } else {
+          createOrderAndEmptyCart();
+        }
+
+        function createOrderAndEmptyCart() {
+          Order.create({
+            user: userId,
+            products: foundCart.items,
+            totalPrice: foundCart.totalPrice,
+            address: foundCart.address
+          }).then(() => {
+            // Then empty the user's cart
+            Cart.findOneAndUpdate(
+              { user: userId },
+              { $set: { items: [], totalPrice: 0, address: null } },
+              { new: true, useFindAndModify: false },
+              (err, cart) => {
+                if (err)
+                  res.status(400).json({
+                    message: "Error in order",
+                    err
+                  });
+                else {
+                  res.status(200).json({
+                    message: "Ordered Placed",
+                    cart
+                  });
+                }
               }
-            }
-          );
-        });
+            );
+          });
+        }
       });
     }
   });
@@ -103,30 +112,68 @@ exports.userOrdersHistory = (req, res) => {
 exports.ordersToShip = (req, res) => {
   let userId = req.user.id;
 
-  Order.find()
-    .populate({ path: "products.product", model: "Product" })
-    .exec((err, orders) => {
-      if (err) res.status(400).json({ message: "Couldn't find user", err });
-      else {
-        let len = orders.length;
-        let orderCurInx = 0;
-        let ordersToShip = [];
-
-        orders.forEach(order => {
-          ++orderCurInx;
-
-          order.products.forEach(product => {
-            if (product.product.seller == userId) {
-              ordersToShip.push(product);
-            }
-          });
-        });
-
-        if (len == orderCurInx) {
-          return res.status(200).json({ ordersToShip });
+  Order.aggregate(
+    [
+      { $unwind: "$products" },
+      { $unwind: "$products.product" },
+      { $sort: { orderDate: 1 } }
+    ],
+    function (err, result) {
+      Order.populate(
+        result,
+        [
+          {
+            path: "products.product",
+            model: "Product"
+          },
+          { path: "address", model: "Address" }
+        ],
+        function (err, results) {
+          let sellerItemsToShip = results.filter(
+            order =>
+              order.products.product.seller == userId &&
+              order.products.orderState.shipped == false
+          );
+          if (err) res.status(400).json({ message: "Couldn't get orders", err });
+          return res.status(200).json({ ordersToShip: sellerItemsToShip });
         }
-      }
-    });
+      );
+    }
+  );
+};
+
+//handle GET at api/order/shippedOrders to all seller's shipped orders
+exports.shippedOrders = (req, res) => {
+  let userId = req.user.id;
+
+  Order.aggregate(
+    [
+      { $unwind: "$products" },
+      { $unwind: "$products.product" },
+      { $sort: { orderDate: -1 } }
+    ],
+    function (err, result) {
+      Order.populate(
+        result,
+        [
+          {
+            path: "products.product",
+            model: "Product"
+          },
+          { path: "address", model: "Address" }
+        ],
+        function (err, results) {
+          let sellerShippedOrders = results.filter(
+            order =>
+              order.products.product.seller == userId &&
+              order.products.orderState.shipped == true
+          );
+          if (err) res.status(400).json({ message: "Couldn't get orders", err });
+          return res.status(200).json({ shippedOrders: sellerShippedOrders });
+        }
+      );
+    }
+  );
 };
 
 //handle GET at api/order/ordersToShip/markAsShipped to all seller's orders to be delivered

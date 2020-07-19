@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Image, Row, Col, Spinner, Alert, Button } from "react-bootstrap";
+import { Container, Image, Row, Col, Alert, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOrdersHistory } from "../../redux/actions/order-actions/fetchOrdersHistory";
 import SettingsSidebar from "./SettingsSidebar";

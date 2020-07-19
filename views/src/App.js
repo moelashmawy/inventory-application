@@ -36,15 +36,30 @@ import ChooseOrderPayment from "./components/cart/ChooseOrderPayment";
 import AllShippersList from "./components/dashboard/AllShippersList";
 import AllAdminsList from "./components/dashboard/AllAdminsList";
 import Page404 from "./components/404";
+import GeneralSpinner from "./components/GeneralSpinner";
 import { loadUser } from "./redux/actions/auth-actions/loadUser";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function App() {
   const dispatch = useDispatch();
+
   useEffect(() => {
     // load our user everytime we render
     dispatch(loadUser());
   }, [dispatch]);
+
+  const { user, loading, auth } = useSelector(state => state.userrr);
+
+  // this method to control 404 not found page
+  const generateRoute = (path, compt) => {
+    if (user && auth.isCustomer && !loading) {
+      return <Route path={path} component={compt} exact />;
+    } else if (loading) {
+      return <Route path={path} component={GeneralSpinner} exact />;
+    } else if ((!user && !auth.customer, !loading)) {
+      return <Route path={path} component={Page404} exact />;
+    }
+  };
 
   return (
     <Router>
@@ -53,44 +68,47 @@ function App() {
         <MainNavbar />
         <div className='page-body'>
           <Switch>
+            {/* Public Routes */}
             <Route path='/' component={HomePage} exact />
-            <Route path='/dashboard' component={Dashboard} exact />
             <Route path='/signup' component={SignUpForm} />
             <Route path='/login' component={LoginForm} />
-            <Route path='/permissions' component={AllUsersPermissions} />
-            <Route path='/categories' component={Categories} />
-            <Route path='/addCategory' component={AddCategoryForm} />
-            <Route path='/editCategories' component={EditCategories} />
-            <Route path='/category/:id' component={CategoryProducts} />
-            <Route path='/products' component={AllProducts} />
-            <Route path='/editProducts' component={EditProducts} />
-            <Route path='/addProduct' component={AddProductForm} />
             <Route path='/product/:id' component={SingleProduct} />
-            <Route path='/cart' component={Cart} />
-            <Route path='/settings' component={AccountSettings} exact />
-            <Route path='/settings/edit_account' component={EditAccountForm} />
-            <Route path='/my_addresses' component={Addresses} exact />
-            <Route path='/my_addresses/add_address' component={AddAddressForm} />
-            <Route path='/my_addresses/edit_address' component={EditAddressForm} />
-            <Route path='/my_orders' component={OrdersHistory} />
-            <Route path='/wish_list' component={WishList} />
-            <Route path='/dashboard/seller/orders_to_ship' component={OrdersToShip} />
-            <Route path='/dashboard/seller/shipped_orders' component={ShippedOrders} />
-            <Route
-              path='/dashboard/shipper/orders_to_deliver'
-              component={OrdersToDeliver}
-            />
-            <Route
-              path='/dashboard/shipper/delivered_orders'
-              component={DeliveredOrders}
-            />
-            <Route path='/dashboard/admin/admins_permissions' component={AllAdminsList} />
-            <Route
-              path='/dashboard/admin/shippers_permissions'
-              component={AllShippersList}
-            />
-            <Route path='/checkout/select_address' component={ChooseAddressToDeliver} />
-            <Route path='/checkout/payment' component={ChooseOrderPayment} />
+            <Route path='/categories' component={Categories} />
+            <Route path='/products' component={AllProducts} />
+            <Route path='/category/:id' component={CategoryProducts} />
+
+            {/* Account settings Routes */}
+            {generateRoute("/settings", AccountSettings)}
+            {generateRoute("/settings/edit_account", EditAccountForm)}
+            {generateRoute("/my_orders", OrdersHistory)}
+            {generateRoute("/my_addresses", Addresses)}
+            {generateRoute("/my_addresses/add_address", AddAddressForm)}
+            {generateRoute("/my_addresses/edit_address", EditAddressForm)}
+            {generateRoute("/wish_list", WishList)}
+
+            {/* Admin Dashboard  Routes */}
+            {generateRoute("/dashboard", Dashboard)}
+            {generateRoute("/addCategory", AddCategoryForm)}
+            {generateRoute("/editCategories", EditCategories)}
+            {generateRoute("/permissions", AllUsersPermissions)}
+            {generateRoute("/dashboard/admin/admins_permissions", AllAdminsList)}
+            {generateRoute("/dashboard/admin/shippers_permissions", AllShippersList)}
+
+            {/* Seller Dashboard  Routes */}
+            {generateRoute("/addProduct", AddProductForm)}
+            {generateRoute("/editProducts", EditProducts)}
+            {generateRoute("/dashboard/seller/orders_to_ship", OrdersToShip)}
+            {generateRoute("/dashboard/seller/shipped_orders", ShippedOrders)}
+
+            {/* Shipper Dashboard  Routes */}
+            {generateRoute("/dashboard/shipper/orders_to_deliver", OrdersToDeliver)}
+            {generateRoute("/dashboard/shipper/delivered_orders", DeliveredOrders)}
+
+            {/* Cart Routes */}
+            {generateRoute("/cart", Cart)}
+            {generateRoute("/checkout/select_address", ChooseAddressToDeliver)}
+            {generateRoute("/checkout/payment", ChooseOrderPayment)}
+
             {/* if no match just render 404 not found page */}
             <Route component={Page404} />
           </Switch>

@@ -10,7 +10,7 @@ import Slider from "react-slick";
 
 // custom prev arrow
 function SamplePrevArrow(props) {
-  const { className, style, onClick } = props;
+  const { onClick } = props;
   return <i onClick={onClick} class='fa fa-arrow-left' aria-hidden='true'></i>;
 }
 
@@ -21,10 +21,6 @@ function SampleNextArrow(props) {
 }
 
 class ProductsCarousel extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   // will fetch the products before the compnent mounts
   componentDidMount() {
     this.props.fetchP();
@@ -34,10 +30,10 @@ class ProductsCarousel extends React.Component {
     let productsNumber = this.props.productsNumber;
     const settings = {
       dots: true,
-      infinite: true,
-      speed: 500,
+      infinite: false,
+      speed: 700,
       slidesToShow: productsNumber,
-      slidesToScroll: productsNumber,
+      slidesToScroll: 4,
       arrows: true,
       nextArrow: <SamplePrevArrow />,
       prevArrow: <SampleNextArrow />,

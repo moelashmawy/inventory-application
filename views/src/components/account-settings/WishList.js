@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Table, Spinner, Button, Row, Col } from "react-bootstrap";
+import { Container, Table, Button, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchWishlistProducts } from "../../redux/actions/wishlist-actions/fetchWishlistProducts";
 import { removeFromWishlist } from "../../redux/actions/wishlist-actions/removeFromWishlist";

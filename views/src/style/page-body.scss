@@ -1,3 +1,35 @@
+/* General Style */
+
+// change all tables colors
+.table-dark {
+  background-color: #123 !important;
+}
+
+// general spinner style
+.general-spinner {
+  text-align: center;
+  padding-top: 10%;
+}
+
+// general pagination
+.general-pagination {
+  position: relative;
+  bottom: 0;
+  width: 90%;
+  margin: 0 auto;
+  padding: 30px 0;
+
+  .MuiPagination-root {
+    text-align: center;
+
+    ul {
+      display: inline-flex;
+      display: -webkit-inline-flex;
+    }
+  }
+}
+
+/* Page body */
 .page-body {
   min-height: 500px;
   margin-right: 0;

@@ -31,69 +31,6 @@ const OrderProgress = props => {
       </ul>
     </div>
   );
-
-  /* let orderState;
-  if (delivered) {
-    orderState = (
-      <div class='container1'>
-        <ul class='progressbar'>
-          <li class='active'>
-            <i class='fa fa-hourglass-end' aria-hidden='true'></i>
-          </li>
-          <li class='active'>
-            <i class='fa fa-truck' aria-hidden='true'></i>
-          </li>
-          <li class='active'>
-            <i class='fa fa-home' aria-hidden='true'></i>
-          </li>
-          <li>
-            <i class='fa fa-undo' aria-hidden='true'></i>
-          </li>
-        </ul>
-      </div>
-    );
-  }
-  if (shipped && !delivered) {
-    orderState = (
-      <div class='container1'>
-        <ul class='progressbar'>
-          <li class='active'>
-            <i class='fa fa-hourglass-end' aria-hidden='true'></i>
-          </li>
-          <li class='active'>
-            <i class='fa fa-truck' aria-hidden='true'></i>
-          </li>
-          <li>
-            <i class='fa fa-home' aria-hidden='true'></i>
-          </li>
-          <li>
-            <i class='fa fa-undo' aria-hidden='true'></i>
-          </li>
-        </ul>
-      </div>
-    );
-  }
-
-  if (pending && !shipped && !delivered) {
-    orderState = (
-      <div class='container1'>
-        <ul class='progressbar'>
-          <li class='active'>
-            <i class='fa fa-hourglass-end' aria-hidden='true'></i>
-          </li>
-          <li>
-            <i class='fa fa-truck' aria-hidden='true'></i>
-          </li>
-          <li>
-            <i class='fa fa-home' aria-hidden='true'></i>
-          </li>
-          <li>
-            <i class='fa fa-undo' aria-hidden='true'></i>
-          </li>
-        </ul>
-      </div>
-    );
-  } */
 };
 
 export default OrderProgress;

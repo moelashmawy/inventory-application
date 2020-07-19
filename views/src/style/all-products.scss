@@ -3,4 +3,20 @@
     margin: 0 auto;
     margin-top: 30px;
   }
+
+  .per-page {
+    padding-bottom: 40px;
+
+    span {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ccc;
+    }
+
+    select {
+      color: #cdcdcd;
+      width: 6rem;
+      border-color: #e6e1e1 !important;
+    }
+  }
 }

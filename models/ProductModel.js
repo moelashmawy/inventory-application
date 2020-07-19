@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+var mongoosePaginate = require("mongoose-paginate");
 const Schema = mongoose.Schema;
 
 // Creating our Product Schema with it's elements
@@ -16,6 +17,9 @@ const ProductSchema = new Schema({
 ProductSchema.virtual("url").get(function () {
   return "/product/" + this._id;
 });
+
+// will use mongoose-paginate plugin to retrieve data when make pagination
+ProductSchema.plugin(mongoosePaginate);
 
 const Product = mongoose.model("Product", ProductSchema);
 module.exports = Product;

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllShippers } from "../../redux/actions/shippers-actions/fetchAllShippers";
 import { changeShipperPermission } from "../../redux/actions/permissions-actions/shipperPermissionActions";
-import { Container, Table, Spinner, Col, Row } from "react-bootstrap";
+import { Container, Table, Col, Row } from "react-bootstrap";
 import { toast, Slide } from "react-toastify";
 import EditShipperForm from "./EditShipperForm";
 import DashboardSidebar from "./DashboardSidebar";

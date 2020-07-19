@@ -1,21 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../redux/actions/product-actions/fetchProductsAction";
 import { addToCart } from "../redux/actions/cart-actions/addToCart";
 import { addToWishlist } from "./../redux/actions/wishlist-actions/addToWishlist";
 import { toast, Slide } from "react-toastify";
 import DashboardSpinner from "./dashboard/DashboardSpinner";
+import MainPagination from "./MainPagination";
 
-function AllProducts() {
-  const { products, loading, error } = useSelector(state => state.productsss);
+function AllProducts(props) {
+  const { products, pagesCount, loading, error } = useSelector(state => state.productsss);
+
+  let [perPageP, setPerPageP] = useState(8);
 
   const dispatch = useDispatch();
 
+  // get the page number from the url
+  const query = new URLSearchParams(props.location.search);
+  const page = parseInt(query.get("page") || "1", 10);
+
+  // will let the user decide how many products to show per page
+  let perPage = perPageP || 8;
+
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    dispatch(fetchProducts(page, perPage));
+  }, [dispatch, page, perPage]);
 
   // handle add to cart and wishlist
   const addTo = addFunction => {
@@ -36,6 +46,17 @@ function AllProducts() {
 
   return (
     <Container fluid className='all-products'>
+      {!loading && (
+        <Col className='per-page'>
+          <span>Per page</span>
+          <select className='custom-select' onChange={e => setPerPageP(e.target.value)}>
+            <option value='8'>8</option>
+            <option value='12'>12</option>
+            <option value='20'>20</option>
+            <option value='24'>24</option>
+          </select>
+        </Col>
+      )}
       <Row>
         {loading && <DashboardSpinner />}
         {error && <Col>{error}</Col>}
@@ -49,6 +70,7 @@ function AllProducts() {
                     variant='top'
                     src={process.env.PUBLIC_URL + "/" + product.productImage[0].path}
                   />
+
                   <Card.Body className='product-details'>
                     <Card.Title className='product-name'>
                       <Link to={`/product/${product._id}`}>{product.name}</Link>
@@ -99,6 +121,7 @@ function AllProducts() {
             );
           })}
       </Row>
+      {!loading && <MainPagination path='/products' pagesCount={pagesCount} />}
     </Container>
   );
 }
