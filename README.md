@@ -37,12 +37,12 @@
   - The shipper deliver the order, and mark it as delivered.
   - The customer may want to turn it back (to be done).
 - **Other facilities**
-  - Users can edit their account info
-  - Users can track their order's state
-  - Users can add, delete or edit addresses
-  - Users can have a wishlist with any amount of products
+  - Users can edit their account info [Picture](https://imgur.com/gAaF4rm)
+  - Users can track their order's state [Picture](https://imgur.com/9DqrnjF)
+  - Users can add, delete or edit addresses [Picture](https://imgur.com/YUWHMko)
+  - Users can have a wishlist with any amount of products [Picture](https://imgur.com/XVBMsAB)
 
-#### Users roles
+#### Users roles - [Dashboard Picture](https://imgur.com/hn5QKlp)
 
 - **Customer**
   - Sign up & login.
