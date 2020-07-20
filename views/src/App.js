@@ -4,6 +4,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "./style/index.scss";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import ScrollToTop from "./components/ScrollToTop";
 import HomePage from "./components/home-page/HomePage";
 import MainNavbar from "./components/MainNavbar";
 import MainFooter from "./components/MainFooter";
@@ -63,6 +64,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <ToastContainer />
       <div className='App'>
         <MainNavbar />

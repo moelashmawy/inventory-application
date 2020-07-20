@@ -65,11 +65,13 @@ function AllProducts(props) {
             return (
               <Col lg={3} key={product._id} className='product-card'>
                 <Card>
-                  <Card.Img
-                    className='product-card-image'
-                    variant='top'
-                    src={process.env.PUBLIC_URL + "/" + product.productImage[0].path}
-                  />
+                  <Link to={`/product/${product._id}`}>
+                    <Card.Img
+                      className='product-card-image'
+                      variant='top'
+                      src={process.env.PUBLIC_URL + "/" + product.productImage[0].path}
+                    />
+                  </Link>
 
                   <Card.Body className='product-details'>
                     <Card.Title className='product-name'>

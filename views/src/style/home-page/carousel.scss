@@ -17,12 +17,14 @@
       left: -10px;
       cursor: pointer;
       margin-right: 5px;
+      z-index: 100;
     }
     .fa-arrow-right {
       position: absolute;
       left: 100%;
       top: 50% !important;
       cursor: pointer;
+      z-index: 100;
     }
   }
 }

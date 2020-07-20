@@ -88,7 +88,7 @@ function MainNavbar() {
 
           <NavDropdown.Divider />
 
-          <NavDropdown.Item onClick={logoutUser}>
+          <NavDropdown.Item onClick={() => logoutUser()}>
             <i class='fa fa-sign-out' aria-hidden='true' />
             Log out
           </NavDropdown.Item>
@@ -156,12 +156,14 @@ function MainNavbar() {
                 English
               </a>
             </li>
-            <li>
-              <a href='/#' className='nav-link' onClick={() => logout()}>
-                <i class='fa fa-sign-out' aria-hidden='true'></i>
-                Sign Out
-              </a>
-            </li>
+            {user && (
+              <li>
+                <a href='/#' className='nav-link' onClick={() => logoutUser()}>
+                  <i class='fa fa-sign-out' aria-hidden='true'></i>
+                  Sign Out
+                </a>
+              </li>
+            )}
           </ul>
         </Nav>
       </Navbar.Collapse>
