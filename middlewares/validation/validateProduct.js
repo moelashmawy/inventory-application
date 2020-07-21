@@ -24,6 +24,8 @@ exports.validateAdd = [
     .withMessage("Must be at least 1 number")
     .isNumeric()
     .withMessage("Must be Numeric")
+    .isInt({ gt: 0 })
+    .withMessage("must be more than 0")
     .trim()
     .escape(),
   body("numberInStock")
@@ -31,6 +33,8 @@ exports.validateAdd = [
     .withMessage("Must be at least 1 number")
     .isNumeric()
     .withMessage("Must be Numeric")
+    .isInt({ gt: 0 })
+    .withMessage("must be more than 0")
     .trim()
     .escape(),
 
@@ -38,8 +42,6 @@ exports.validateAdd = [
   //if there are any. just throw them to the user
   // if no errors, call next, for the next middleware
   (req, res, next) => {
-    console.log(req.file);
-
     const errors = validationResult(req);
 
     // check if the validation passes, if not
@@ -84,8 +86,10 @@ exports.validateUpdate = [
   body("numberInStock")
     .isLength({ min: 1 })
     .withMessage("Must be at least 1 number")
-    .isNumeric()
+    .isNumeric({ gt: -1 })
     .withMessage("Must be Numeric")
+    .isInt({ gt: -1 })
+    .withMessage("must be more than -1")
     .trim()
     .escape(),
 
@@ -93,8 +97,6 @@ exports.validateUpdate = [
   //if there are any. just throw them to the user
   // if no errors, call next, for the next middleware
   (req, res, next) => {
-    console.log(req.body);
-
     const errors = validationResult(req);
 
     // check if the validation passes, if not

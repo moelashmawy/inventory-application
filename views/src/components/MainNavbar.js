@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { logout } from "./../redux/actions/auth-actions/logoutAction";
@@ -19,6 +19,10 @@ function MainNavbar() {
     history.push("/");
   };
 
+  // to controll toggle and expand
+  const [expanded, setExpanded] = useState(false);
+
+  /* Dashboard link */
   let dashboard;
   if (auth.isAdmin || auth.isSeller) {
     dashboard = (
@@ -31,6 +35,7 @@ function MainNavbar() {
     );
   }
 
+  /* sign up link */
   let signUp;
   if (!auth.isCustomer && !loading) {
     signUp = (
@@ -40,6 +45,7 @@ function MainNavbar() {
     );
   }
 
+  /* login link */
   let login;
   if (!auth.isCustomer && !loading) {
     login = (
@@ -49,6 +55,7 @@ function MainNavbar() {
     );
   }
 
+  /* drop down menu */
   let userDropDown;
   if (loading) {
     userDropDown = <Loader type='ThreeDots' color='#123' width={40} className='mr-5' />;
@@ -98,9 +105,13 @@ function MainNavbar() {
   }
 
   return (
-    <Navbar bg='light' expand='xxl' className='main-navbar'>
+    <Navbar bg='light' expand='xxl' className='main-navbar' expanded={expanded}>
       <div>
-        <Navbar.Toggle aria-controls='basic-navbar-nav' className='navbar-toggle' />
+        <Navbar.Toggle
+          aria-controls='basic-navbar-nav'
+          className='navbar-toggle'
+          onClick={() => setExpanded(expanded ? false : "expanded")}
+        />
 
         <Link to='/'>
           <img
@@ -125,43 +136,58 @@ function MainNavbar() {
           <div className='shop-by'>Shop by</div>
           <ul>
             <li>
-              <a href='/categories' className='nav-link'>
+              <Link
+                to='/categories'
+                className='nav-link'
+                onClick={() => setExpanded(false)}>
                 All Categories
-              </a>
+              </Link>
             </li>
             <li>
-              <a href='/products' className='nav-link'>
+              <Link
+                to='/products'
+                className='nav-link'
+                onClick={() => setExpanded(false)}>
                 All Products
-              </a>
+              </Link>
             </li>
           </ul>
           {/* Help and settings */}
           <div className='shop-by'>help & settings</div>
           <ul>
             <li>
-              <a href='/settings' className='nav-link'>
+              <Link
+                to='/settings'
+                className='nav-link'
+                onClick={() => setExpanded(false)}>
                 <i class='fa fa-user' aria-hidden='true'></i>
                 Your Account
-              </a>
+              </Link>
             </li>
             <li>
-              <a href='/products' className='nav-link'>
+              <Link to='/' className='nav-link' onClick={() => setExpanded(false)}>
                 <i class='fa fa-phone' aria-hidden='true'></i>
                 Customer Service
-              </a>
+              </Link>
             </li>
             <li>
-              <a href='/products' className='nav-link'>
+              <Link to='/' className='nav-link' onClick={() => setExpanded(false)}>
                 <i class='fa fa-globe' aria-hidden='true'></i>
                 English
-              </a>
+              </Link>
             </li>
             {user && (
               <li>
-                <a href='/#' className='nav-link' onClick={() => logoutUser()}>
+                <Link
+                  to='/'
+                  className='nav-link'
+                  onClick={() => {
+                    logoutUser();
+                    setExpanded(false);
+                  }}>
                   <i class='fa fa-sign-out' aria-hidden='true'></i>
                   Sign Out
-                </a>
+                </Link>
               </li>
             )}
           </ul>

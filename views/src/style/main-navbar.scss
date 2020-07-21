@@ -31,9 +31,13 @@ $main-color: rgb(221, 28, 28);
       background-image: url("../assets/pictures/close.svg");
       color: whitesmoke;
       position: absolute;
-      right: 0;
-      left: 24rem;
+      left: 82%;
       z-index: 2000;
+
+      @media (min-width: 768px) {
+        position: absolute;
+        left: 26%;
+      }
     }
   }
   .collapsed {

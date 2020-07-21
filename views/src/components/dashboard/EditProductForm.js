@@ -22,7 +22,6 @@ const validate = () =>
       .integer("Must be more than 0")
       .required("This field is required"),
     numberInStock: Yup.number()
-      .positive("Must be more than 0")
       .integer("Must be more than 0")
       .required("This field is required")
   });

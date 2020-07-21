@@ -12,6 +12,10 @@
     line-height: 40px;
     position: relative;
     top: 120px;
+
+    @media (max-width: 992px) {
+      top: 30px;
+    }
   }
 
   /*slider*/
