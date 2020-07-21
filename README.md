@@ -24,31 +24,32 @@
 #### Project methodology
 
 - **Register and signin system**
-  - Everyone is registered as only a customer.
-  - Customers can apply to be sellers.
+  - Everyone is registered as a customer.
+  - Customers can apply to be sellers. [Picture](https://imgur.com/a0Jcmtf)
   - Shipper only created by the Admin.
   - Admins can create any other admins.
 - **Product life cycle**
   - A seller add a product.
   - A customer order some products, number in stock decreases.
-  - Depends on the address the customer provided, the area shipper get notification.
-  - The product's seller get a notification about the order.
+  - The customer tracks the order's state since it's placed. [Picture](https://imgur.com/9DqrnjF)
+  - Depends on the address the customer provided, the area shipper get notification. [Picture](https://imgur.com/Q2zWau2)
+  - The product's seller get a notification about the order. [Picture](https://imgur.com/2ZnjDLA)
   - The shipper pick the product, the seller mark it as shipped.
   - The shipper deliver the order, and mark it as delivered.
   - The customer may want to turn it back (to be done).
 - **Other facilities**
-  - Users can edit their account info [Picture](https://imgur.com/gAaF4rm)
-  - Users can track their order's state [Picture](https://imgur.com/9DqrnjF)
-  - Users can add, delete or edit addresses [Picture](https://imgur.com/YUWHMko)
-  - Users can have a wishlist with any amount of products [Picture](https://imgur.com/XVBMsAB)
+  - Users can edit their account info. [Picture](https://imgur.com/gAaF4rm)
+  - Users can track their order's state. [Picture](https://imgur.com/9DqrnjF)
+  - Users can add, delete or edit addresses. [Picture](https://imgur.com/YUWHMko)
+  - Users can have a wishlist with any amount of products. [Picture](https://imgur.com/XVBMsAB)
 
 #### Users roles - [Dashboard Picture](https://imgur.com/hn5QKlp)
 
 - **Customer**
   - Sign up & login.
-  - Switch the account to seller.
+  - Switch the account to seller. [Picture](https://imgur.com/a0Jcmtf)
   - Purchase order of any amount of products.
-  - Tracking order state.
+  - Tracking order state. [Picture](https://imgur.com/9DqrnjF)
   - Return order (To do).
 - **Seller** -> all above plus.
   - Add and edit his own products.
