@@ -13,11 +13,13 @@
     "express-validator": "^6.5.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.19",
+    "moment": "^2.27.0",
     "mongoose": "^5.9.15",
     "mongoose-paginate": "^5.0.3",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "react-moment": "^0.9.7"
   },
   "devDependencies": {},
   "scripts": {

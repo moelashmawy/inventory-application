@@ -6,6 +6,7 @@ import { Container, Button, Col, Row, Image, Alert } from "react-bootstrap";
 import { toast, Slide } from "react-toastify";
 import DashboardSidebar from "./DashboardSidebar";
 import { Link } from "react-router-dom";
+import Moment from "react-moment";
 import DashboardSpinner from "./DashboardSpinner";
 
 function OrdersToDeliver() {
@@ -67,7 +68,8 @@ function OrdersToDeliver() {
                 <Row className='single-order-heading'>
                   <Col>
                     <div className='order-time'>
-                      Order placed <span>{order.orderDate}</span>
+                      <div>Order placed </div>
+                      <Moment format='YYYY-MM-DD HH:mm'>{order.orderDate}</Moment>
                     </div>
                   </Col>
                   <Col>
@@ -96,7 +98,12 @@ function OrdersToDeliver() {
                 </Row>
 
                 <Row className='order-delivered-time'>
-                  {order.deliveredDate && <div>Delivered on: {order.deliveredDate}</div>}
+                  {order.deliveredDate && (
+                    <div>
+                      Delivered on:{" "}
+                      <Moment format='YYYY-MM-DD HH:mm'>{order.deliveredDate}</Moment>
+                    </div>
+                  )}
                 </Row>
 
                 {order.products.map(productItem => (
@@ -155,49 +162,6 @@ function OrdersToDeliver() {
             return singleOrder;
           })}
         </Col>
-
-        {/*  <Col>
-          {ordersToDeliver &&
-            ordersToDeliver.map(order => {
-              let singleOrder = (
-                <div className='mb-5' key={order._id}>
-                  <div>Order ID: #{order._id}</div>
-                  <div>Order placed on: {order.orderDate}</div>
-                  {order.totalPrice && <div>Total Price: ${order.totalPrice}</div>}
-                  <div>Address: {order.address.state + " " + order.address.city}</div>
-                  <div>
-                    Recipient: {order.address.firstName + " " + order.address.lastName}
-                  </div>
-                  <div>Phone No.: {order.address.phoneNumber}</div>
-
-                  <Table striped bordered hover variant='dark'>
-                    <thead>
-                      <tr>
-                        <th>Item</th>
-                        <th>quantity</th>
-                        <th>Total Price</th>
-                        <th>Mark as Delivered</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {order.products.map(product => (
-                        <tr key={product._id}>
-                          <td>{product.product.name}</td>
-                          <td>{product.quantity}</td>
-                          <td>{product.product.price * product.quantity}</td>
-                          <td>
-                            
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
-              );
-
-              return singleOrder;
-            })}
-        </Col> */}
       </Row>
     </Container>
   );

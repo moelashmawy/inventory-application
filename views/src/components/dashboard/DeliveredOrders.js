@@ -5,6 +5,7 @@ import DashboardSidebar from "./DashboardSidebar";
 import { Container, Col, Row, Image, Button } from "react-bootstrap";
 import OrderProgress from "./../account-settings/OrderProgress";
 import { Link } from "react-router-dom";
+import Moment from "react-moment";
 import DashboardSpinner from "./DashboardSpinner";
 
 function DeliveredOrders() {
@@ -50,7 +51,8 @@ function DeliveredOrders() {
                 <Row className='single-order-heading'>
                   <Col>
                     <div className='order-time'>
-                      Order placed <span>{order.orderDate}</span>
+                      <div> Order placed</div>
+                      <Moment format='YYYY-MM-DD HH:mm'>{order.orderDate}</Moment>
                     </div>
                   </Col>
                   <Col>
@@ -79,7 +81,12 @@ function DeliveredOrders() {
                 </Row>
 
                 <Row className='order-delivered-time'>
-                  {order.deliveredDate && <div>Delivered on: {order.deliveredDate}</div>}
+                  {order.deliveredDate && (
+                    <div>
+                      Delivered on:{" "}
+                      <Moment format='YYYY-MM-DD HH:mm'>{order.deliveredDate}</Moment>
+                    </div>
+                  )}
                 </Row>
 
                 {order.products.map(productItem => (

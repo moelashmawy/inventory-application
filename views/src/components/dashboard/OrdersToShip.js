@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import Moment from "react-moment";
+import { Container, Image, Button, Col, Row } from "react-bootstrap";
 import { fetchordersToShip } from "../../redux/actions/order-actions/fetchOrdersToShip";
 import { markOrderShipped } from "../../redux/actions/order-actions/markOrderShipped";
-import { Link } from "react-router-dom";
-import { Container, Image, Button, Col, Row } from "react-bootstrap";
 import DashboardSidebar from "./DashboardSidebar";
 import DashboardSpinner from "./DashboardSpinner";
 
@@ -47,7 +48,8 @@ function OrdersToShip() {
                 <Row className='single-order-heading'>
                   <Col>
                     <div className='order-time'>
-                      Order placed <span>{order.orderDate}</span>
+                      <div>Order placed </div>
+                      <Moment format='YYYY-MM-DD HH:mm'>{order.orderDate}</Moment>
                     </div>
                   </Col>
                   <Col>
@@ -74,10 +76,6 @@ function OrdersToShip() {
                       Order ID: #<span>{order._id}</span>
                     </div>
                   </Col>
-                </Row>
-
-                <Row className='order-delivered-time'>
-                  {order.deliveredDate && <div>Delivered on: {order.deliveredDate}</div>}
                 </Row>
 
                 {/* Order product */}
