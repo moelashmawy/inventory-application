@@ -176,6 +176,7 @@ function SingleProduct(props) {
                     onChange={e => {
                       setOrderQuantity(e.target.value);
                     }}>
+                    <option value={0}>QTY</option>
                     {options()}
                   </select>
                 </Col>

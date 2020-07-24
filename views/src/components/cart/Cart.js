@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Table, Spinner, Button, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCartProducts } from "../../redux/actions/cart-actions/fetchCartProducts";
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Page404 from "./../404";
+import ChooseAddressToDeliver from "./ChooseAddressToDeliver";
 
 function Cart() {
   const { cart, totalPrice, loading } = useSelector(state => state.carttt);
@@ -19,6 +20,7 @@ function Cart() {
     dispatch(fetchCartProducts());
   }, [dispatch]);
 
+  /* handle loading spinner  */
   let loadingSpinner;
   if (loading && cart.length === 0) {
     loadingSpinner = (
@@ -30,6 +32,7 @@ function Cart() {
     );
   }
 
+  /* handle empty message */
   let emptyMessage;
   if (!loading && cart.length === 0) {
     emptyMessage = <td>Your cart is empty</td>;
@@ -61,7 +64,7 @@ function Cart() {
           </Col>
           <Col>
             {cart.length > 0 && (
-              <Link className='cart-pay' to='/checkout/select_address'>
+              <Link className='cart-pay' to='/checkout'>
                 <Button variant='secondary'>Proceed to pay</Button>
               </Link>
             )}

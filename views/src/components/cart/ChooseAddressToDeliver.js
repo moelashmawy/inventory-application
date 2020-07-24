@@ -89,8 +89,8 @@ function ChooseAddressToDeliver(props) {
             {allAddresses()}
             <Button
               variant='secondary'
-              onClick={() => {
-                if (address) props.history.push("/checkout/payment");
+              onClick={e => {
+                if (address) props.clickBtn("choose-payment");
               }}
               type='submit'>
               Proceed to pay

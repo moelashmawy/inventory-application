@@ -21,6 +21,7 @@ import SignUpForm from "./components/login&signup/SignUpForm";
 import LoginForm from "./components/login&signup/LoginForm";
 import AllUsersPermissions from "./components/dashboard/AllUsersPermissions";
 import Cart from "./components/cart/Cart";
+import CheckOut from "./components/cart/CheckOut";
 import AccountSettings from "./components/account-settings/AccountSettings";
 import Addresses from "./components/account-settings/Addresses";
 import OrdersHistory from "./components/account-settings/OrdersHistory";
@@ -32,8 +33,6 @@ import OrdersToShip from "./components/dashboard/OrdersToShip";
 import ShippedOrders from "./components/dashboard/ShippedOrders";
 import OrdersToDeliver from "./components/dashboard/OrdersToDeliver";
 import DeliveredOrders from "./components/dashboard/DeliveredOrders";
-import ChooseAddressToDeliver from "./components/cart/ChooseAddressToDeliver";
-import ChooseOrderPayment from "./components/cart/ChooseOrderPayment";
 import AllShippersList from "./components/dashboard/AllShippersList";
 import AllAdminsList from "./components/dashboard/AllAdminsList";
 import Page404 from "./components/404";
@@ -108,8 +107,7 @@ function App() {
 
             {/* Cart Routes */}
             {generateRoute("/cart", Cart)}
-            {generateRoute("/checkout/select_address", ChooseAddressToDeliver)}
-            {generateRoute("/checkout/payment", ChooseOrderPayment)}
+            {generateRoute("/checkout", CheckOut)}
 
             {/* if no match just render 404 not found page */}
             <Route component={Page404} />

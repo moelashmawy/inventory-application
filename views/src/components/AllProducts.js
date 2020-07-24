@@ -99,9 +99,10 @@ function AllProducts(props) {
                         <i
                           class='fa fa-cart-plus add-to-cart'
                           aria-hidden='true'
-                          onClick={e => {
-                            e.preventDefault();
-                            addTo(addToCart(product._id));
+                          onClick={() => {
+                            let orderQuantity = 1;
+                            let quantity = { orderQuantity };
+                            addTo(addToCart(product._id, quantity));
                           }}
                           title='Add to cart'
                         />

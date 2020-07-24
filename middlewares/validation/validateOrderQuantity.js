@@ -9,7 +9,7 @@ exports.validateOrderQuantity = [
     .isLength({
       min: 1
     })
-    .withMessage("must be at least 555 charachers")
+    .withMessage("must be at least 1 charachers")
     .trim()
     .escape(),
 

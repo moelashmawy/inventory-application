@@ -11,7 +11,7 @@ exports.orderSuccess = (req, res) => {
   // find the current user cart
   Cart.findOne({ user: userId }).then(cart => {
     // if the cart is empty, end with 400 respond
-    if (!cart) {
+    if (cart.items.length === 0) {
       res.status(400).json({ message: "Your cart is empty" });
     } else {
       let cartInfo = cart.items;

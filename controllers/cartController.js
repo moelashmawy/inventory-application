@@ -10,7 +10,7 @@ exports.addToCart = (req, res) => {
   // prepare new item for the cart
   const item = {
     product: productId,
-    quantity: req.body.orderQuantity ? req.body.orderQuantity : 1,
+    quantity: req.body.orderQuantity == null || 0 ? 1 : req.body.orderQuantity,
     orderState: {
       pending: true,
       shipped: false,
