@@ -126,6 +126,8 @@ exports.deleteProduct = (req, res) => {
 
 // handle POST request at /api/product/:id/update to update an item
 exports.updateProduct = (req, res) => {
+  const images_url = req.files.map(image => image.path);
+
   // find one product in the database to get the same images
   //if the user won't update the images
   Product.findById(req.params.id, "productImage")
@@ -137,7 +139,7 @@ exports.updateProduct = (req, res) => {
         category: req.body.category,
         price: req.body.price,
         numberInStock: req.body.numberInStock,
-        productImage: req.files[0] ? req.files : product.productImage
+        productImage: req.files[0] ? images_url : product.productImage
       };
 
       // update with the new data
