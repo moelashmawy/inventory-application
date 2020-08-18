@@ -64,6 +64,8 @@ exports.createProduct = (req, res) => {
     return res.status(400).json({ message: "Please upload an image" });
   }
 
+  const images_url = req.files.map(image => image.path);
+
   // create new product after being validated and sanitized
   let newProduct = new Product({
     name: req.body.name,
@@ -72,7 +74,7 @@ exports.createProduct = (req, res) => {
     seller: req.user.id,
     price: req.body.price,
     numberInStock: req.body.numberInStock,
-    productImage: req.files
+    productImage: images_url
   });
 
   newProduct.save(function (err, product) {

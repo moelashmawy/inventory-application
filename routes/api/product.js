@@ -44,8 +44,8 @@ router.post(
   "/:id/update",
   auth,
   sellerAuth,
-  //product_validation.validateUpdate,
   handle_images.productImages(),
+  product_validation.validateUpdate,
   product_controller.updateProduct
 );
 

@@ -67,32 +67,35 @@ exports.validateUpdate = [
   // then sanitize it with trima and escape
   body("name")
     .isLength({ min: 2 })
-    .withMessage("Must be at least 2 letters")
+    .withMessage("must be at least 2 letters")
     .trim()
     .escape(),
   body("description")
     .isLength({ min: 10 })
-    .withMessage("Must be at least 10 letters")
+    .withMessage("must be at least 10 letters")
     .trim()
     .escape(),
   body("category", "This field is required").isLength({ min: 1 }).trim().escape(),
   body("price")
     .isLength({ min: 1 })
-    .withMessage("Must be at least 1 number")
+    .withMessage("must be at least 1 number")
     .isNumeric()
-    .withMessage("Must be Numeric")
+    .withMessage("must be Numeric")
     .trim()
     .escape(),
   body("numberInStock")
     .isLength({ min: 1 })
-    .withMessage("Must be at least 1 number")
+    .withMessage("must be at least 1 number")
     .isNumeric({ gt: -1 })
-    .withMessage("Must be Numeric")
+    .withMessage("must be Numeric")
     .isInt({ gt: -1 })
     .withMessage("must be more than -1")
     .trim()
     .escape(),
 
+  // after we validate the inputs we check for errors
+  //if there are any. just throw them to the user
+  // if no errors, call next, for the next middleware
   // after we validate the inputs we check for errors
   //if there are any. just throw them to the user
   // if no errors, call next, for the next middleware
