@@ -106,12 +106,12 @@ function SingleProduct(props) {
                 totalSlides={product.productImage.length}>
                 <Slider>
                   {product.productImage.map((image, index) => {
-                    let imgPath = image.path.replace(/\\/g, "/");
+                    //let imgPath = image.path.replace(/\\/g, "/");
                     return (
-                      <Slide index={index}>
+                      <Slide index={index} key={index}>
                         <ImageWithZoom
                           className='d-block w-100 product-card-image'
-                          src={`${process.env.PUBLIC_URL + "/" + imgPath}`}
+                          src={image}
                         />
                       </Slide>
                     );
@@ -121,13 +121,9 @@ function SingleProduct(props) {
 
                 <div className='all-dots'>
                   {product.productImage.map((image, index) => {
-                    let imgPath = image.path.replace(/\\/g, "/");
                     return (
-                      <Dot slide={index}>
-                        <Image
-                          className='d-block w-100 product-card-image'
-                          src={`${process.env.PUBLIC_URL + "/" + imgPath}`}
-                        />
+                      <Dot slide={index} key={index}>
+                        <Image className='d-block w-100 product-card-image' src={image} />
                       </Dot>
                     );
                   })}
