@@ -69,7 +69,7 @@ function AllProducts(props) {
                     <Card.Img
                       className='product-card-image'
                       variant='top'
-                      src={process.env.PUBLIC_URL + "/" + product.productImage[0].path}
+                      src={product.productImage[0]}
                     />
                   </Link>
 
