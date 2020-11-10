@@ -123,9 +123,9 @@ $ npm run dev (for both client and server side)
 👤 &nbsp; **Mohamed Elashmawy**
 
 - Twitter: [@hamohuh](https://twitter.com/hamohuh)
-- Github: [@hamohuh](https://github.com/hamohuh)
+- Github: [@moelashmawy](https://github.com/moelashmawy)
 - Linkedin: [@mo-elashmawy](https://www.linkedin.com/in/mo-elashmawy/)
-- Email: [hamohuh@gmail.com](mailto:hamohuh@gmail.com)
+- Email: [mohamed.elashmawy894@gmail.com](mailto:mohamed.elashmawy894@gmail.com)
 
 ## 📝 &nbsp; License
 
