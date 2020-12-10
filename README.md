@@ -117,6 +117,11 @@ $ npm run server (for Node server side development)
 $ npm run client (for React client side development)
 $ npm run dev (for both client and server side)
 ```
+# ENV
+-PORT=
+-DB_URI=
+-JWT_SECRET=
+
 
 # Author
 
