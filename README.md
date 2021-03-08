@@ -15,6 +15,7 @@
 - [Key Concepts](#--key-concepts)
 - [UML Diagram](#--uml-diagram)
 - [Setup](#--setup)
+- [ENV](#--ENV)
 
 ## 🚩 &nbsp; Main Features
 
@@ -117,10 +118,13 @@ $ npm run server (for Node server side development)
 $ npm run client (for React client side development)
 $ npm run dev (for both client and server side)
 ```
-# ENV
--PORT=
--DB_URI=
--JWT_SECRET=
+# &nbsp; ENV
+- PORT=
+- DB_URI=
+- JWT_SECRET=
+- CLOUDINARY_CLOUD_NAME=
+- CLOUDINARY_API_KEY=
+- CLOUDINARY_API_ESCRET=
 
 
 # Author
