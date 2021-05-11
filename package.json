@@ -13,7 +13,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.5.0",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment": "^2.27.0",
     "mongoose": "^5.9.15",
     "mongoose-paginate": "^5.0.3",
