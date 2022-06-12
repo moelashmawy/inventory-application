@@ -96,7 +96,7 @@
 - Authentication system
 - Encrypting passwords
 - Images handling using multer
-- OOP (Object Oriented Programming)
+- OOP 
 
 ## 📈 &nbsp; UML Diagram
 
