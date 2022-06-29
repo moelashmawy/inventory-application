@@ -1,6 +1,6 @@
 <h1 align="center">  🛒 &nbsp; Shopping App 🛒 </h1>
 
-> Built with MERN stack (MongoDB, Express, React and Node).
+> Built with MERN stack (MongoDB, Express, React and NodeJS).
 
 > Shopping App, it started for The Odin Project practice
 > Started from here [curriculum](https://www.theodinproject.com/courses/nodejs/lessons/inventory-application)
