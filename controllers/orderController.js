@@ -206,21 +206,15 @@ exports.markAsShipped = async (req, res) => {
       return res.status(403).json({ message: "You are not authorized to ship this order" });
     }
 
-    if (orderItem.orderState.shipped) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).json({ message: "Order is already shipped" });
-    }
-
-    if (!orderItem.orderState.pending) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).json({ message: "Order is not in pending state" });
-    }
-
     const updatedOrder = await Order.findOneAndUpdate(
       {
-        products: { $elemMatch: { _id: mongoose.Types.ObjectId(orderId) } }
+        products: {
+          $elemMatch: {
+            _id: mongoose.Types.ObjectId(orderId),
+            "orderState.pending": true,
+            "orderState.shipped": false
+          }
+        }
       },
       {
         $set: {
@@ -231,6 +225,18 @@ exports.markAsShipped = async (req, res) => {
       },
       { new: true, useFindAndModify: false, session }
     ).populate("products.product");
+
+    if (!updatedOrder) {
+      await session.abortTransaction();
+      session.endSession();
+      if (orderItem.orderState.shipped) {
+        return res.status(400).json({ message: "Order is already shipped" });
+      }
+      if (!orderItem.orderState.pending) {
+        return res.status(400).json({ message: "Order is not in pending state" });
+      }
+      return res.status(400).json({ message: "Order state has changed, please refresh and try again" });
+    }
 
     const shippedOrder = updatedOrder.products.filter(
       item => item._id.toString() === orderId
@@ -316,18 +322,6 @@ exports.markAsDelivered = async (req, res) => {
       return res.status(404).json({ message: "Order item not found" });
     }
 
-    if (orderItem.orderState.delivered) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).json({ message: "Order is already delivered" });
-    }
-
-    if (!orderItem.orderState.shipped) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).json({ message: "Order must be shipped before it can be delivered" });
-    }
-
     const shipper = await Shipper.findOne({ user: userId }).session(session);
     if (!shipper) {
       await session.abortTransaction();
@@ -343,12 +337,17 @@ exports.markAsDelivered = async (req, res) => {
 
     const updatedOrder = await Order.findOneAndUpdate(
       {
-        products: { $elemMatch: { _id: mongoose.Types.ObjectId(orderId) } }
+        products: {
+          $elemMatch: {
+            _id: mongoose.Types.ObjectId(orderId),
+            "orderState.shipped": true,
+            "orderState.delivered": false
+          }
+        }
       },
       {
         $set: {
           "products.$.orderState.delivered": true,
-          "products.$.orderState.shipped": false,
           deliveredDate: Date.now()
         }
       },
@@ -356,6 +355,18 @@ exports.markAsDelivered = async (req, res) => {
     )
       .populate("address")
       .populate("products.product");
+
+    if (!updatedOrder) {
+      await session.abortTransaction();
+      session.endSession();
+      if (orderItem.orderState.delivered) {
+        return res.status(400).json({ message: "Order is already delivered" });
+      }
+      if (!orderItem.orderState.shipped) {
+        return res.status(400).json({ message: "Order must be shipped before it can be delivered" });
+      }
+      return res.status(400).json({ message: "Order state has changed, please refresh and try again" });
+    }
 
     const deliveredOrder = updatedOrder.products.filter(
       item => item._id.toString() === orderId
