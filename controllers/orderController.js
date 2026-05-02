@@ -2,6 +2,7 @@ const Product = require("./../models/ProductModel");
 const Cart = require("./../models/Cart");
 const Order = require("./../models/Order");
 const Shipper = require("./../models/Shipper");
+const Address = require("./../models/Addresses");
 const mongoose = require("mongoose");
 
 exports.orderSuccess = async (req, res) => {
@@ -25,8 +26,16 @@ exports.orderSuccess = async (req, res) => {
       return res.status(400).json({ message: "Please Select order address" });
     }
 
+    const address = await Address.findById(cart.address).session(session);
+    if (!address) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "Address not found" });
+    }
+
     const cartInfo = cart.items;
 
+    const productsWithSeller = [];
     for (const item of cartInfo) {
       const product = await Product.findById(item.product).session(session);
       if (!product) {
@@ -41,6 +50,18 @@ exports.orderSuccess = async (req, res) => {
           message: `Insufficient stock for product: ${product.name}. Available: ${product.numberInStock}, Requested: ${item.quantity}`
         });
       }
+      productsWithSeller.push({
+        ...item.toObject ? item.toObject() : item,
+        sellerId: product.seller,
+        _id: item._id || mongoose.Types.ObjectId(),
+        orderState: item.orderState || {
+          pending: true,
+          shipped: false,
+          delivered: false,
+          returned: false,
+          refunded: false
+        }
+      });
     }
 
     for (const item of cartInfo) {
@@ -55,9 +76,10 @@ exports.orderSuccess = async (req, res) => {
       [
         {
           user: userId,
-          products: cartInfo,
+          products: productsWithSeller,
           totalPrice: cart.totalPrice,
-          address: cart.address
+          address: cart.address,
+          addressState: address.state
         }
       ],
       { session }
@@ -200,17 +222,12 @@ exports.markAsShipped = async (req, res) => {
       return res.status(404).json({ message: "Order item not found" });
     }
 
-    if (orderItem.product.seller.toString() !== userId) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(403).json({ message: "You are not authorized to ship this order" });
-    }
-
     const updatedOrder = await Order.findOneAndUpdate(
       {
         products: {
           $elemMatch: {
             _id: mongoose.Types.ObjectId(orderId),
+            sellerId: mongoose.Types.ObjectId(userId),
             "orderState.pending": true,
             "orderState.shipped": false
           }
@@ -229,10 +246,28 @@ exports.markAsShipped = async (req, res) => {
     if (!updatedOrder) {
       await session.abortTransaction();
       session.endSession();
-      if (orderItem.orderState.shipped) {
+      
+      const freshOrder = await Order.findOne({
+        products: { $elemMatch: { _id: mongoose.Types.ObjectId(orderId) } }
+      }).populate("products.product");
+      
+      const freshItem = freshOrder?.products?.find(
+        item => item._id.toString() === orderId
+      );
+
+      if (!freshItem) {
+        return res.status(404).json({ message: "Order item not found" });
+      }
+
+      const itemSellerId = freshItem.sellerId?.toString() || freshItem.product?.seller?.toString();
+      if (itemSellerId !== userId) {
+        return res.status(403).json({ message: "You are not authorized to ship this order" });
+      }
+
+      if (freshItem.orderState.shipped) {
         return res.status(400).json({ message: "Order is already shipped" });
       }
-      if (!orderItem.orderState.pending) {
+      if (!freshItem.orderState.pending) {
         return res.status(400).json({ message: "Order is not in pending state" });
       }
       return res.status(400).json({ message: "Order state has changed, please refresh and try again" });
@@ -299,6 +334,13 @@ exports.markAsDelivered = async (req, res) => {
     const orderId = req.query.orderId;
     const userId = req.user.id;
 
+    const shipper = await Shipper.findOne({ user: userId }).session(session);
+    if (!shipper) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(403).json({ message: "You are not authorized as a shipper" });
+    }
+
     const order = await Order.findOne({
       products: { $elemMatch: { _id: mongoose.Types.ObjectId(orderId) } }
     })
@@ -322,21 +364,9 @@ exports.markAsDelivered = async (req, res) => {
       return res.status(404).json({ message: "Order item not found" });
     }
 
-    const shipper = await Shipper.findOne({ user: userId }).session(session);
-    if (!shipper) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(403).json({ message: "You are not authorized as a shipper" });
-    }
-
-    if (order.address && order.address.state !== shipper.area) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(403).json({ message: "This order is not in your delivery area" });
-    }
-
     const updatedOrder = await Order.findOneAndUpdate(
       {
+        addressState: shipper.area,
         products: {
           $elemMatch: {
             _id: mongoose.Types.ObjectId(orderId),
@@ -359,10 +389,30 @@ exports.markAsDelivered = async (req, res) => {
     if (!updatedOrder) {
       await session.abortTransaction();
       session.endSession();
-      if (orderItem.orderState.delivered) {
+
+      const freshOrder = await Order.findOne({
+        products: { $elemMatch: { _id: mongoose.Types.ObjectId(orderId) } }
+      })
+        .populate("address")
+        .populate("products.product");
+
+      const freshItem = freshOrder?.products?.find(
+        item => item._id.toString() === orderId
+      );
+
+      if (!freshItem) {
+        return res.status(404).json({ message: "Order item not found" });
+      }
+
+      const orderAddressState = freshOrder.addressState || freshOrder.address?.state;
+      if (orderAddressState && orderAddressState !== shipper.area) {
+        return res.status(403).json({ message: "This order is not in your delivery area" });
+      }
+
+      if (freshItem.orderState.delivered) {
         return res.status(400).json({ message: "Order is already delivered" });
       }
-      if (!orderItem.orderState.shipped) {
+      if (!freshItem.orderState.shipped) {
         return res.status(400).json({ message: "Order must be shipped before it can be delivered" });
       }
       return res.status(400).json({ message: "Order state has changed, please refresh and try again" });
