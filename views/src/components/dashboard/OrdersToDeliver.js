@@ -20,7 +20,7 @@ function OrdersToDeliver() {
 
   let emptyMessage;
   if (!loading && ordersToDeliver.length === 0) {
-    emptyMessage = <Alert variant='warning'>There are no orders yet</Alert>;
+    emptyMessage = <Alert variant='warning'>There are no orders to deliver</Alert>;
   }
 
   let loadingSpinner;
@@ -28,12 +28,7 @@ function OrdersToDeliver() {
     emptyMessage = <DashboardSpinner />;
   }
 
-  /**
-   * This method to handle our whole update process
-   * it takes the targeted category id and the category object
-   */
   const handleMarkOrderDelivered = orederId => {
-    //this promise was returned to handle sucess and error messages
     dispatch(markOrderDelivered(orederId))
       .then(res => {
         toast.success(res, {
@@ -55,14 +50,21 @@ function OrdersToDeliver() {
         <Col md='3'>
           <DashboardSidebar />
         </Col>
-        {/*
-         ******************* My orders History *********
-         */}
         <Col>
           <h1 className='dashboard-headline'>Orders to deliver</h1>
           {loadingSpinner}
           {emptyMessage}
           {ordersToDeliver.map(order => {
+            const shippableProducts = order.products.filter(
+              productItem =>
+                productItem.orderState.shipped === true &&
+                productItem.orderState.delivered === false
+            );
+
+            if (shippableProducts.length === 0) {
+              return null;
+            }
+
             let singleOrder = (
               <Row className='single-order' key={order._id}>
                 <Row className='single-order-heading'>
@@ -106,7 +108,7 @@ function OrdersToDeliver() {
                   )}
                 </Row>
 
-                {order.products.map(productItem => (
+                {shippableProducts.map(productItem => (
                   <Row className='single-order-item' key={productItem._id}>
                     <Col md='3'>
                       <Image
@@ -135,22 +137,20 @@ function OrdersToDeliver() {
                               ${productItem.quantity * productItem.product.price}
                             </span>
                           </div>
+                          <div className='status'>
+                            Status: <span>Shipped - Ready for delivery</span>
+                          </div>
                         </Col>
                         <Col md='3'>
-                          {!productItem.orderState.delivered && (
-                            <Button
-                              onClick={() => {
-                                handleMarkOrderDelivered(productItem._id);
-                              }}>
-                              Deliver
-                            </Button>
-                          )}
-
-                          {productItem.orderState.delivered && (
-                            <Button variant='secondary' disabled>
-                              Delivered
-                            </Button>
-                          )}
+                          {productItem.orderState.shipped &&
+                            !productItem.orderState.delivered && (
+                              <Button
+                                onClick={() => {
+                                  handleMarkOrderDelivered(productItem._id);
+                                }}>
+                                Deliver
+                              </Button>
+                            )}
                         </Col>
                       </Row>
                     </Col>
